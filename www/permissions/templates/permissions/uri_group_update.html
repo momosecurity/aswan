@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+
+{% block header %}
+    <a href="javascript:;" class="active">更新uri组列表</a>
+{% endblock %}
+
+{% block action %}
+    <a class="roll-nav roll-right extra-right-btns pull-right" href="{% url 'permissions:uri_groups' %}">
+        <i class="fa fa-reply"></i>
+        返回
+    </a>
+{% endblock %}
+
+{% block main %}
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox extra-float-margins">
+                    <div class="extra-box-content">
+                        <form method="post" class="form-horizontal" id="UriForm" action="{{ request.get_full_path }}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10">
+                                    <span id="id-__all__-error" class="help-block" style="color:darkred"></span>
+                                </div>
+                            </div>
+                            <div class="form-group" style="display: none">
+                                <label class="col-sm-2 control-label">entity_id</label>
+                                <div class="col-sm-10">
+                                    {{ form.entity_id }}
+                                    <span id="id-entity_id-error" class="help-block" style="color:darkred"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">uri组名称</label>
+                                <div class="col-sm-10">
+                                    {{ form.desc }}
+                                    <span id="id-desc-error" class="help-block" style="color:darkred"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">uri组唯一标识</label>
+                                <div class="col-sm-10">
+                                    {{ form.pk }}
+                                    <span id="id-name-error" class="help-block" style="color:darkred"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">uri列表(每行输入一个URL)</label>
+                                <div class="col-sm-10">
+                                    {{ form.uris }}
+                                    <span id="id-uris-error" class="help-block" style="color:darkred"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button class="btn btn-primary" type="submit">保存</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

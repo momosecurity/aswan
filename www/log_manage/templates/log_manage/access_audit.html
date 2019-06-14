@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+
+{% block css %}
+    {{ block.super }}
+    <link href="{% static 'css/plugins/sweetalert/sweetalert.css' %}" rel="stylesheet">
+    <link href="{% static 'css/filter-form.css' %}" rel="stylesheet">
+    <link href="{% static 'css/pagination.css' %}" rel="stylesheet">
+    <style>
+        .modal-body {
+            word-break: break-all;
+        }
+    </style>
+{% endblock %}
+
+
+{% block header %}
+    <a href="javascript:;" class="active">后台审计日志</a>
+{% endblock %}
+
+
+{% block main %}
+    <div class="wrapper wrapper-content">
+        <div class="extra-search-form">
+            {% crispy filter_form %}
+        </div>
+        <div class="extra-box-content">
+            {% render_table table "table.html" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{% static 'js/plugins/sweetalert/sweetalert.min.js' %}"></script>
+    {% include "datepicker.html" %}
+
+{% endblock %}

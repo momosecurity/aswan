@@ -1,0 +1,16 @@
+gevent==1.2.1
+redis==2.10.5
+hiredis==0.2.0
+py_lru_cache==0.1.4
+Django==1.8.10
+django-redis==4.8.0
+django-braces==1.11.0
+django-filter==1.0.4
+django-environ==0.4.3
+django-tables2==1.10.0
+django-crispy-forms==1.7.0
+pymongo==3.4.0
+pymysql==0.9.3
+DBUtils==1.2
+python-dateutil==2.6.1
+uWSGI==2.0.15

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+{% load staticfiles %}
+
+{% url 'permissions:index' as permissions_index %}
+{% url 'permissions:users' as permissions_users %}
+{% url 'permissions:groups' as permissions_groups %}
+{% url 'permissions:uri_groups' as permissions_uri_groups %}
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+
+    <title>风控管理</title>
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
+    <script src="{% static 'js/vendor/jquery.min.js' %}"></script>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet">
+    <link href="{% static 'widget/datetimepicker/bootstrap-datetimepicker.css' %}" rel="stylesheet">
+    <link href="{% static 'widget/datetimepicker/datetimepicker.css' %}" rel="stylesheet">
+    {% block css %}{% endblock %}
+    <link href="{% static 'css/multi-select.css' %}" rel="stylesheet">
+    <link href="{% static 'css/jquery-ui.css' %}" rel="stylesheet">
+    <link href="{% static 'css/filter-form.css' %}" rel="stylesheet">
+    <link href="{% static 'css/pagination.css' %}" rel="stylesheet">
+    <link href="{% static 'css/plugins/sweetalert/sweetalert.css' %}" rel="stylesheet">
+    <link href="{% static 'css/jquery.searchableSelect.css' %}" rel="stylesheet">
+    <link href="{% static 'css/main.css' %}?v=3" rel="stylesheet">
+</head>
+
+<body class="fixed-sidebar full-height-layout extra-main-bg" style="overflow:hidden">
+<div id="wrapper">
+    <!--侧边栏-->
+    {% include 'siderbar.html' %}
+
+    <div id="extra-main-page" class="extra-main-bg">
+        <nav class="navbar navbar-default extra-navbar-default">
+            <div class="container-fluid">
+                <div class="row extra-nav">
+                    <div class="col-md-8 extra-tab-title">
+                        {% block header %}
+                        <a>风控管理中心</a>
+                        {% endblock %}
+                    </div>
+                    <div class="col-md-4">
+                        {% block action %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        {% block content %}
+        <div class="row" id="content-main">
+            {% block main %} {% endblock %}
+        </div>
+        {% endblock %}
+    </div>
+</div>
+
+<script src="{% static 'js/vendor/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/csrf.js' %}"></script>
+<script src="{% static 'js/content.min.js' %}"></script>
+<script src="{% static 'js/plugins/metisMenu/jquery.metisMenu.js' %}"></script>
+<script src="{% static 'js/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
+<script src="{% static 'js/plugins/layer/layer.min.js' %}"></script>
+<script src="{% static 'js/plugins/sweetalert/sweetalert.min.js' %}"></script>
+
+<script src="{% static 'js/jquery-ui-1.10.4.min.js' %}"></script>
+<script src="{% static 'js/jquery.searchableSelect.js' %}"></script>
+<script src="{% static 'js/jquery.multi-select.js' %}"></script>
+<script src="{% static 'js/jquery.quicksearch.js' %}"></script>
+<script src="{% static 'widget/datetimepicker/bootstrap-datetimepicker.js' %}"></script>
+<script src="{% static 'js/default_time.js' %}"></script>
+
+<!--Custom JS-->
+<script src="{% static 'js/uri_scene.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+
+{% block js %}{% endblock %}
+
+</body>
+</html>

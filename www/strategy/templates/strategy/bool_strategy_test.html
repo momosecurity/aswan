@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block css %}
+    {{ block.super }}
+
+
+    {{ form.media }}
+{% endblock %}
+
+{% block header %}
+    <a href="javascript:;" class="active">调试布尔型策略</a>
+{% endblock %}
+
+{% block action %}
+    <a class="roll-nav roll-right extra-right-btns pull-right" href="{% url 'strategy:bool_strategy_list' %}">
+        <i class="fa fa-reply"></i>
+        返回
+    </a>
+{% endblock %}
+
+
+{% block main %}
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox extra-float-margins">
+                    <div class="extra-box-content">
+                        <form method="post" class="form-horizontal" id="menu_create_form" action="{{ request.get_full_path }}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">布尔型策略</label>
+                                <div class="col-sm-9">
+                                    {{ form.strategy }}
+                                    <span id="id-strategy-error" class="help-block" style="color:darkred"></span>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">请求体</label>
+                                <div class="col-sm-9">
+                                    {{ form.req_body }}
+                                    <span id="id-req_body-error" class="help-block" style="color:darkred"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                     <button class="btn btn-primary" type="submit">保存</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="extra-box-content">
+                        <div id="resultArea"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+{{ block.super }}
+
+
+<script>
+    $(function () {
+    // 创建漏洞表单提交
+    $("body").on("submit", '#menu_create_form', function (e) {
+        $("#id-req_body-error").html("");
+        $("#id-strategy-error").html("");
+        $("#resultArea").html("");
+
+        e.preventDefault();
+        var form = $(this);
+        var _this = $(this);
+        var uri = _this.attr('action');
+        var params = form.serializeArray();
+
+        _this.addClass("posting");
+        $.ajax({
+            url: uri,
+            data: params,
+            dataType: "json",
+            type: "POST",
+            success: function (resp) {
+                if (resp.state) {
+                    var data = JSON.stringify(resp.data, null, 4);
+                    $("#resultArea").html(data);
+                } else {
+                    _this.removeClass("posting");
+                    var error = resp.error;
+                    for (var name in error) {
+                        $("#id-" + name +"-error").html(error[name][0]);
+                    }
+                }
+            },
+            error: function (err) {
+                if (err.statusText !== 'abort') {
+                    _this.removeClass("posting");
+                    swal({
+                        title: "哎呀，出错了",
+                        type: "error",
+                        confirmButtonColor:"#1ab394"
+                    });
+                }
+            }
+        })
+    });
+});
+
+    function get_data_example() {
+        uuid = $(".searchable-select-item.selected").data('value');
+        $.ajax({
+            url: "{% url 'strategy:bool_strategy_data' %}",
+            data: {
+                "uuid":uuid,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            dataType: "json",
+            type: "POST",
+            success: function(resp) {
+                if (resp.state) {
+                    var req_body = JSON.stringify(resp.req_body, null, 4);
+                    $("#id_req_body").val(req_body);
+                }
+            },
+        })
+    }
+</script>
+
+<script>
+    $(function () {
+        $('select.form-control').searchableSelect();
+    });
+</script>
+{% endblock %}

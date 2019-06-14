@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block css %}
+{{ block.super }}
+
+{{ form.media }}
+{% endblock %}
+
+
+{% block header %}
+<a href="javascript:;" class="active">新增名单型策略</a>
+{% endblock %}
+
+{% block action %}
+<a class="roll-nav roll-right extra-right-btns pull-right" href="{% url 'strategy:menu_strategy_list' %}">
+    <i class="fa fa-reply"></i>
+    返回
+</a>
+{% endblock %}
+
+
+{% block main %}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox extra-float-margins">
+                <div class="extra-box-content">
+                    <form method="post" class="form-horizontal" id="menu_create_form"
+                          action="{{ request.get_full_path }}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">维度</label>
+                            <div class="col-sm-10">
+                                {{ form.dimension }}
+                                <span id="id-strategy_dim-error" class="help-block" style="color:darkred"></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">操作码</label>
+                            <div class="col-sm-10">
+                                {{ form.menu_op }}
+                                <span id="id-strategy_op-error" class="help-block" style="color:darkred"></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">项目</label>
+                            <div class="col-sm-10">
+                                {{ form.event }}
+                                <span id="id-strategy_event-error" class="help-block" style="color:darkred"></span>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">名单类型</label>
+                            <div class="col-sm-10">
+                                {{ form.menu_type }}
+                                <span id="id-strategy_type-error" class="help-block" style="color:darkred"></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">策略名称</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" id="id_strategy_name" name="strategy_name" type="text">
+                                <!--{{ form.strategy_name }}-->
+                                <span id="id-strategy_name-error" class="help-block" style="color:darkred"></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">策略描述</label>
+                            <div class="col-sm-10">
+                                {{ form.strategy_desc }}
+                                <span id="id-strategy_desc-error" class="help-block" style="color:darkred"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-primary" type="submit">保存</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block js %}
+{{ block.super }}
+
+<script>
+    function makename() {
+        var a = $("#id_dimension").find("option:selected").text();
+        var b = $("#id_menu_op").find("option:selected").text();
+        var c = $("#id_event").find("option:selected").text();
+        var d = $("#id_menu_type").find("option:selected").text();
+        $("#id_strategy_name").val(a + b + c + "的" + d + "中");
+    }
+
+    makename();
+    $('#id_dimension').on('change', makename);
+    $('#id_event').on('change', makename);
+    $('#id_menu_op').on('change', makename);
+    $('#id_menu_type').on('change', makename);
+</script>
+<script>
+    $(function () {
+        // 创建漏洞表单提交
+        $("body").on("submit", '#menu_create_form', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            var _this = $(this);
+            var uri = _this.attr('action');
+            var params = form.serializeArray();
+
+            _this.addClass("posting");
+            $.ajax({
+                url: uri,
+                data: params,
+                dataType: "json",
+                type: "POST",
+                success: function (resp) {
+                    if (resp.state) {
+                        window.location.href = resp.redirect_url;
+                    } else {
+                        _this.removeClass("posting");
+                        var error = resp.error;
+                        for (var name in error) {
+                            $("#id-" + name + "-error").html(error[name][0]);
+                        }
+                    }
+                },
+                error: function (err) {
+                    if (err.statusText !== 'abort') {
+                        _this.removeClass("posting");
+                        swal({
+                            title: "哎呀，出错了",
+                            type: "error",
+                            confirmButtonColor: "#1ab394"
+                        });
+                    }
+                }
+            })
+        });
+    });
+
+
+    // 错误提示复位
+    $("#id_strategy_op").focus(function () {
+        $("#id-strategy_op-error").html("");
+    });
+    $("#id_strategy_name").focus(function () {
+        $("#id-strategy_name-error").html("");
+    });
+</script>
+{% endblock %}
+
+

@@ -1,0 +1,56 @@
+.pagination {
+  overflow: hidden;
+  float: right;
+  font-size: 12px;
+  margin: 20px 0 20px 0;
+  clear: both;
+  border-radius: 0; }
+.pagination a {
+color: #666; }
+.pagination a:hover {
+color: #29c6c9; }
+.pagination .page-show {
+float: right; }
+.pagination .page-show .page, .pagination .page-show .current, .pagination .page-show .prev, .pagination .page-show .next {
+  padding: 5px;
+  display: inline-block;
+  line-height: 20px; }
+.pagination .page-show .page, .pagination .page-show .current {
+  padding: 5px 10px; }
+.pagination .page-show .page:hover, .pagination .page-show .prev:hover, .pagination .page-show .next:hover {
+  border-color: #1ab394; }
+.pagination .page-show .prev, .pagination .page-show .next {
+  display: inline-block;
+  border: 1px solid #1ab394;
+  background-color: #1ab394;
+  margin-right: 7px;
+  color: #fff; }
+.pagination .page-show .page {
+  margin-right: 7px;
+  border: 1px solid #a6a6a6;
+  background: #fdfdfd; }
+.pagination .page-show .current {
+  color: #fff;
+  background-color: #1ab394;
+  border: 1px solid #1ab394; }
+.pagination .goto {
+float: right;
+display: inline-block;
+margin-left: 15px; }
+.pagination .goto .num {
+  float: left;
+  width: 30px;
+  padding: 5px 4px;
+  text-align: center;
+  border: 1px solid #a6a6a6;
+  background: #fdfdfd; }
+.pagination .goto a {
+  float: left;
+  margin-left: 3px;
+  line-height: 20px;
+  padding: 4px;
+  color: #fff;
+  background-color: #1ab394;
+  border: 1px solid #1ab394; }
+  .pagination .goto a:hover {
+    border-color: #1ab394; }

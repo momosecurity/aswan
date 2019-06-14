@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+{% block header %}
+    <a href="javascript:;" class="active">设备号管理</a>
+{% endblock %}
+
+
+{% block action %}
+    <a class="roll-nav roll-right extra-right-btns pull-right" data-toggle="modal" data-target="#setValue">
+        <i class="fa fa-plus"></i>
+        新增
+    </a>
+{% endblock %}
+
+
+{% block main %}
+    <div class="wrapper wrapper-content">
+        <div class="extra-search-form">
+            {% crispy filter_form %}
+        </div>
+        <div class="extra-box-content">
+            {% render_table table "table.html" %}
+        </div>
+    </div>
+
+
+    <div class="modal inmodal fade" id="setValue" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+             <div class="modal-header">
+                 <h2>新增设备号名单</h2>
+             </div>
+             <div class="modal-body">
+                 <textarea class="form-control" id="id_value" name="value" placeholder="设备uid[批量添加时请以回车键隔开]" rows="5"></textarea>
+                 <span id="id-value-error" class="help-block" style="color:darkred"></span>
+                 <div class="hr-line-dashed"></div>
+                 {{ create_form.menu_kind }}
+                 <span id="id-menu_kind-error" class="help-block" style="color:darkred"></span>
+                 <div class="hr-line-dashed"></div>
+                 {{ create_form.event }}
+                 <span id="id-event-error" class="help-block" style="color:darkred"></span>
+                 <div class="hr-line-dashed"></div>
+                 <input class="form-control datetime" id="id_end_time" name="end_time" placeholder="结束时间" type="datetime">
+                 <span id="id-end_time-error" class="help-block" style="color:darkred"></span>
+                 <div class="hr-line-dashed"></div>
+                 {{ create_form.menu_desc }}
+                 <span id="id-menu_desc-error" class="help-block" style="color:darkred"></span>
+             </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                  <button type="button" id="valueSave" class="btn btn-primary" data-uri="{% url 'menus:create' %}">保存</button>
+              </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+{{ block.super }}
+{% include "datepicker.html" %}
+{% include "menu/batch_delete.html" %}
+<script>
+    $(function () {
+        $('select#id_filter_event.form-control').searchableSelect();
+        $('select#id_event.form-control').searchableSelect();
+    });
+</script>
+<script>
+    $(function () {
+    // 新增
+    $('#valueSave').click(function () {
+        var _this = $(this);
+        var uri = _this.data('uri'),
+            value = $("#id_value").val(),
+            menu_kind = $("#id_menu_kind").val(),
+            event = $("#id_event").val(),
+            end_time = $("#id_end_time").val(),
+            menu_desc = $("#id_menu_desc").val();
+        $.ajax({
+            url: uri,
+            data: {
+                'value': value,
+                'menu_kind': menu_kind,
+                'event': event,
+                'end_time': end_time,
+                'menu_desc': menu_desc,
+                'menu_type': "uid",
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            dataType: "json",
+            type: "POST",
+            success: function (resp) {
+                if (resp.state) {
+                    window.location.reload();
+                } else {
+                    var error = resp.error;
+                    for (var name in error) {
+                        $("#id-" + name +"-error").html(error[name][0]);
+                    }
+                }
+            },
+            error: function (err) {
+                if (err.statusText !== 'abort') {
+                    swal({
+                        title: "哎呀，出错了",
+                        type: "error",
+                        confirmButtonColor:"#1ab394"
+                    });
+                }
+            }
+        })
+    });
+    // 错误提示复位
+    $("#id_value").focus(function () {
+        $("#id-value-error").html("");
+    });
+    $("#id_menu_kind").focus(function () {
+        $("#id-menu_kind-error").html("");
+    });
+    $("#id_event").focus(function () {
+        $("#id-event-error").html("");
+    });
+    $("#id_start_time").focus(function () {
+        $("#id-start_time-error").html("");
+    });
+    $("#id_end_time").focus(function () {
+        $("#id-end_time-error").html("");
+    });
+    $("#id_menu_desc").focus(function () {
+        $("#id-menu_desc-error").html("");
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block css %}
+    {{ block.super }}
+
+<style>
+    .err-msg {
+        font-size: 10px; font-style:italic; color:red;
+    }
+</style>
+    {{ form.media }}
+{% endblock %}
+
+{% block header %}
+    <a href="javascript:;" class="active">规则详情</a>
+{% endblock %}
+
+{% block action %}
+    <a id='id_edit_rule' class="roll-nav roll-right extra-right-btns pull-right">
+        <i class="fa fa-cog"></i>
+        编辑
+    </a>
+    <a class="roll-nav roll-right extra-right-btns pull-right" href="{% url 'rule:list' %}">
+        <i class="fa fa-reply"></i>
+        返回
+    </a>
+{% endblock %}
+
+
+{% block main %}
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="extra-box-content p-xl" style="min-height: 400px;">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <address>
+                            <strong>规则名称:</strong> {{ rule.title }}<br>
+                            <strong>规则描述:</strong> {{ rule.describe }}<br>
+                            <strong>规则状态:</strong> {% if rule.status == "on" %} 开启 {% else %} 关闭 {% endif %}<br>
+                        </address>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <address>
+                            <strong>规则ID:</strong> <label class="text-danger">{{ rule.id }}</label><br>
+                            <strong>规则结束时间:</strong> <label class="text-danger">{{ rule.end_time }}</label><br>
+                        </address>
+                    </div>
+                </div>
+
+                <div class="table-responsive m-t">
+                    <table class="table invoice-table" style="word-break:break-all; word-wrap:break-all;">
+                        <thead>
+                            <tr>
+                                <th>策略原子组名称</th>
+                                <th>权重</th>
+                                <th>策略原子组列表</th>
+                                <th>管控原子</th>
+                                <th>客服话术</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for rule in rule.rule_list %}
+                            <tr>
+                                <td style="width: 10%">{{ rule.group_name }}</td>
+                                <td style="width: 5%">{{ rule.weight }}</td>
+                                <td style="width: 45%">
+                                    <div><strong>{{ rule.strategy_name }}</strong></div>
+                                </td>
+                                <td style="width: 10%">{{ rule.control_display }}</td>
+                                <td style="width: 20%">{{ rule.custom }}</td>
+                                <td style="width: 10%">
+                                    <a href="#" data-toggle="modal" data-target="#setThreshold"
+                                       data-strategy_index = "{{ forloop.counter }}"
+                                       data-strategy_list="{{ rule.strategy_list_str }}">编辑阈值</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal inmodal fade" id="setThreshold" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>修改阈值</h2>
+                </div>
+                <div class="modal-body">
+                    <table class="table invoice-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 60%">策略原子</th>
+                                <th style="width: 40%">阈值</th>
+                            </tr>
+                        </thead>
+                        <tbody id="thresholdModalBody">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <button type="button" id="thresholdSave" class="btn btn-primary"
+                            data-uri="{% url 'rule:threshold_edit' %}"
+                            data-id="{{ rule.uuid }}">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+
+    <script>
+    $("#setThreshold").on("show.bs.modal", function(e) {
+        var strategyList = $(e.relatedTarget).data('strategy_list');  // 修改策略原子组的数据
+        var strategyIndex = $(e.relatedTarget).data('strategy_index');  // 修改策略原子组的下标
+        $("#thresholdModalBody").html("");
+        $("#thresholdSave").attr('data-strategy_index', strategyIndex - 1);
+        for (var i in strategyList) {
+            // 构造 阈值input框
+            var inputList = "";
+            for (var t in strategyList[i][1]){
+                if(t != 0){
+                    inputList += '&nbsp;&nbsp;'
+                }
+                var inputItem = "<input style='width: 50px;' name='threshold_" + t +"' value='" +strategyList[i][1][t] +"'><span class='err-msg'></span>";
+                inputList += inputItem
+            }
+            // 构造tr的html
+            var htmlBody = "<tr><td><div class='strategy-item' data-uuid='"+ strategyList[i][0] +"'>" + strategyList[i][2] + "</div></td><td>" + inputList + "</td></tr>";
+            $("#thresholdModalBody").append(htmlBody);
+        }
+    });
+
+    $('#thresholdSave').click(function () {
+        var _this = $(this);
+        var hasError = false;
+        var regexPattern = /^\d{1,10}(\.\d{1,2})?$/;
+        var uri = _this.data('uri'),
+            strategy_index = Number(_this.data('strategy_index')),
+            rule_uuid = _this.data('id');
+        var data = {'rule_uuid': rule_uuid, 'strategy_index':strategy_index, 'strategy_list': []};
+        $(".strategy-item").each(function (index, obj) {
+            var strategyUuid = $(this).data('uuid');
+            var strategyDesc = $(this).html();
+            var thresholdList =[];
+            $(this).parents('tr').find("input").each(function () {
+                var inputValue = $(this).val();
+                // 验证input参数
+                if (strategyDesc.match("^手机号")) {
+                    var phoneRe = /^\d{1,4}(,\d{1,4})*$/;
+                    if(phoneRe.test(inputValue)) {
+                        $(this).next('span').html("");
+                    } else {
+                        $(this).next('span').html("参数不合法");
+                        hasError = true
+                    }
+                }
+                else if (strategyDesc.match("货币类型$")) {
+                    if (inputValue.indexOf("，") !== -1){
+                        $(this).next('span').html("参数不合法");
+                        hasError = true;
+                    } else {
+                        $(this).next('span').html("");
+                    }
+                }
+                else if(regexPattern.test(inputValue)) {
+                        $(this).next('span').html("");
+                } else {
+                        $(this).next('span').html("参数不合法");
+                        hasError = true
+                }
+                thresholdList.push(inputValue);
+            });
+            data["strategy_list"].push({'strategy_uuid':strategyUuid, 'threshold_list':thresholdList})
+        });
+        if(hasError){
+            return false
+        }
+        $.ajax({
+            url: uri,
+            data: {
+                "data":JSON.stringify(data),
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            dataType: "json",
+            type: "POST",
+            success: function (resp) {
+                if (resp.state) {
+                    window.location.reload();
+                } else {
+                    var error = resp.error;
+                    swal({
+                        title: "哎呀，出错了",
+                        text: error,
+                        type: "error",
+                        confirmButtonColor:"#1ab394"
+                    });
+                }
+            },
+            error: function (err) {
+                if (err.statusText !== 'abort') {
+                    swal({
+                        title: "哎呀，出错了",
+                        type: "error",
+                        confirmButtonColor:"#1ab394"
+                    });
+                }
+            }
+        })
+    });
+    </script>
+    <script>
+        var cur_url = window.location.href;
+        var url = "{% url 'rule:edit'%}?"+cur_url.split("?")[1];
+        $("#id_edit_rule").attr("href",url);
+    </script>
+{% endblock %}

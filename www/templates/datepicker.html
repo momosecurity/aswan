@@ -1,0 +1,29 @@
+{% load i18n %}
+{% load staticfiles %}
+
+
+{% block js %}
+<script>
+    jQuery(function () {
+        $(".date").datetimepicker({
+            format: 'yyyy-mm-dd',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2
+        });
+
+        $(".datetime, .datetimeinput").datetimepicker({
+            format: 'yyyy-mm-dd hh:ii',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 0
+        });
+    })
+</script>
+{% endblock %}
