@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load render_table from django_tables2 %}
+{% load staticfiles %}
+
+{% block header %}
+    <a href="javascript:;" class="active">用户管理</a>
+{% endblock %}
+
+
+
+{% block main %}
+<div class="wrapper wrapper-content">
+    <div class="extra-search-form">
+        {% crispy filter_form %}
+    </div>
+
+
+    <div class="extra-box-content">
+        {% render_table table "table.html" %}
+    </div>
+</div>
+{% endblock %}

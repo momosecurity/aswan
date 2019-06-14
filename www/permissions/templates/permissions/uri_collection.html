@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+
+{% block header %}
+<a href="javascript:;" class="active">修改uri权限控制集合</a>
+{% endblock %}
+
+{% block css %}
+{{ block.super }}
+<style>
+    .feat-uri-li {
+        border: 0;
+        padding: 0;
+    }
+    .feat-uri-span {
+        background: #f9f9f9;
+    }
+</style>
+{% endblock %}
+
+
+{% block action %}
+<a class="roll-nav roll-right extra-right-btns pull-right" href="{% url 'uri_scene:list' %}">
+    <i class="fa fa-reply"></i>
+    返回
+</a>
+{% endblock %}
+
+
+{% block main %}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <input type="hidden" class="request-url" value="{{ request.get_full_path }}">
+    <div class="row">
+        <div class="col-sm-6">
+            {% for doc in docs %}
+            <div class="ibox extra-float-margins">
+                <div class="ibox-title">
+                    <h5>
+                        <span class="text-info">{{ doc.fullname }}</span> -
+                        <span class="text-muted">{{ doc.pk }}</span>
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </div>
+                </div>
+                <div class="extra-box-content">
+                    <ul class="list-group">
+                        {% for uri in doc.uris %}
+                        <li class="list-group-item feat-uri-li">
+                            <div class="input-group">
+                                <span class="form-control feat-uri-span">{{ uri }}</span>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-danger feat-uri-del-btn"
+                                            data-feat-uri-name="{{ doc.pk }}"
+                                            data-feat-target-uri="{{ uri }}" type="button">删除</button>
+                                </span>
+                            </div>
+                        </li>
+                        {% endfor %}
+                        <li class="list-group-item feat-uri-li">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="输入新的 uri">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary feat-uri-add-btn"
+                                            data-feat-uri-name="{{ doc.pk }}" type="button">添加
+                                    </button>
+                                </span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox extra-float-margins">
+                <div class="ibox-title">
+                    <h5>
+                        <span class="text-info">添加新分组</span>
+                    </h5>
+                </div>
+                <div class="extra-box-content">
+                    <form class="feat-uri-collection-add-form">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">名称</label>
+                            <div class="col-sm-10">
+                                {{ add_uri_collection_form.pk }}
+                                <span id="id-name-error" class="help-block" style="color:darkred"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">描述</label>
+                            <div class="col-sm-10">
+                                {{ add_uri_collection_form.desc }}
+                                <span id="id-desc-error" class="help-block" style="color:darkred"></span>
+                            </div>
+                        </div>
+                        <input type="submit" value="添加新分组" class="btn btn-primary btn-block feat-uri-collection-add-btn" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

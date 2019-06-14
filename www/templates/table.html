@@ -1,0 +1,61 @@
+{% extends "django_tables2/table.html" %}
+
+
+{% load i18n %}
+{% load django_tables2 %}
+
+
+{% block table.thead %}
+    <thead>
+        <tr>
+        {% for column in table.columns %}
+            {% if column.orderable %}
+            <th {{ column.attrs.th.as_html }}>
+                <a href="{% querystring table.prefixed_order_by_field=column.order_by_alias.next %}">
+                    <span class="fn">{{ column.header }}</span>
+                </a>
+            </th>
+            {% else %}
+            <th {{ column.attrs.th.as_html }}>{{ column.header }}</th>
+            {% endif %}
+        {% endfor %}
+        </tr>
+    </thead>
+{% endblock table.thead %}
+
+
+{% block table.tbody.empty_text %}
+    <tr><td class="tfoot-empty txt-center" colspan="{{ table.columns|length }}">{{ table.empty_text|safe }}</td></tr>
+{% endblock table.tbody.empty_text %}
+
+
+{% block table.tfoot %}
+    {% if table.deletable and table.page.object_list %}
+    <tfoot class="check-tfoot">
+        <tr>
+            <td colspan="{{ table.columns|length }}">
+                <input type="checkbox" id="checkall-bottom" class="check-all" name="checkall" />
+                <label for="checkall-bottom">{% trans "全选" %}</label>
+                <a id="batchDelete" class="btn btn-primary" style="padding: 4px 8px;" data-uri="{{ batch_delete_uri }}">{% trans "删除" %}</a>
+            </td>
+        </tr>
+    </tfoot>
+    {% endif %}
+    {% if table.editable and table.page.object_list %}
+    <tfoot class="check-tfoot">
+        <tr>
+            <td colspan="{{ table.columns|length }}">
+                <input type="checkbox" id="checkall-bottom" class="check-all" name="checkall" />
+                <label for="checkall-bottom">{% trans "全选" %}</label>
+                <a id="batchEdit" class="btn btn-primary" style="padding: 4px 8px;">{% trans "批量编辑" %}</a>
+                <a id="batchEditSave" class="btn btn-primary" disabled="disabled" style="padding: 4px 8px;" data-uri="{{ batch_edit_uri }}">{% trans "保存" %}</a>
+            </td>
+        </tr>
+    </tfoot>
+    {% endif %}
+{% endblock table.tfoot %}
+
+
+{% block pagination %}
+    {% include "pagination.html" %}
+{% endblock %}

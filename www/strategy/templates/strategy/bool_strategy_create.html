@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block css %}
+{{ block.super }}
+
+
+{{ form.media }}
+{% endblock %}
+
+
+{% block header %}
+<a href="javascript:;" class="active">新增布尔型策略</a>
+{% endblock %}
+
+{% block action %}
+<a class="roll-nav roll-right extra-right-btns pull-right" href="{% url 'strategy:bool_strategy_list' %}">
+    <i class="fa fa-reply"></i>
+    返回
+</a>
+{% endblock %}
+
+
+{% block main %}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox extra-float-margins">
+                <div class="extra-box-content">
+                    <form method="post" class="form-horizontal" id="menu_create_form"
+                          action="{{ request.get_full_path }}">
+                        {% csrf_token %}
+
+                        <!--<div class="hr-line-dashed"></div>-->
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">内置变量</label>
+                            <div class="col-sm-10">
+                                {{ form.strategy_var }}
+                                <span id="id-strategy_var-error" class="help-block" style="color:darkred"></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">操作码</label>
+                            <div class="col-sm-10">
+                                {{ form.strategy_op }}
+                                <span id="id-strategy_op-error" class="help-block" style="color:darkred"></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">内置函数</label>
+                            <div class="col-sm-10">
+                                {{ form.strategy_func }}
+                                <span id="id-strategy_func-error" class="help-block" style="color:darkred"></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">阈值</label>
+                            <div class="col-sm-10">
+                                {{ form.strategy_threshold }}
+                                <span id="id-strategy_threshold-error" class="help-block" style="color:darkred"></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">策略名称</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" id="id_strategy_name" name="strategy_name" type="text">
+                                <!--{{ form.strategy_name }}-->
+                                <span id="id-strategy_name-error" class="help-block" style="color:darkred"></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">策略描述</label>
+                            <div class="col-sm-10">
+                                {{ form.strategy_desc }}
+                                <span id="id-strategy_desc-error" class="help-block" style="color:darkred"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-primary" type="submit">保存</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block js %}
+{{ block.super }}
+
+
+<script>
+    function makename(){
+        var a = $("#id_strategy_var").find("option:selected").text();
+        var b = $("#id_strategy_op").find("option:selected").text();
+        var c = $(".searchable-select-item.selected")[0].innerHTML;
+        var func_name = $("#id_strategy_func").find("option:selected").val();
+        if(['is_proxy_ip', 'is_adsl_ip', 'is_cloud_ip', 'is_evil_ip', 'is_idc_ip'].indexOf(func_name) !== -1){
+            $('#id-strategy_func-error').html("单独的ip信息并不能说明用户为恶意用户，请配合其他策略原子使用");
+        } else {
+            $('#id-strategy_func-error').html("");
+        }
+        if(b === c){
+            c = "";
+        }
+        relation_ops = ["大于...","大于等于...","小于...","小于等于...","等于...","不等于..."]
+        if(relation_ops.indexOf(b) === -1){
+            $("#id_strategy_name").val(a + b + c);
+        }else{
+            $("#id_strategy_name").val(a + c + b);
+        }
+   }
+
+    $('#id_strategy_var').on('change', makename);
+    $('#id_strategy_op').on('change', makename);
+    // $('#id_strategy_func').on('change', makename);  //加了搜索框插件,change 事件失效
+    function replace_param(){
+        var name = $("#id_strategy_name").val();
+        var param = $("#id_strategy_threshold").val();
+        var new_name = name.replace("...", param);
+        $("#id_strategy_name").val(new_name);
+    }
+    $("#id_strategy_threshold").blur(replace_param);
+</script>
+<script>
+    $(function () {
+        // 创建漏洞表单提交
+        $("body").on("submit", '#menu_create_form', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            var _this = $(this);
+            var uri = _this.attr('action');
+            var params = form.serializeArray();
+
+            _this.addClass("posting");
+            $.ajax({
+                url: uri,
+                data: params,
+                dataType: "json",
+                type: "POST",
+                success: function (resp) {
+                    if (resp.state) {
+                        window.location.href = resp.redirect_url;
+                    } else {
+                        _this.removeClass("posting");
+                        var error = resp.error;
+                        for (var name in error) {
+                            $("#id-" + name + "-error").html(error[name][0]);
+                        }
+                    }
+                },
+                error: function (err) {
+                    if (err.statusText !== 'abort') {
+                        _this.removeClass("posting");
+                        swal({
+                            title: "哎呀，出错了",
+                            type: "error",
+                            confirmButtonColor: "#1ab394"
+                        });
+                    }
+                }
+            })
+        });
+    });
+
+
+    // 错误提示复位
+    $("#id_strategy_op").focus(function () {
+        $("#id-strategy_op-error").html("");
+    });
+    $("#id_strategy_threshold").focus(function () {
+        $("#id-strategy_threshold-error").html("");
+    });
+    $("#id_strategy_var").focus(function () {
+        $("#id-strategy_var-error").html("");
+    });
+    $("#id_strategy_func").focus(function () {
+        $("#id-strategy_func-error").html("");
+    });
+</script>
+
+<script>
+    $(function () {
+        $('select#id_strategy_func').searchableSelect();
+    });
+</script>
+
+
+<script>
+    //内置函数联动显示（需要特殊处理，因为加了搜索框插件）
+    function get_data_example(){
+        makename()
+    }
+</script>
+
+<script>
+    // typehead的宽度和同页面的input宽度一致
+    function setWidth() {
+        var input_element = document.getElementById("id_strategy_op");
+        var objs = document.getElementsByClassName("searchable-select");
+        for (var i = 0; i < objs.length; i++) {
+            objs[i].style.cssText = "min-width:" + input_element.offsetWidth + "px;";
+        }
+    }
+
+    window.onresize = setWidth;
+    $(document).ready(setWidth)
+
+</script>
+
+{% endblock %}

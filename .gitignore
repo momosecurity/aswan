@@ -1,0 +1,8 @@
+*.pyc
+*.rdb
+*.pyo
+*.log
+*.sqlite
+.idea/
+mongo/
+output/

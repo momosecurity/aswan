@@ -1,0 +1,132 @@
+{% load i18n %}
+{% load django_tables2 %}
+
+{% trans '共查询出' %}{{ record_count }}{% trans '条数据' %}
+
+{% if is_paginated %}
+    {% if enable_page_size_config %}
+        <style type="text/css">
+            .count-container {
+                text-align: right;
+                padding-top: 15px;
+            }
+            .count-container select {
+                width: 50px;
+            }
+        </style>
+        <div class="count-container">
+            {% trans '每页显示' %}
+            <select name="count" id="change-count">
+            {% for value in page_values %}
+                <option  value="{{ value }}" {% if value == page_size %} selected {% endif %}>{{ value }}</option>
+            {% endfor %}
+            </select>
+            {% trans '条数据' %}
+        </div>
+        <script type="text/javascript">
+            function getUrlVars() {
+                var vars = {};
+                if (window.location.href.indexOf('?') > 0) {
+                    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+                    for (var i = 0; i < hashes.length; i++) {
+                        hash = hashes[i].split('=');
+                        vars[hash[0]] = hash[1];
+                    }
+                }
+                return vars;
+            }
+            $("body").on("change", "#change-count", function () {
+                var value = $(this).val();
+                var urlVars = getUrlVars(window.location.href);
+                urlVars['page_size'] = value;
+                urlVars['page'] = 1;
+                var itemArray = [];
+                $.each(urlVars, function (key, value) {
+                    if (value) {
+                       itemArray.push(key + '=' + value);
+                   }
+                });
+                var path = itemArray.join("&");
+
+                window.location.href = window.location.origin + window.location.pathname + "?" + path;
+            });
+        </script>
+    {% endif %}
+
+    <div class="pagination">
+        <div class="goto" id="goto">
+            <input type="text" value="" class="num"/>
+            <a href="" data-href="{% querystring table.prefixed_page_field='' %}">{% trans '跳页 ' %}</a>
+        </div>
+
+        <div class="page-show">
+            {% block pagination.previous %}
+                {% if page_obj.has_previous %}
+                    <a href="{% querystring table.prefixed_page_field=page_obj.previous_page_number %}" class="prev">{{ previous_link_decorator|safe }}上一页</a>
+                {% endif %}
+            {% endblock pagination.previous %}
+
+            {% block pagination.cardinality %}
+                {% for page in pages %}
+                    {% if page %}
+                        {% ifequal page page_obj.number %}
+                            <span class="current page">{{ page }}</span>
+                        {% else %}
+                            <a href="{% querystring table.prefixed_page_field=page %}" class="page">{{ page }}</a>
+                        {% endifequal %}
+                    {% else %}
+                        ...
+                    {% endif %}
+                {% endfor %}
+            {% endblock pagination.cardinality %}
+
+            {% block pagination.next %}
+                {% if page_obj.has_next %}
+                    <a href="{% querystring table.prefixed_page_field=page_obj.next_page_number %}" class="next">{% trans '下一页' %}{{ next_link_decorator|safe }}</a>
+                {% endif %}
+            {% endblock pagination.next %}
+        </div>
+    </div>
+
+    <script>
+        "use strict";
+
+        var _oGo = $('#goto'),
+            _inpNum = _oGo.find('input'),
+            _btnConfirm = _oGo.find('a');
+
+        $(".num").on("keyup", function() {
+
+            var pageNum = $(this).val(),
+                maxNum = parseFloat($(".page-show .page").eq(-1).text()),
+                reg = /^\d*$/;
+
+            if(!reg.test(pageNum)) {
+                $(this).val("");
+            } else {
+                pageNum = parseFloat(pageNum);
+
+                if (pageNum > maxNum){
+                    $(this).val(maxNum);
+                }
+                if(pageNum <= 0){
+                    $(this).val("1");
+                }
+            }
+        });
+
+        _btnConfirm.on("click", function() {
+
+            var pageNum = $.trim(_inpNum.val());
+            var hrefPrefix = _btnConfirm.attr('data-href');
+            hrefPrefix = hrefPrefix.replace("&submit=%E6%9F%A5%E8%AF%A2", "");
+
+            if(pageNum == "") {
+                return false;
+            } else {
+
+                _btnConfirm[0].href = hrefPrefix + pageNum;
+            }
+        });
+    </script>
+{% endif %}

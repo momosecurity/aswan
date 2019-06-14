@@ -1,0 +1,202 @@
+/*侧边栏样式*/
+
+.nav > li > a {
+    color: rgba(252, 247, 254, 0.97);
+    font-weight: bold;
+}
+
+.nav-header {
+    padding: 20px 25px;
+}
+
+.nav-header a {
+    color: white;
+}
+
+.navbar-default {
+    background: #184256;
+    overflow: scroll;
+}
+
+.navbar-default .nav > li > a:hover,
+.navbar-default .nav > li > a:focus {
+    background-color: #184256;
+}
+
+.extra-navbar-default {
+    margin-top: 40px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-radius: 0;
+    background: #ffffff;
+    box-shadow: 0 1px 1px #eeeeee;
+}
+
+.arrow {
+    float: right;
+    margin-top: 2px;
+}
+
+.fa.arrow:before {
+    content: "\f104";
+}
+
+.active > a > .fa.arrow:before {
+    content: "\f107";
+}
+
+.extra-nav-level-2 li a {
+    padding: 6px 15px 6px 40px;
+}
+
+.extra-navbar-right {
+    position: fixed;
+    width: 220px;
+    z-index: 9999;
+    height: 100%;
+}
+
+.extra-float-margins .btn {
+    margin-bottom: 5px;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
+#wrapper {
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 100%;
+}
+
+.wrapper {
+    padding: 0 0;
+}
+
+.wrapper-content {
+    margin-left: 17px;
+}
+
+#extra-main-page {
+    padding: 0;
+    position: inherit;
+    height: 100%;
+    margin: 0 0 0 220px;
+}
+
+.extra-nav a {
+    font-size: 13px;
+}
+
+.extra-tab-title {
+    padding-left: 25px;
+}
+
+.extra-tab-title a {
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.extra-right-btns {
+    padding: 6px 12px;
+    border-radius: 3px;
+    background-color: #417690;
+    border-color: #417690;
+    color: #FFFFFF;
+    width: auto;
+    margin-left: 15px;
+}
+
+.extra-right-btns:hover {
+    background-color: #375b79;
+    color: white;
+    text-decoration: none;
+}
+
+.extra-right-btns i {
+    margin-right: 2px;
+}
+
+.btn-primary {
+    background-color: #417690;
+    border-color: #417690;
+}
+
+.extra-online-icon {
+    color: #14e43d;
+}
+
+.nav > li.active {
+    border-left: none;
+    background: #293846;
+}
+
+.extra-main-bg {
+    background-color: #f3f3f4;
+}
+
+.extra-box-content {
+    background-color: #ffffff;
+    color: inherit;
+    padding: 15px 20px 5px 20px;
+    border-color: #e7eaec;
+    -webkit-border-image: none;
+    border-style: solid solid none;
+    border-width: 1px 0;
+}
+
+.extra-search-form {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+#extra-side-menu {
+    margin-bottom: 40px;
+}
+
+/* 登录页面样式 */
+.extra-login-content {
+    margin-top: 150px;
+    margin-left: auto;
+    margin-right: auto;
+    width:440px;
+    max-width:440px;
+    background: white;
+    padding: 30px 50px 42px 50px;
+}
+
+.extra-error-page-content {
+    margin-top: 150px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width:840px;
+    background: white;
+    padding: 30px 50px 42px 50px;
+}
+
+.extra-error-desc {
+    margin-bottom: 20px;
+}
+
+/* 表单样式 */
+.form-control[type=checkbox] {
+    box-shadow: none;
+}
+
+
+/* 首页样式 */
+.extra-welcome {
+    margin: 20px 25px;
+    font-size: 16px;
+}

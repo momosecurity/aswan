@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+
+{% block css %}
+{{ block.super }}
+
+
+
+{% endblock %}
+
+
+{% block header %}
+<a href="javascript:;" class="active">时段频控型策略配置</a>
+{% endblock %}
+
+
+{% block action %}
+<a class="roll-nav roll-right extra-right-btns pull-right" href="{% url 'strategy:freq_strategy_test' %}">
+    <i class="fa fa-cog"></i>
+    在线仿真
+</a>
+<a class="roll-nav roll-right extra-right-btns pull-right" href="{% url 'strategy:freq_strategy_create' %}">
+    <i class="fa fa-plus"></i>
+    新增
+</a>
+{% endblock %}
+
+
+{% block main %}
+<div class="wrapper wrapper-content">
+    <div class="extra-search-form">
+        {% crispy filter_form %}
+    </div>
+    <div class="extra-box-content">
+        {% render_table table "table.html" %}
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block js %}
+{{ block.super }}
+
+<script>
+    $(function () {
+        $('.strategy-destroy').click(function () {
+            var _this = $(this),
+                uri = _this.data('uri'),
+                id = _this.data('id');
+            swal({
+                title: "您确定要删除吗",
+                type: "warning",
+                allowOutsideClick: true,
+                showCancelButton: true,
+                confirmButtonColor: "#ff6700",
+                confirmButtonText: "删除",
+                cancelButtonText: "取消",
+                closeOnConfirm: false
+            }, function () {
+                $.ajax({
+                    url: uri,
+                    data: {
+                        'id': id,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    dataType: "json",
+                    type: "POST",
+                    success: function (resp) {
+                        if (resp.state) {
+                            window.location.reload();
+                        }
+                        else {
+                            swal({
+                                title: resp.error,
+                                type: "error",
+                                confirmButtonColor: "#ff6700"
+                            });
+                        }
+                    },
+                    error: function (err) {
+                        if (err.statusText !== 'abort') {
+                            swal({
+                                title: "删除失败",
+                                type: "error",
+                                confirmButtonColor: "#ff6700"
+                            });
+                        }
+                    }
+                })
+            });
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+{% block header %}
+    <a href="javascript:;" class="active">名单项目管理</a>
+{% endblock %}
+
+
+{% block action %}
+    <a class="roll-nav roll-right extra-right-btns pull-right" data-toggle="modal" data-target="#setEvent">
+        <i class="fa fa-plus"></i>
+        新增
+    </a>
+{% endblock %}
+
+
+{% block main %}
+    <div class="wrapper wrapper-content">
+        <div class="extra-box-content">
+            {% render_table table "table.html" %}
+        </div>
+    </div>
+
+
+    <div class="modal inmodal fade" id="setEvent" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    新增名单项目
+                </div>
+                <div class="modal-body">
+                    <input class="form-control" id="id_event_name" type="text" name="event_name" placeholder="项目名称">
+                    <span id="id-event_name-error" class="help-block" style="color:darkred"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <button type="button" id="eventSave" class="btn btn-primary" data-uri="{% url 'menus:event_create' %}">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+{{ block.super }}
+{% include "datepicker.html" %}
+{% include "menu/batch_delete.html" %}
+<script>
+    $(function () {
+    // 删除
+    $('.event-destroy').click(function () {
+        var _this = $(this),
+            uri = _this.data('uri'),
+            id = _this.data('id');
+        swal({
+            title: "您确定要删除吗",
+            type: "warning",
+            allowOutsideClick: true,
+            showCancelButton: true,
+            confirmButtonColor: "#ff6700",
+            confirmButtonText: "删除",
+            cancelButtonText: "取消",
+            closeOnConfirm: false
+        }, function () {
+            $.ajax({
+                url: uri,
+                data: {
+                    'id': id,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                dataType: "json",
+                type: "POST",
+                success: function (resp) {
+                    if (resp.state) {
+                        window.location.reload();
+                    } else {
+
+                        swal({
+                            title: resp.error,
+                            type: "error",
+                            confirmButtonColor:"#ff6700"
+                        });
+                    }
+                },
+                error: function (err) {
+                    if (err.statusText !== 'abort') {
+                        swal({
+                            title: "删除失败",
+                            type: "error",
+                            confirmButtonColor:"#ff6700"
+                        });
+                    }
+                }
+            })
+        });
+    });
+    // 新增
+    $('#eventSave').click(function () {
+        var _this = $(this);
+        var uri = _this.data('uri'),
+            event_name = $("#id_event_name").val();
+        $.ajax({
+            url: uri,
+            data: {
+                'event_name': event_name,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            dataType: "json",
+            type: "POST",
+            success: function (resp) {
+                if (resp.state) {
+                    window.location.reload();
+                } else {
+                    var error = resp.error;
+                    for (var name in error) {
+                        $("#id-" + name +"-error").html(error[name][0]);
+                    }
+                }
+            },
+            error: function (err) {
+                if (err.statusText !== 'abort') {
+                    swal({
+                        title: "哎呀，出错了",
+                        type: "error",
+                        confirmButtonColor:"#1ab394"
+                    });
+                }
+            }
+        })
+    });
+    // 错误提示复位
+    $("#id_event_name").focus(function () {
+        $("#id-event_name-error").html("");
+    });
+});
+</script>
+{% endblock %}

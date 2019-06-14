@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+{% block header %}
+    <a href="javascript:;" class="active">拦截日志详情列表</a>
+{% endblock %}
+
+
+{% block main %}
+    <div class="wrapper wrapper-content">
+        <div class="extra-search-form">
+            {% crispy filter_form %}
+        </div>
+        <div class="extra-box-content">
+            {% render_table table "table.html" %}
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+{{ block.super }}
+<script src="{% static 'js/rule_map_strategygroup.js' %}"></script>
+<script>
+    $(function () {
+        $('#id_strategy_group').searchableSelect();
+        $('#id_rule_id').searchableSelect({afterSelectItem: function(){
+            //规则和策略联动显示
+            var rule_id = $("#id_rule_id").val();
+            if (rule_id != ''){
+                var update_url = "{% url 'log_manage:rule_strategy_map' %}";
+                rule_map_strategy(update_url, rule_id);
+            }
+        }});
+    });
+</script>
+{% endblock %}

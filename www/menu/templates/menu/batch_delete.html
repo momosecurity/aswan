@@ -1,0 +1,67 @@
+<script>
+$(function () {
+    // 批量删除-全选
+    $("#checkall-bottom").change(function () {
+        var isCheckAll = $(this).is(":checked");
+        if (isCheckAll) {
+            $(".menu-item").prop("checked", true);
+        } else {
+            $(".menu-item").prop("checked", false);
+        }
+    });
+
+    //批量删除-提交
+    $("#batchDelete").click(function () {
+        var uri = $(this).data('uri');
+        var idList = $("input:checkbox:checked.menu-item").map(function (){return $(this).data('id')}).get();
+        if(!idList.length){
+            swal({
+                title: "请选择要删除的数据",
+                type: "warning",
+                confirmButtonColor:"#1ab394"
+            });
+            return false
+        }
+        swal({
+            title: "您确定要删除吗",
+            type: "warning",
+            allowOutsideClick: true,
+            showCancelButton: true,
+            confirmButtonColor: "#ff6700",
+            confirmButtonText: "删除",
+            cancelButtonText: "取消",
+            closeOnConfirm: false
+            }, function () {
+                $.ajax({
+                url: uri,
+                data: {
+                    'ids': idList.join(','),
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                dataType: "json",
+                type: "POST",
+                success: function (resp) {
+                    if (resp.state) {
+                        window.location.reload();
+                    } else {
+                        var error = resp.error;
+                        swal({
+                            title: error,
+                            confirmButtonColor:"#1ab394"
+                        });
+                    }
+                },
+                error: function (err) {
+                    if (err.statusText !== 'abort') {
+                        swal({
+                            title: "哎呀，出错了",
+                            type: "error",
+                            confirmButtonColor:"#1ab394"
+                        });
+                    }
+                }
+            });
+        });
+    });
+});
+</script>

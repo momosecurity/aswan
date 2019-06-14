@@ -1,0 +1,265 @@
+{% extends 'base.html' %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+
+{% block css %}
+    {{ block.super }}
+    <style>
+        .action-button {
+            margin-right: 20px;
+        }
+    </style>
+{% endblock %}
+
+
+{% block header %}
+    <a href="javascript:;" class="active">规则配置</a>
+{% endblock %}
+
+
+{% block action %}
+    <a class="roll-nav roll-right extra-right-btns pull-right" href="{% url 'rule:test' %}">
+        <i class="fa fa-cog"></i>
+        调试
+    </a>
+    <a class="roll-nav roll-right extra-right-btns pull-right" href="{% url 'rule:create' %}">
+        <i class="fa fa-plus"></i>
+        新增
+    </a>
+{% endblock %}
+
+
+{% block main %}
+    <div class="wrapper wrapper-content">
+        <div class="extra-search-form">
+            {% crispy filter_form %}
+        </div>
+        <div class="extra-box-content">
+            {% render_table table "table.html" %}
+        </div>
+    </div>
+
+    <div class="modal inmodal fade" id="show-detail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+             <div class="modal-header">
+                 <h2>规则详情</h2>
+             </div>
+             <div class="modal-body">
+                 <label class="form-control control-label" id="detail-title"></label>
+                 <div class="hr-line-dashed"></div>
+                 <label class="form-control control-label" id="detail-describe"></label>
+                 <div class="hr-line-dashed"></div>
+                 <label class="form-control control-label" id="detail-status"></label>
+                 <div class="hr-line-dashed"></div>
+                 <label class="form-control control-label" id="detail-end_time"></label>
+                 <div class="hr-line-dashed"></div>
+                 <ul id="detail-list">
+                     <li style="display: none;">
+                     </li>
+                 </ul>
+             </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+              </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+    {{ block.super }}
+
+<script>
+    $(function () {
+    $('.rules-destroy').click(function () {
+        var _this = $(this),
+            uri = _this.data('uri'),
+            id = _this.data('id');
+        swal({
+            title: "您确定要删除吗",
+            type: "warning",
+            allowOutsideClick: true,
+            showCancelButton: true,
+            confirmButtonColor: "#ff6700",
+            confirmButtonText: "删除",
+            cancelButtonText: "取消",
+            closeOnConfirm: true
+        }, function () {
+            $.ajax({
+                url: uri,
+                data: {
+                    'id': id,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                dataType: "json",
+                type: "POST",
+                success: function (resp) {
+                    if (resp.state) {
+                        window.location.reload();
+                    }
+                },
+                error: function (err) {
+                    if (err.statusText !== 'abort') {
+                        swal({
+                            title: "删除失败",
+                            type: "error",
+                            confirmButtonColor:"#ff6700"
+                        });
+                    }
+                }
+            })
+        });
+    });
+});
+    $(function () {
+    $('.rules-on').click(function () {
+        var _this = $(this),
+            uri = _this.data('uri'),
+            title = _this.data('title'),
+            status = _this.data('status'),
+            id = _this.data('id');
+        if(status === 'on'){
+            swal({
+                title: "规则" + title + "已启用",
+                type: "error",
+                confirmButtonColor:"#ff6700"
+            });
+            return;
+        }
+        swal({
+            title: "您确定启用规则" + title + "吗?",
+            type: "warning",
+            allowOutsideClick: true,
+            showCancelButton: true,
+            confirmButtonColor: "#ff6700",
+            confirmButtonText: "启用",
+            cancelButtonText: "取消",
+            closeOnConfirm: true
+        }, function () {
+            $.ajax({
+                url: uri,
+                data: {'id': id, 'status': status},
+                dataType: "json",
+                type: "POST",
+                success: function (resp) {
+                    if (resp.state) {
+                        window.location.reload();
+                    }
+                },
+                error: function (err) {
+                    if (err.statusText !== 'abort') {
+                        swal({
+                            title: "启用失败",
+                            type: "error",
+                            confirmButtonColor:"#ff6700"
+                        });
+                    }
+                }
+            })
+        });
+    });
+});
+
+    $(function () {
+    $('.rules-off').click(function () {
+        var _this = $(this),
+            uri = _this.data('uri'),
+            title = _this.data('title'),
+            status = _this.data('status'),
+            id = _this.data('id');
+        if(status === 'off'){
+            swal({
+                title: "规则" + title + "已停用",
+                type: "error",
+                confirmButtonColor:"#ff6700"
+            });
+            return;
+        }
+        swal({
+            title: "您确定停用规则" + title + "吗?",
+            type: "warning",
+            allowOutsideClick: true,
+            showCancelButton: true,
+            confirmButtonColor: "#ff6700",
+            confirmButtonText: "停用",
+            cancelButtonText: "取消",
+            closeOnConfirm: true
+        }, function () {
+            $.ajax({
+                url: uri,
+                data: {'id': id, 'status': status},
+                dataType: "json",
+                type: "POST",
+                success: function (resp) {
+                    if (resp.state) {
+                        window.location.reload();
+                    }
+                },
+                error: function (err) {
+                    if (err.statusText !== 'abort') {
+                        swal({
+                            title: "停用失败",
+                            type: "error",
+                            confirmButtonColor:"#ff6700"
+                        });
+                    }
+                }
+            })
+        });
+    });
+});
+
+    $(function () {
+    $('.rules-detail').click(function () {
+        var _this = $(this),
+            uri = _this.data('uri'),
+            id = _this.data('id'),
+            url = uri + "?id=" + id;
+            window.location.href = url;
+        });
+    });
+
+    $(function () {
+    $('.rules-edit').click(function () {
+        var _this = $(this),
+            uri = _this.data('uri'),
+            id = _this.data('id'),
+            url = uri + "?id=" + id;
+            window.location.href = url;
+        });
+    });
+
+    $(function () {
+        $('td .rules-on').map(function(){
+            if($(this).attr("data-status") == "on"){
+                $(this).parent().attr("hidden", "");
+            }
+        });
+        $('td .rules-off').map(function(){
+            if($(this).attr("data-status") == "off"){
+                $(this).parent().attr("hidden", "");
+            }
+        });
+    });
+
+    $(function () {
+        $('th.id').click(function () {
+            var _this = $(this),
+                new_uri = '';
+            var uri = _this.find('a').attr('href');
+            var target = window.location.href.substr(window.location.href.indexOf("?"));
+            if(target.indexOf('sort=id') < 0){
+                new_uri = uri.replace("sort=-id", "sort=id");
+                _this.find('a').attr('href', new_uri);
+            } else {
+                new_uri = uri.replace("sort=id", "sort=-id");
+                _this.find('a').attr('href', new_uri);
+            }
+        });
+    })
+</script>
+{% endblock %}

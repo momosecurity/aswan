@@ -1,0 +1,443 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block css %}
+{{ block.super }}
+{{ form.media }}
+{% endblock %}
+
+
+{% block header %}
+<a href="javascript:;" class="active">新增规则</a>
+{% endblock %}
+
+{% block action %}
+<a class="roll-nav roll-right extra-right-btns pull-right" href="{% url 'rule:list' %}">
+    <i class="fa fa-reply"></i>
+    返回
+</a>
+{% endblock %}
+
+
+{% block main %}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox extra-float-margins">
+                <div class="extra-box-content">
+                    <form method="post" class="form-horizontal" id="menu_create_form"
+                          action="{{ request.get_full_path }}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">规则名称</label>
+                            <div class="col-sm-10">
+                                {{ form.title }}
+                                <span id="id-title-error" class="help-block" style="color:darkred"></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">规则描述</label>
+                            <div class="col-sm-10">
+                                {{ form.describe }}
+                                <span id="id-describe-error" class="help-block" style="color:darkred"></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">状态</label>
+                            <div class="col-sm-10">
+                                {{ form.status }}
+                                <span id="id-status-error" class="help-block" style="color:darkred"></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">结束时间</label>
+                            <div class="col-sm-10">
+                                <input class="form-control datetime" id="id_end_time" name="end_time" type="datetime">
+                                <span id="id-end_time-error" class="help-block" style="color:darkred"></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="modal inmodal fade" id="choose-strategy" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1>策略原子选择</h1>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="ibox">
+                                                <div class="extra-box-content">
+                                                    <h3>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                                        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                                        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                                        待选&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                                        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                                        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                                        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                                        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                                        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                                        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                                        已选 (可拖动排序)</h3>
+                                                    <select multiple="" class="searchable" name="searchable[]"
+                                                            id="89multiselect"
+                                                            style="position: absolute; left: -9999px;">
+                                                        {% for uuid, strategy in strategys %}
+                                                        <option id={{ uuid }}>{{ strategy}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                                        <button type="button" id="save-strategy" class="btn btn-primary"
+                                                onclick="save_strategys()">
+                                            保存
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <table id="rule-list" class="table table-bordered">
+                                <tr id="list-0" hidden>
+                                    <td width="5%">
+                                        <button class="btn fa fa-minus" type="button"
+                                                onclick="delete_rule(this)"></button>
+                                    </td>
+                                    <td width="15%">
+                                        <textarea class="form-control group-name" placeholder="策略原子组名" data-autoresize rows="1"></textarea>
+                                    </td>
+                                    <td width="10%">
+                                        <input type="number" class="form-control weight" placeholder="权重"/>
+                                    </td>
+                                    <td width="10%">
+                                        <a class="strategy-choose" href="#choose-strategy" data-toggle="modal" data-list-id="list-0">策略原子选择</a>
+                                    </td>
+                                    <td width="35%">
+                                        <label class="strategy" style="text-align:left"></label>
+                                    </td>
+                                    <td width="10%">
+                                        {{ form.control }}
+                                    </td>
+                                    <td width="20%">
+                                        <div class="custom">
+                                            {{ form.custom }}
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <span id="id-strategys-error" class="help-block" style="color:darkred"></span>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-info" onclick="create_rule()" type="button">新增策略原子</button>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-primary" type="submit">完成</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+<script>
+    $(document).ready(function () {
+        $(".sortable-list").sortable({connectWith: ".connectList"}).disableSelection()
+    });
+</script>
+
+{% include "datepicker.html" %}
+
+<script>
+    $(function () {
+        $("body").on("submit", '#menu_create_form', function (e) {
+            e.preventDefault();
+            var _this = $(this);
+            var uri = _this.attr('action');
+
+            var title = $('#id_title').val()
+            var describe = $('#id_describe').val()
+            var status = $('#id_status').val()
+            var end_time = $('#id_end_time').val()
+
+            var names = $(".group-name:visible").map(function () {
+                return $(this).val();
+            });
+            var weights = $(".weight:visible").map(function () {
+                return $(this).val();
+            });
+            console.log(weights);
+            var strategys = $("#rule-list label.strategy:visible").map(function () {
+                return $(this).val();
+            });
+            var controls = $("#rule-list .form-control:visible").map(function () {
+                return $(this).find(":selected").val();
+            });
+            var customs = $(".custom textarea:visible").map(function () {
+                return $(this).val();
+            });
+            if (names.length !== strategys.length || strategys.length !== controls.length || controls.length !== customs.length) {
+                swal({
+                    title: "策略原子不能留空",
+                    type: "error",
+                    confirmButtonColor: "#1ab394"
+                });
+                return;
+            }
+            if (strategys.length <= 0) {
+                swal({
+                    title: "必须添加规则",
+                    type: "error",
+                    confirmButtonColor: "#1ab394"
+                });
+                return;
+            }
+            strategy_arr = [];
+            control_arr = [];
+            custom_arr = [];
+            name_arr = [];
+            weight_arr = [];
+            for (i = 0; i < strategys.length; i++) {
+                if (names[i] === '') {
+                    swal({
+                        title: "策略原子组名不能为空",
+                        type: "error",
+                        confirmButtonColor: "#1ab394"
+                    });
+                    return;
+                }
+                if (weights[i] === '') {
+                    swal({
+                        title: "权重不能为空",
+                        type: "error",
+                        confirmButtonColor: "#1ab394"
+                    });
+                    return;
+                }
+                if (strategys[i] === '') {
+                    swal({
+                        title: "策略原子不能留空",
+                        type: "error",
+                        confirmButtonColor: "#1ab394"
+                    });
+                    return;
+                }
+                if (controls[i] === '') {
+                    swal({
+                        title: "管控原子不能留空",
+                        type: "error",
+                        confirmButtonColor: "#1ab394"
+                    });
+                    return;
+                }
+                if (customs[i] === '') {
+                    customs[i] = " ";
+                }
+                name_arr.push(names[i]);
+                weight_arr.push(weights[i]);
+                strategy_arr.push(strategys[i]);
+                control_arr.push(controls[i]);
+                custom_arr.push(customs[i]);
+            }
+
+            params = {
+                'title': title,
+                'describe': describe,
+                'status': status,
+                'end_time': end_time,
+                'strategys': strategy_arr.join(","),
+                'controls': control_arr.join(","),
+                "customs": custom_arr.join(":::"),
+                "names": name_arr.join(":::"),
+                "weights": weight_arr.join(","),
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            };
+
+            _this.addClass("posting");
+            $.ajax({
+                url: uri,
+                data: params,
+                dataType: "json",
+                type: "POST",
+                success: function (resp) {
+                    if (resp.state) {
+                        window.location.href = resp.redirect_url;
+                    } else {
+                        _this.removeClass("posting");
+                        var error = resp.error;
+                        for (var name in error) {
+                            $("#id-" + name + "-error").html(error[name][0]);
+                        }
+                    }
+                },
+                error: function (err) {
+                    if (err.statusText !== 'abort') {
+                        _this.removeClass("posting");
+                        swal({
+                            title: "哎呀，出错了",
+                            type: "error",
+                            confirmButtonColor: "#1ab394"
+                        });
+                    }
+                }
+            })
+        });
+    });
+
+    // 错误提示复位
+    $(document).on('click', ".strategy-choose" , function() {
+        $("#id-strategys-error").html("");
+    });
+    $("#id_title").focus(function () {
+        $("#id-title-error").html("");
+    });
+
+    function create_rule() {
+        var id = $("#rule-list tr:last").attr("id");
+        var num = id.split("-")[1];
+        var new_id = parseInt(num) + 1;
+        var clone = $("#list-0").clone();
+        clone.find("a").attr("data-list-id", "list-" + new_id);
+        $('#rule-list').append(
+            '<tr id="list-' + new_id + '">' + clone.html() + "</tr>"
+        );
+
+        $.each($('textarea[data-autoresize]'), function() {
+            var offset = this.offsetHeight - this.clientHeight;
+            var resizeTextarea = function(el) {
+                jQuery(el).css('height', 'auto').css('height', el.scrollHeight + offset);
+            };
+            jQuery(this).on('keyup input', function() { resizeTextarea(this); });
+        });
+    }
+
+    $(document).ready(create_rule());
+
+    function save_strategys() {
+        var list_id = $("#save-strategy").val();
+        var uuids = $('.ms-selection ul.ms-list-selection').children('li').map(function () {
+            if ($(this).css("display") != 'none') {
+                return $(this).attr("id").split("-selection")[0];
+            }
+        });
+        var strategys = $('.ms-selection ul.ms-list-selection').children('li').map(function () {
+            if ($(this).css("display") != 'none') {
+                return $(this).html();
+            }
+        });
+        var uuid_arr = [];
+        var strategy_arr = [];
+        for (i = 0; i < strategys.length; i++) {
+            uuid_arr[i] = uuids[i];
+            strategy_arr[i] = strategys[i];
+        }
+        uuids = uuid_arr.join(";");
+        strategys = strategy_arr.join(";");
+        $("#" + list_id).find("label.strategy").html(strategys);
+        $("#" + list_id).find("label.strategy").val(uuids);
+        $("#choose-strategy").modal('hide')
+    }
+
+    function delete_rule(which) {
+        $(which).parent().parent().remove();
+    }
+
+
+</script>
+
+<script>
+    var fun_setVal = function () {
+        var body = $("#id_search_input").val();
+        $("#id_strategy_name").val("相同" + body + "，在最近" + time + "s内，不超过" + limit + "次(" + source + ")");
+    };
+    $('#id_search_input').on('propertychange input', fun_setVal);
+</script>
+
+<script>
+    $('.searchable').multiSelect({
+        selectableHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='过滤条件'>",
+        afterInit: function (ms) {
+            var that = this,
+                $selectableSearch = that.$selectableUl.prev(),
+                $selectionSearch = that.$selectionUl.prev(),
+                selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+                selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
+
+            that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                .on('keydown', function (e) {
+                    if (e.which === 40) {
+                        that.$selectableUl.focus();
+                        return false;
+                    }
+                });
+
+            that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                .on('keydown', function (e) {
+                    if (e.which == 40) {
+                        that.$selectionUl.focus();
+                        return false;
+                    }
+                });
+        },
+        afterSelect: function () {
+            this.qs1.cache();
+            this.qs2.cache();
+        },
+        afterDeselect: function () {
+            this.qs1.cache();
+            this.qs2.cache();
+        }
+    });
+
+
+    $("#choose-strategy").on("hidden.bs.modal", function () {
+        $('#89multiselect').multiSelect('refresh');
+        $('.ms-selection ul.ms-list-selection').sortable();
+        $('.ms-selection ul.ms-list-selection').disableSelection();
+    });
+
+
+    $("#choose-strategy").on("show.bs.modal", function (e) {
+        var listId = $(e.relatedTarget).data('list-id');
+        $("#save-strategy").val(listId);
+    });
+</script>
+<script>
+    $(function () {
+        $('.ms-selection ul.ms-list-selection').sortable();
+        $('.ms-selection ul.ms-list-selection').disableSelection();
+    });
+</script>
+<script>
+        $.each($('textarea[data-autoresize]'), function() {
+            var offset = $('.form-control.group-name:visible')[0].offsetHeight - $('.form-control.group-name:visible')[0].clientHeight;
+            var resizeTextarea = function(el) {
+                jQuery(el).css('height', 'auto').css('height', el.scrollHeight + offset);
+            };
+            jQuery(this).on('keyup input', function() { resizeTextarea(this); });
+        });
+</script>
+{% endblock %}

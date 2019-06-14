@@ -1,0 +1,24 @@
+.form-horizontal .inline-group {
+  overflow: hidden;
+  margin-bottom: 22px; }
+  .form-horizontal .inline-group .control-group,
+  .form-horizontal .inline-group .form-group {
+    float: left;
+    margin-bottom: 10px; }
+.form-horizontal .control-label {
+  float: left;
+  width: 150px;
+  text-align: right; }
+.form-horizontal .controls {
+  *display: inline-block;
+  *padding-left: 20px;
+  margin-left: 170px;
+  *margin-left: 0; }
+.form-horizontal .form-actions {
+  margin-top: 20px;
+  padding-left: 170px; }
+.form-horizontal .controls .form-actions {
+  padding-left: 4px; }
+.form-horizontal {
+    margin-bottom: 22px;
+}

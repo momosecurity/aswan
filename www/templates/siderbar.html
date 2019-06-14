@@ -1,0 +1,246 @@
+{% load staticfiles %}
+
+{% url 'home' as home_page %}
+
+{% url 'permissions:index' as permissions_index %}
+{% url 'permissions:users' as permissions_users %}
+{% url 'permissions:groups' as permissions_groups %}
+{% url 'permissions:uri_groups' as permissions_uri_groups %}
+
+{% url 'strategy:menu_strategy_list' as menu_strategy_url %}
+{% url 'strategy:bool_strategy_list' as bool_strategy_url %}
+{% url 'strategy:freq_strategy_list' as freq_strategy_url %}
+{% url 'strategy:user_strategy_list' as user_strategy_url %}
+
+{% url 'rule:list' as rule_list_url %}
+
+{% url 'menus:event_list' as menu_event_list %}
+{% url 'menus:userid_list' as menu_userid_list %}
+{% url 'menus:uid_list' as menu_uid_list %}
+{% url 'menus:ip_list' as menu_ip_list %}
+{% url 'menus:pay_list' as menu_pay_list %}
+{% url 'menus:phone_list' as menu_phone_list %}
+
+{% url 'competition:competition_list' as competition_list_url %}
+
+{% url 'config:source_list' as source_list %}
+{% url 'config:upload_source_list' as upload_source_list %}
+{% url 'config:ordering_business_list' as ordering_business_list %}
+
+{% url 'log_manage:hit_list_detail' as hit_list_detail %}
+{% url 'log_manage:audit_logs' as audit_logs %}
+
+<style>
+    i {
+        width: 10px;
+        text-align: right;
+    }
+</style>
+
+<nav class="navbar-default extra-navbar-right" role="navigation">
+    <div>
+        <i class="fa fa-times-circle"></i>
+    </div>
+    <div class="">
+        <ul class="nav" id="extra-side-menu">
+            <li class="nav-header">
+                    <span >
+                        <a href="{{ home_page }}"><center><img alt="image" height="64px" width="175px" src="{% static 'img/icon.png' %}"/></center>
+                        <center><h3>风控系统</h3></center></a>
+                    </span>
+                    <br>
+                    <span>
+                        <a>
+                            <i class="fa fa-circle extra-online-icon"></i>
+                            <strong>{{ request.user.last_name }}{{ request.user.first_name }}</strong>
+                        </a>
+                    </span>
+                    <span>
+                    <a href="{% url 'risk_auth:risk_logout' %}" style="margin-left: 10px">
+                         退出
+                    </a>
+                    </span>
+            </li>
+
+            <li class="siderbar">
+                <a href="#">
+                    <span class="nav-label">名单管理</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav extra-nav-level-2">
+                    {% if menu_event_list in project_perms %}
+                    <li class="siderbar">
+                        <a href="{{ menu_event_list }}">名单项目管理</a>
+                    </li>
+                    {% endif %}
+                    {% if menu_userid_list in project_perms %}
+                    <li class="siderbar">
+                        <a href="{{ menu_userid_list }}">用户ID管理</a>
+                    </li>
+                    {% endif %}
+                    {% if menu_ip_list in project_perms %}
+                    <li class="siderbar">
+                        <a href="{{ menu_ip_list }}">IP地址管理</a>
+                    </li>
+                    {% endif %}
+                    {% if menu_uid_list in project_perms %}
+                    <li class="siderbar">
+                        <a href="{{ menu_uid_list }}">设备号管理</a>
+                    </li>
+                    {% endif %}
+                    {% if menu_pay_list in project_perms %}
+                    <li class="siderbar">
+                        <a href="{{ menu_pay_list }}">支付账号管理</a>
+                    </li>
+                    {% endif %}
+                    {% if menu_phone_list in project_perms %}
+                    <li class="siderbar">
+                        <a href="{{ menu_phone_list }}">手机号管理</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </li>
+            <li class="siderbar">
+                <a href="#">
+                    <span class="nav-label">策略原子管理</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav extra-nav-level-2">
+
+                    {% if menu_strategy_url in project_perms %}
+                    <li class="siderbar">
+                        <a href="{{ menu_strategy_url }}">名单型策略配置</a>
+                    </li>
+                    {% endif %}
+                    {% if bool_strategy_url in project_perms %}
+                    <li class="siderbar">
+                        <a href="{{ bool_strategy_url }}">布尔型策略配置</a>
+                    </li>
+                    {% endif %}
+                    {% if freq_strategy_url in project_perms %}
+                    <li class="siderbar">
+                        <a href="{{ freq_strategy_url }}">时段频控型策略配置</a>
+                    </li>
+                    {% endif %}
+                    {% if user_strategy_url in project_perms %}
+                    <li class="siderbar">
+                        <a href="{{ user_strategy_url }}">限用户数型策略配置</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </li>
+            <li class="siderbar">
+                <a href="#">
+                    <span class="nav-label">规则管理</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav extra-nav-level-2">
+                    {% if rule_list_url in project_perms %}
+                    <li class="siderbar">
+                        <a href="{{ rule_list_url }}">规则配置</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </li>
+            <li class="siderbar">
+                <a href="#">
+                    <span class="nav-label">日志管理</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav extra-nav-level-2">
+                    {% if hit_list_detail in project_perms %}
+                    <li class="siderbar">
+                        <a href="{{ hit_list_detail }}">拦截日志详情</a>
+                    </li>
+                    {% endif %}
+                    {% if audit_logs in project_perms %}
+                    <li class="siderbar">
+                        <a href="{{ audit_logs }}">访问日志详情</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </li>
+            <li class="siderbar">
+                <a href="#">
+                    <span class="nav-label">权限管理</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav extra-nav-level-2">
+                    {% if permissions_users in project_perms %}
+                    <li class="siderbar">
+                        <a href="{{ permissions_users }}">用户</a>
+                    </li>
+                    {% endif %}
+                    {% if permissions_groups in project_perms %}
+                    <li class="siderbar">
+                        <a href="{{ permissions_groups }}">组</a>
+                    </li>
+                    {% endif %}
+                    {% if permissions_uri_groups in project_perms %}
+                    <li class="siderbar">
+                        <a href="{{ permissions_uri_groups }}">权限</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </li>
+            <li class="siderbar">
+                <a href="#">
+                    <span class="nav-label">后台配置</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav extra-nav-level-2">
+                    {% if source_list in project_perms %}
+                    <li class="siderbar">
+                        <a href="{{ source_list }}">数据源配置</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<script>
+    $(function () {
+        // 动作菜单 -- 导航菜单 对应关系
+        var actionPages = {
+            '/permissions/user/update/': "/permissions/users/",
+            '/permissions/group/create/':"/permissions/groups/",
+            '/permissions/group/update/':"/permissions/groups/",
+            '/permissions/uri_group/create/':"/permissions/uri_groups/",
+            '/permissions/uri_group/update/':"/permissions/uri_groups/",
+
+            '/rules/menu/create/': "/rules/menu/list/",
+
+            '/rules/bool_strategy/test/': "/rules/bool_strategy/list/",
+            '/rules/bool_strategy/create/': "/rules/bool_strategy/list/",
+
+            '/rules/freq_strategy/create/': "/rules/freq_strategy/list/",
+            '/rules/freq_strategy/test/': "/rules/freq_strategy/list/",
+
+            '/rules/user_strategy/create/': "/rules/user_strategy/list/",
+            '/rules/user_strategy/test/': "/rules/user_strategy/list/",
+
+            '/rules/menu_strategy/create/': "/rules/menu_strategy/list/",
+            '/rules/menu_strategy/test/': "/rules/menu_strategy/list/",
+
+            '/rule/rules/create/': "/rule/rules/list/",
+            '/rule/rules/detail/': "/rule/rules/list/",
+            '/rule/rules/edit/': "/rule/rules/list/",
+            '/rule/rules/test/': "/rule/rules/list/",
+        };
+        // 定义当前导航菜单
+        var currentPath = actionPages[window.location.pathname] ? actionPages[window.location.pathname] : window.location.pathname;
+        // 选择当前导航a标签
+        var selector = 'a[href="' + currentPath + '"]';
+        var currentNav = $(selector);
+        // 控制父级菜单高亮
+        currentNav.parents('li.siderbar').addClass('active');
+        // 控制父级菜单展开
+        currentNav.parents('ul.nav').addClass('collapse in');
+
+        // 控制无子菜单的一二级菜单的显隐
+        $("ul:not(:has(li))").parent().addClass('hide');
+    });
+
+</script>
