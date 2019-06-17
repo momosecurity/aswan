@@ -17,11 +17,11 @@ def _create_new_strategy(form_cls, strategy_conf):
         return False, ''
 
 
-def create_menu_strategy(event, dimension, menu_type, menu_op,
+def create_menu_strategy(event_code, dimension, menu_type, menu_op,
                          strategy_name=None, strategy_desc=None):
     """
         新建名单型策略
-    :param str|unicode event: 项目uuid
+    :param str|unicode event_code: 项目uuid
     :param str|unicode dimension: 维度  user_id / ip / uid ...
     :param str|unicode menu_type: 名单类型  black, white, gray
     :param str|unicode menu_op: 操作码 在/不在(is/is_not)
@@ -36,7 +36,7 @@ def create_menu_strategy(event, dimension, menu_type, menu_op,
         'strategy_name': strategy_name,
         'strategy_desc': strategy_desc,
         'menu_op': menu_op,
-        'event': event,
+        'event': event_code,
         'dimension': dimension,
         'menu_type': menu_type
     }

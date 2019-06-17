@@ -62,12 +62,12 @@ class TestRuleManage(BaseTestCase):
         # 正常创建
         event_code = create_menu_event()['event_code']
         add_element_to_menu(event_code=event_code, menu_type='black',
-                            menu_kind='user_id', element='111111')
+                            dimension='user_id', element='111111')
 
         request = self.request_factory.get(create_url)
 
         # user_id 在 event_code 所代表的黑名单中
-        self.menu_strategy_uuid = create_menu_strategy(event=event_code,
+        self.menu_strategy_uuid = create_menu_strategy(event_code=event_code,
                                                        dimension='user_id',
                                                        menu_type='black',
                                                        menu_op='is')

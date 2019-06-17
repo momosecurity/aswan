@@ -78,7 +78,7 @@ class HitListDetailView(ListView):
                           table_names):
             qs.extend(model_cls.objects.filter(**query_params).order_by(
                 '-time').values(*select_fields))
-        return qs
+        return sorted(qs, key=lambda d: d['time'], reverse=True)
 
     def get_filter_form(self):
         return self.filter_form(initial=self.request.GET)
