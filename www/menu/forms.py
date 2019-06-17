@@ -14,7 +14,7 @@ from core.redis_client import get_redis_client
 from risk_models.menu import build_redis_key
 
 # 查询时有全部名单
-MENU_KIND_CHOICES = (
+MENU_TYPE_CHOICES = (
     (u'', u'全部名单'),
     (u'black', u'黑名单'),
     (u'white', u'白名单'),
@@ -28,13 +28,11 @@ MENU_STATUS_CHOICES = (
 )
 
 # 新增时没有全部名单
-MENU_KIND_CHOICES_ADD = ((u'black', u'黑名单'),
-                         (u'white', u'白名单'),
-                         (u'gray', u'灰名单'))
+MENU_TYPE_CHOICES_ADD_CHOICES = MENU_TYPE_CHOICES[1:]
 
-MENU_KIND = dict(MENU_KIND_CHOICES)
+MENU_TYPE_NAME_MAP = dict(MENU_TYPE_CHOICES_ADD_CHOICES)
 
-FIELD_ZH_NAME_MAP = {
+DIMENSION_NAME_MAP = {
     "user_id": u"用户ID",
     "ip": u'IP地址',
     "phone": u"手机号",
@@ -69,10 +67,11 @@ class MenuEventCreateForm(BaseForm):
 class MenuCreateForm(BaseForm):
     value = forms.CharField(widget=forms.Textarea(
         attrs={"placeholder": "用户ID[批量添加时请以回车键隔开]", "rows": "5"}))
-    menu_type = forms.CharField(required=False, widget=forms.HiddenInput)
-    menu_kind = forms.ChoiceField(label=_(u"名单类型"),
-                                  choices=MENU_KIND_CHOICES_ADD)
-    event = forms.ChoiceField(label=_(u"项目"))
+    dimension = forms.CharField(required=False, widget=forms.HiddenInput,
+                                label=_(u'名单维度'))
+    menu_type = forms.ChoiceField(label=_(u"名单类型"),
+                                  choices=MENU_TYPE_CHOICES_ADD_CHOICES)
+    event_code = forms.ChoiceField(label=_(u"项目"))
     end_time = forms.DateTimeField(widget=forms.TextInput(
         attrs={"placeholder": "结束时间", "class": "form-control datetime"}))
     menu_desc = forms.CharField(required=False, widget=forms.Textarea(
@@ -80,13 +79,15 @@ class MenuCreateForm(BaseForm):
 
     def __init__(self, *args, **kwargs):
         super(MenuCreateForm, self).__init__(*args, **kwargs)
-        self.fields['event'].choices = self._build_event_choices()
+        self.fields['event_code'].choices = self._build_event_choices()
 
     @classmethod
     def _build_event_choices(cls):
         db = get_mongo_client()
         choices = [(x["event_code"], x["event_name"]) for x in
-                   db['menu_event'].find()]
+                   db['menu_event'].find({}, projection={'_id': False,
+                                                         'event_code': True,
+                                                         'event_name': True})]
         return choices
 
     def clean_value(self):
@@ -118,12 +119,12 @@ class MenuCreateForm(BaseForm):
 
     def clean(self):
         cd = self.cleaned_data
-        menu_type = cd['menu_type']
+        dimension = cd['dimension']
         values = cd['value']
 
-        if menu_type == "phone":
+        if dimension == "phone":
             self._check_regex(values, r'^1\d{10}$')
-        elif menu_type == 'ip':
+        elif dimension == 'ip':
             self._check_regex(
                 values,
                 r'^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$'
@@ -150,12 +151,14 @@ class MenuCreateForm(BaseForm):
             )
 
             value = value.strip()
+            dimension = cd['dimension']
             menu_type = cd['menu_type']
+            event_code = cd.get('event_code')
 
             condition = dict(value=value,
-                             event=cd.get('event'),
-                             menu_kind=cd.get('menu_kind'),
-                             menu_type=menu_type
+                             event_code=event_code,
+                             menu_type=menu_type,
+                             dimension=dimension
                              )
             res = db.menus.find_one(condition)
 
@@ -168,8 +171,8 @@ class MenuCreateForm(BaseForm):
                                         {"$set": payload})
 
                 #  同时写redis
-                redis_key = build_redis_key(cd.get('event'), menu_type,
-                                            cd.get('menu_kind'))
+                redis_key = build_redis_key(event_code, dimension,
+                                            menu_type)
                 if redis_key:
                     redis_client.sadd(redis_key, value)
 
@@ -180,20 +183,20 @@ class MenuCreateForm(BaseForm):
 
 
 class MenuFilterForm(BaseFilterForm):
-    filter_event = forms.ChoiceField(label=_(u"项目类型"), required=False)
-    filter_hack_type = forms.ChoiceField(label=_(u"名单类型"),
-                                         choices=MENU_KIND_CHOICES,
-                                         required=False)
+    filter_event_code = forms.ChoiceField(label=_(u"项目类型"), required=False)
+    filter_menu_type = forms.ChoiceField(label=_(u"名单类型"),
+                                  choices=MENU_TYPE_CHOICES,
+                                  required=False)
     filter_value = forms.CharField(label=_(u"值"), required=False)
-    filter_status = forms.ChoiceField(choices=MENU_STATUS_CHOICES,
-                                      required=False)
+    filter_menu_status = forms.ChoiceField(choices=MENU_STATUS_CHOICES,
+                                    required=False)
 
     def __init__(self, *args, **kwargs):
-        self.menu_type = kwargs.pop("type", None)
+        self.dimension = kwargs.pop("dimension", None)
         super(MenuFilterForm, self).__init__(*args, **kwargs)
-        self.fields['filter_event'].choices = self._build_event_choices()
+        self.fields['filter_event_code'].choices = self._build_event_choices()
 
-        placeholder = FIELD_ZH_NAME_MAP.get(self.menu_type, u'未知')
+        placeholder = DIMENSION_NAME_MAP.get(self.dimension, u'未知')
         self.fields['filter_value'].widget.attrs["placeholder"] = _(
             placeholder)
 
@@ -201,6 +204,8 @@ class MenuFilterForm(BaseFilterForm):
     def _build_event_choices(cls):
         db = get_mongo_client()
         choices = [(x["event_code"], x["event_name"]) for x in
-                   db['menu_event'].find()]
+                   db['menu_event'].find({}, projection={'_id': False,
+                                                         'event_code': True,
+                                                         'event_name': True})]
         choices.insert(0, ('', u"全部项目"))
         return choices

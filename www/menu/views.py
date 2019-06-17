@@ -103,24 +103,30 @@ class EventDestroyView(JSONResponseMixin, View):
 class BaseMenuListView(ListView):
     enable_page_size_config = True
     collection_name = "menus"
+    filter_form = MenuFilterForm
     extra_filter_kwargs = {}
 
     def build_filter_query(self):
-        value = self.request.GET.get('filter_value', '')
-        menu_kind = self.request.GET.get('filter_hack_type', '')
-        event_kind = self.request.GET.get('filter_event', '')
-        status = self.request.GET.get('filter_status', '')
+        form_obj = self.filter_form(data=self.request.GET)
+        if not form_obj.is_valid():
+            return self.extra_filter_kwargs
+
+        data = form_obj.cleaned_data
+        value = data['filter_value']
+        menu_type = data['filter_menu_type']
+        event_code = data['filter_event_code']
+        menu_status = data['filter_menu_status']
         query = {}
         if value:
             query['value'] = {'$regex': value}
-        if menu_kind:
-            query['menu_kind'] = menu_kind
-        if event_kind:
-            query['event'] = event_kind
-        if not status:
-            status = u'有效'
-        if status != u'全部':
-            query['menu_status'] = status
+        if menu_type:
+            query['menu_type'] = menu_type
+        if event_code:
+            query['event_code'] = event_code
+        if not menu_status:
+            menu_status = u'有效'
+        if menu_status != u'全部':
+            query['menu_status'] = menu_status
         query.update(self.extra_filter_kwargs)
         return query
 
@@ -139,8 +145,8 @@ class BaseMenuListView(ListView):
         return count
 
     def get_filter_form(self):
-        return MenuFilterForm(data=self.request.GET,
-                              type=self.extra_filter_kwargs.get("menu_type"))
+        return self.filter_form(data=self.request.GET,
+                                dimension=self.extra_filter_kwargs.get("dimension"))
 
     def get_context_data(self, **kwargs):
         context = super(BaseMenuListView, self).get_context_data(**kwargs)
@@ -189,9 +195,9 @@ class MenuDestroyView(JSONResponseMixin, View):
 
         menus_records = list(
             db['menus'].find({'_id': {"$in": obj_ids}, 'menu_status': u'有效'},
-                             {'event': True, '_id': False,
-                              'menu_type': True,
-                              'menu_kind': True, 'value': True,
+                             {'event_code': True, '_id': False,
+                              'dimension': True,
+                              'menu_type': True, 'value': True,
                               }))
 
         if not menus_records:
@@ -201,8 +207,8 @@ class MenuDestroyView(JSONResponseMixin, View):
             ))
 
         for d in menus_records:
-            redis_key = build_redis_key(d['event'], d['menu_type'],
-                                        d['menu_kind'])
+            redis_key = build_redis_key(d['event_code'], d['dimension'],
+                                        d['menu_type'])
             if redis_key:
                 redis_values_should_remove[redis_key].append(d['value'])
 
@@ -234,28 +240,28 @@ class MenuDestroyView(JSONResponseMixin, View):
 class UseridListView(BaseMenuListView):
     template_name = "menu/userid_list.html"
     table_class = UseridTable
-    extra_filter_kwargs = {"menu_type": "user_id"}
+    extra_filter_kwargs = {"dimension": "user_id"}
 
 
 class IpListView(BaseMenuListView):
     template_name = "menu/ip_list.html"
     table_class = IPTable
-    extra_filter_kwargs = {"menu_type": "ip"}
+    extra_filter_kwargs = {"dimension": "ip"}
 
 
 class UidListView(BaseMenuListView):
     template_name = "menu/uid_list.html"
     table_class = UidTable
-    extra_filter_kwargs = {"menu_type": "uid"}
+    extra_filter_kwargs = {"dimension": "uid"}
 
 
 class PayListView(BaseMenuListView):
     template_name = "menu/pay_list.html"
     table_class = PayTable
-    extra_filter_kwargs = {"menu_type": "pay"}
+    extra_filter_kwargs = {"dimension": "pay"}
 
 
 class PhoneListView(BaseMenuListView):
     template_name = "menu/phone_list.html"
     table_class = PhoneTable
-    extra_filter_kwargs = {"menu_type": "phone"}
+    extra_filter_kwargs = {"dimension": "phone"}

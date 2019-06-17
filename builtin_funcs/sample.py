@@ -41,6 +41,6 @@ def user_login_count(req_body):
 
     # 通过各种方法(http,硬编码,rpc等等方式)得到用户在此维度上的值
     if user_id[-1] in {'1', '2', '3', '4'}:
-        return 100
+        return 40
     else:
         return 200

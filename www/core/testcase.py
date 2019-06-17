@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 import os
 
-from django.test import TestCase
+from django.test import TransactionTestCase
 
 from core.redis_client import get_redis_client
 from core.pymongo_client import get_mongo_client
@@ -17,7 +17,7 @@ def _get_test_mongo_client(db_name='test_risk_control'):
     return get_mongo_client(db_name)
 
 
-class BaseTestCase(TestCase):
+class BaseTestCase(TransactionTestCase):
     username = 'test_superuser'
     password = 'test_test'
     email = 'test@immomo.com'
@@ -39,8 +39,7 @@ class BaseTestCase(TestCase):
     def tearDownClass(cls):
         super(BaseTestCase, cls).tearDownClass()
 
-        # 由于是测试环境，需清理
-
+        # 清理测试库
         db = get_mongo_client()
         db.client.drop_database(db.name)
 

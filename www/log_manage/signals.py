@@ -30,7 +30,7 @@ def record_access_log(request, response, **kwargs):
 
     email = request.user.email if request.user else ""
     username = get_username(request.user)
-    req_body = request.REQUEST
+
     path = request.path
     method = request.method
 
@@ -39,8 +39,11 @@ def record_access_log(request, response, **kwargs):
     else:
         ignore_args = default_ignore_args
 
-    req_body = {k: req_body[k] for k in req_body if
-                k not in ignore_args}
+    # 此处收集全部参数
+    req_body = {}
+    for req in (request.GET, request.POST):
+        req_body.update({k: req[k] for k in req if
+                         k not in ignore_args})
 
     AuditLogModel.objects.create(
         username=username,

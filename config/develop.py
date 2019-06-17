@@ -43,7 +43,7 @@ LOG_MYSQL_CONFIG = {
     'db': 'risk_control',
 }
 
-"""mongo数据目的地"""
+# 存储权限等信息的mongo
 SOC_MONGO_HOST = [
     "127.0.0.1:27017",
 ]

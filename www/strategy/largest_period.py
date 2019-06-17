@@ -11,7 +11,7 @@ def _get_stategy_largest_period(strategy_type):
     获取strategy_type类型的策略最大时长
     """
     # 1.在数据源和主体名称一致时，扫描strategy数据并获取最大时间段
-    uuid_source_body = {}  # uuid->source、body
+    uuid_source_body = {}
     strategys = {}
     for strategy_key in client.scan_iter(match=strategy_type + ":*"):
         strategy_data = client.hgetall(strategy_key)

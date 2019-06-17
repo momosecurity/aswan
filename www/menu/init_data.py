@@ -19,18 +19,20 @@ def create_menu_event(event_code=None, event_name=None):
     return payload
 
 
-def add_element_to_menu(event_code, menu_type, menu_kind, element, end_time=None):
+def add_element_to_menu(event_code, menu_type, dimension, element,
+                        end_time=None, menu_desc=None):
     """
         为名单中增加元素
-    :param event_code: 名单项目code
-    :param menu_type: 名单类型  black white gray
-    :param menu_kind: 名单维度 user_id / ip / ...
-    :param element: 放入名单的元素
-    :param end_time: 失效时间
+    :param str|unicode event_code: 名单项目code
+    :param str|unicode menu_type: 名单类型  black white gray
+    :param str|unicode dimension: 名单维度 user_id / ip / ...
+    :param str|unicode element: 放入名单的元素
+    :param datetime end_time: 失效时间
+    :param str|unicode menu_desc: 备注
     :return:
     """
     end_time = (end_time or datetime.now() + timedelta(hours=1))
-    menu_desc = get_sample_str(15)
+    menu_desc = menu_desc or get_sample_str(15)
     payload = dict(
         end_time=end_time,
         menu_desc=menu_desc,
@@ -38,15 +40,16 @@ def add_element_to_menu(event_code, menu_type, menu_kind, element, end_time=None
         create_time=datetime.now(),
         creator='test',
         value=element,
-        event=event_code,
-        menu_kind=menu_kind,
+        event_code=event_code,
+        dimension=dimension,
         menu_type=menu_type
     )
     db = get_mongo_client()
     insert_result = db['menus'].insert_one(payload)
 
     redis_client = get_redis_client()
-    redis_key = build_redis_key(event_code, menu_type, menu_kind)
+    redis_key = build_redis_key(event_code, dimension=dimension,
+                                menu_type=menu_type)
     if redis_key:
         redis_client.sadd(redis_key, element)
 

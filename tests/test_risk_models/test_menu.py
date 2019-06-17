@@ -1,5 +1,9 @@
 import unittest
 
+import pymysql
+
+pymysql.install_as_MySQLdb()
+
 from risk_models.menu import hit_menu
 from www.menu.init_data import create_menu_event, add_element_to_menu
 
@@ -9,10 +13,11 @@ class TestBaseFunction(unittest.TestCase):
     def test_hit_menu(self):
         event_code = create_menu_event()['event_code']
         sp_element = '111111'
+
         dimension = 'user_id'
         menu_type = 'black'
         add_element_to_menu(event_code=event_code, menu_type=menu_type,
-                            menu_kind=dimension, element=sp_element)
+                            dimension=dimension, element=sp_element)
         req_body = {'user_id': sp_element}
         self.assertEquals(
             hit_menu(req_body, 'is', event_code, dimension=dimension,
@@ -35,8 +40,6 @@ class TestBaseFunction(unittest.TestCase):
         self.assertEquals(
             hit_menu(req_body, 'is', event_code, dimension=dimension,
                      menu_type=menu_type), False)
-
-
 
 
 if __name__ == '__main__':

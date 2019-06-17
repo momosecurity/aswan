@@ -11,7 +11,8 @@ def query_handler(req_body):
     try:
         assert rule_id
         rule_id = str(rule_id)
-        result = calculate_rule(rule_id, req_body)
+        control, weight = calculate_rule(rule_id, req_body)
+        result = {'control': control, 'weight': weight}
     except AssertionError:
         error = 'must contain rule_id'
         ec = 100

@@ -83,7 +83,7 @@ class TestRuleStrategyMapView(BaseTestCase):
         self.assertEquals(t['rules_num'], 0)
 
         # 存在规则
-        # todo..
+        # todo
 
 
 class TestAuditLogView(BaseTestCase):

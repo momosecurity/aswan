@@ -2,6 +2,10 @@
 
 import unittest
 
+import pymysql
+
+pymysql.install_as_MySQLdb()
+
 import django
 
 # init django settings
@@ -19,7 +23,7 @@ class TestRule(unittest.TestCase):
     def setUp(self):
         super(TestRule, self).setUp()
         self.event_code = create_menu_event()['event_code']
-        self.menu_uuid = create_menu_strategy(event=self.event_code,
+        self.menu_uuid = create_menu_strategy(event_code=self.event_code,
                                               dimension='user_id',
                                               menu_type='black', menu_op='is')
 
@@ -28,12 +32,12 @@ class TestRule(unittest.TestCase):
                                               strategy_func='is_abnormal',
                                               strategy_threshold='')
 
-        strategy_uuids = [
+        strategy_confs = [
             [get_sample_str(), self.menu_uuid, 'deny', get_sample_str(),
              '100'],
             [get_sample_str(), self.bool_uuid, 'log', get_sample_str(), '90'],
         ]
-        self.rule_id, self.rule_uuid = create_rule(strategy_uuids)
+        self.rule_id, self.rule_uuid = create_rule(strategy_confs)
 
     def test_rule(self):
 
@@ -45,7 +49,7 @@ class TestRule(unittest.TestCase):
         self.assertEquals(weight, 90)
 
         # 命中名单型策略
-        add_element_to_menu(event_code=self.event_code, menu_type='black', menu_kind='user_id', element='111')
+        add_element_to_menu(event_code=self.event_code, menu_type='black', dimension='user_id', element='111')
         control, weight = calculate_rule(id_=self.rule_id, req_body=req_body)
         self.assertEquals(control, 'deny')
         self.assertEquals(weight, 100)
