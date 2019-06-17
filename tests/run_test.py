@@ -13,7 +13,7 @@ os.environ['PYTHONPATH'] = ':'.join((parent_dir, www_dir))
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings.settings'
 
-risk_env = os.environ['RISK_ENV']
+risk_env = os.environ.get('RISK_ENV')
 assert risk_env and risk_env == 'test', '注意，此部分只能在测试环境中执行'
 
 

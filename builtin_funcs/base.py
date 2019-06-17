@@ -7,6 +7,7 @@ import operator
 from risk_models.exceptions import BuiltInFuncNotExistError
 
 logger = logging.getLogger(__name__)
+logging.basicConfig()
 
 
 class BuiltInFuncs(object):
