@@ -112,7 +112,7 @@
 
     重要：由于逻辑必然依赖时间信息，为通用且必需字段，timestamp为默认隐含字段，类型是时间戳(精确到秒，整数)
     
-    ![数据源配置](static/img/wiki/data_source.png)
+    ![数据源配置](./www/static/img/wiki/data_source.png)
 
 ### 调用样例
 1. 调用查询服务
