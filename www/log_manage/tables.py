@@ -12,12 +12,12 @@ from rule.forms import CONTROL_MAP
 
 class HitLogDetailTable(tables.Table):
     time = columns.Column(verbose_name=_(u'触碰时间'))
-    rule_id = columns.Column(verbose_name=_(u'规则名称'))
-    group_name = columns.Column(verbose_name=_(u'策略原子组名称'))
-    user_id = columns.Column(verbose_name=_(u'用户ID'))
-    control = columns.Column(verbose_name=_(u'管控原子'))
-    req_body = columns.Column(verbose_name=_(u'请求体'))
-    hit_number = columns.Column(verbose_name=_(u'是否首次命中'))
+    rule_id = columns.Column(verbose_name=_(u'规则名称'), orderable=False)
+    group_name = columns.Column(verbose_name=_(u'策略原子组名称'), orderable=False)
+    user_id = columns.Column(verbose_name=_(u'用户ID'), orderable=False)
+    control = columns.Column(verbose_name=_(u'管控原子'), orderable=False)
+    req_body = columns.Column(verbose_name=_(u'请求体'), orderable=False)
+    hit_number = columns.Column(verbose_name=_(u'是否首次命中'), orderable=False)
 
     class Meta:
         attrs = {'class': 'table table-striped table-hover'}

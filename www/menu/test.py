@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from django.core.urlresolvers import reverse
 
 from core.utils import get_sample_str
-from menu.forms import MENU_KIND_CHOICES_ADD
+from menu.forms import MENU_TYPE_CHOICES_ADD_CHOICES
 from menu.init_data import create_menu_event, add_element_to_menu
 
 from core.testcase import BaseTestCase
@@ -20,7 +20,7 @@ class TestMenuMinix(object):
 
     def _test_list(self):
         # todo 这里的参数有些问题，降低了覆盖率，后续改一下
-        data = {'menu_type': self.menu_type, 'menu_kind': 'black',
+        data = {'dimension': self.dimension, 'menu_type': 'black',
                 'event': self.event_code}
         response = self.client.get(reverse(self.list_uri), data=data)
         self.assertEquals(response.status_code, 200)
@@ -40,8 +40,8 @@ class TestMenuMinix(object):
         self.assertEquals(json.loads(resp.content)['error'], u"id不合法")
 
         # 成功删除
-        menu_element_id = add_element_to_menu(self.event_code, self.menu_type,
-                                            'black', 'test_value')
+        menu_element_id = add_element_to_menu(self.event_code, 'black',
+                                            self.dimension, 'test_value')
         resp = self.client.post(reverse(self.delete_uri),
                                 data={'ids': menu_element_id})
         self.assertEquals(resp.status_code, 200)
@@ -58,13 +58,13 @@ class TestMenuMinix(object):
     def _test_create(self):
         end_time = (datetime.now() + timedelta(days=1))
 
-        for menu_kind, _ in MENU_KIND_CHOICES_ADD:
+        for menu_type, _ in MENU_TYPE_CHOICES_ADD_CHOICES:
             for value, state in self.test_cases:
                 data = {
                     'value': value,
-                    'menu_type': self.menu_type,
-                    'menu_kind': menu_kind,
-                    'event': self.event_code,
+                    'dimension': self.dimension,
+                    'menu_type': menu_type,
+                    'event_code': self.event_code,
                     'end_time': end_time.strftime('%Y-%m-%d %H:%M:%S'),
                     'menu_desc': 'test'
                 }
@@ -98,31 +98,31 @@ class TestMenuMinix(object):
 
 
 class TestPayMenu(TestMenuMinix, BaseTestCase):
-    menu_type = 'pay'
+    dimension = 'pay'
     test_cases = [(get_sample_str(10), True)]
     list_uri = 'menus:pay_list'
 
 
 class TestUidMenu(TestMenuMinix, BaseTestCase):
-    menu_type = 'uid'
+    dimension = 'uid'
     test_cases = [(get_sample_str(10), True)]
     list_uri = 'menus:uid_list'
 
 
 class TestUserIDMenu(TestMenuMinix, BaseTestCase):
-    menu_type = 'user_id'
+    dimension = 'user_id'
     test_cases = [(get_sample_str(10), True)]
     list_uri = 'menus:userid_list'
 
 
 class TestPhoneMenu(TestMenuMinix, BaseTestCase):
-    menu_type = 'phone'
+    dimension = 'phone'
     test_cases = [(get_sample_str(10), False), ('11111111111', True)]
     list_uri = 'menus:phone_list'
 
 
 class TestIPMenu(TestMenuMinix, BaseTestCase):
-    menu_type = 'ip'
+    dimension = 'ip'
     test_cases = [(get_sample_str(7), False), ('1.1.1.1', True)]
     list_uri = 'menus:ip_list'
 

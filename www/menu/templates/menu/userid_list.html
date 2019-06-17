@@ -38,14 +38,13 @@
                           rows="5"></textarea>
                 <span id="id-value-error" class="help-block" style="color:darkred"></span>
                 <div class="hr-line-dashed"></div>
-                {{ create_form.menu_kind }}
-                <span id="id-menu_kind-error" class="help-block" style="color:darkred"></span>
+                {{ create_form.menu_type }}
+                <span id="id-menu_type-error" class="help-block" style="color:darkred"></span>
                 <div class="hr-line-dashed"></div>
-                {{ create_form.event }}
-                <span id="id-event-error" class="help-block" style="color:darkred"></span>
+                {{ create_form.event_code }}
+                <span id="id-event_code-error" class="help-block" style="color:darkred"></span>
                 <div class="hr-line-dashed"></div>
-                <input class="form-control datetime" id="id_end_time" name="end_time" placeholder="结束时间"
-                       type="datetime">
+                <input class="form-control datetime" id="id_end_time" name="end_time" placeholder="结束时间">
                 <span id="id-end_time-error" class="help-block" style="color:darkred"></span>
                 <div class="hr-line-dashed"></div>
                 {{ create_form.menu_desc }}
@@ -71,8 +70,8 @@
 {% include "menu/batch_delete.html" %}
 <script>
     $(function () {
-        $('select#id_filter_event.form-control').searchableSelect();
-        $('select#id_event.form-control').searchableSelect();
+        $('select#id_filter_event_code.form-control').searchableSelect();
+        $('select#id_event_code.form-control').searchableSelect();
     });
 </script>
 
@@ -83,19 +82,19 @@
             var _this = $(this);
             var uri = _this.data('uri'),
                 value = $("#id_value").val(),
-                menu_kind = $("#id_menu_kind").val(),
-                event = $("#id_event").val(),
+                menu_type = $("#id_menu_type").val(),
+                event_code = $("#id_event_code").val(),
                 end_time = $("#id_end_time").val(),
                 menu_desc = $("#id_menu_desc").val();
             $.ajax({
                 url: uri,
                 data: {
                     'value': value,
-                    'menu_kind': menu_kind,
-                    'event': event,
+                    'menu_type': menu_type,
+                    'event_code': event_code,
                     'end_time': end_time,
                     'menu_desc': menu_desc,
-                    'menu_type': "user_id",
+                    'dimension': "user_id",
                     'csrfmiddlewaretoken': '{{ csrf_token }}'
                 },
                 dataType: "json",
@@ -125,11 +124,11 @@
         $("#id_value").focus(function () {
             $("#id-value-error").html("");
         });
-        $("#id_menu_kind").focus(function () {
-            $("#id-menu_kind-error").html("");
+        $("#id_menu_type").focus(function () {
+            $("#id-menu_type-error").html("");
         });
-        $("#id_event").focus(function () {
-            $("#id-event-error").html("");
+        $("#id_event_code").focus(function () {
+            $("#id-event_code-error").html("");
         });
         $("#id_start_time").focus(function () {
             $("#id-start_time-error").html("");

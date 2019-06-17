@@ -33,7 +33,6 @@ VAR_CHOICES = (
     ('uid', u'当前设备ID'),
     ('ip', u'当前IP'),
     ('reg_ip', u'注册IP'),
-    ('reg_time', u'注册时间'),
     ('reg_uid', u'注册设备ID'),
 )
 

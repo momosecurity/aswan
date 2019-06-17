@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 from django_tables2 import tables, columns
 from core.pymongo_client import get_mongo_client
 from core.columns import TruncateColumn
-from menu.forms import MENU_KIND
+from menu.forms import MENU_TYPE_NAME_MAP
 
 
 class EventTable(tables.Table):
@@ -22,8 +22,8 @@ class BaseMenuTable(tables.Table):
         <input class="menu-item" data-id="{{ record|mongo_id }}" type="checkbox" \>
         """, orderable=False, verbose_name="")
     value = columns.Column(verbose_name=_(u"值"))
-    event = columns.Column(verbose_name=_(u"项目"))
-    menu_kind = columns.Column(verbose_name=_(u"名单类型"))
+    event_code = columns.Column(verbose_name=_(u"项目"))
+    menu_type = columns.Column(verbose_name=_(u"名单类型"))
     menu_status = columns.Column(verbose_name=_(u"状态"))
     menu_desc = TruncateColumn(verbose_name=_(u"备注"))
     end_time = columns.DateTimeColumn(format="Y-m-d H:i:s", verbose_name=_(u"结束时间"))
@@ -34,10 +34,10 @@ class BaseMenuTable(tables.Table):
         super(BaseMenuTable, self).__init__(*args, **kwargs)
         self.deletable = True
 
-    def render_menu_kind(self, value):
-        return MENU_KIND.get(value, value)
+    def render_menu_type(self, value):
+        return MENU_TYPE_NAME_MAP.get(value, value)
 
-    def render_event(self, value):
+    def render_event_code(self, value):
         db = get_mongo_client()
         res = db.menu_event.find_one({'event_code': value})
         if not res:

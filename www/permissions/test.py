@@ -33,15 +33,6 @@ class TestPermission(BaseTestCase):
         self.assertEquals(response.status_code, 200)
 
 
-    def test_users_update_url(self):
-        # todo to be done
-        pass
-
-    def test_groups_url(self):
-        pass
-
-
 
     def test_view(self):
         self._test_users()
-        # todo to be dpne..

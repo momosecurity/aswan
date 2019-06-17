@@ -86,7 +86,7 @@ class TestMenuStrategyView(BaseTestCase, TestStrategyViewMinix):
         self.assertEquals(resp_dict['data'], u'不命中')
 
         add_element_to_menu(event_code=self.event_code, element=sp_ip,
-                            menu_type='black', menu_kind='ip')
+                            menu_type='black', dimension='ip')
 
         response = self.client.post(reverse(self.test_uri), data=data)
         self.assertEquals(response.status_code, 200)
