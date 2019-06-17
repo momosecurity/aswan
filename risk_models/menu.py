@@ -5,6 +5,7 @@ import logging
 from risk_models.cache import menu_cache
 
 logger = logging.getLogger(__name__)
+logging.basicConfig()
 
 
 def build_redis_key(event_code, dimension, menu_type):

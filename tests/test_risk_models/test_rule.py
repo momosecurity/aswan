@@ -2,6 +2,10 @@
 
 import unittest
 
+import pymysql
+
+pymysql.install_as_MySQLdb()
+
 import django
 
 # init django settings

@@ -21,7 +21,7 @@ class TestSampleFunction(unittest.TestCase):
     def test_user_login_count(self):
         testcases = [
             ({'user_id': '111110'}, None),
-            ({'user_id': '111111'}, 100),
+            ({'user_id': '111111'}, 40),
             ({'user_id': '111118'}, 200),
         ]
         for req_body, result in testcases:
@@ -56,7 +56,7 @@ class TestBaseFunction(unittest.TestCase):
         }
         testcases = [
             ({'user_id': '111110'}, None),
-            ({'user_id': '111111'}, 100),
+            ({'user_id': '111111'}, 40),
             ({'user_id': '111118'}, 200),
         ]
 
