@@ -170,8 +170,7 @@ class RulesChangeView(JSONResponseMixin, View):
         strategys = strategys_list
         strategy_uuids = []
         for strategy in strategys:
-            item = [x[0] for x in strategy]
-            item.sort()
+            item = sorted([x[0] for x in strategy])
             strategy_uuids.append("".join(item))
         if len(set(strategy_uuids)) < len(strategy_uuids):
             raise ValueError(u"策略原子有重复")

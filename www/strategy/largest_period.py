@@ -1,4 +1,5 @@
 # coding=utf8
+from __future__ import print_function
 import json
 from core.redis_client import get_redis_client
 
@@ -72,4 +73,4 @@ def get_source_largest_period():
 
 
 if __name__ == "__main__":
-    print get_source_largest_period()
+    print(get_source_largest_period())

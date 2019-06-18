@@ -79,7 +79,7 @@ class BoolStrategy(Strategy):
 
     def __init__(self, d):
         super(BoolStrategy, self).__init__(d)
-        self.func_name = d['strategy_func']
+        self.__name__ = d['strategy_func']
         self.op_name = d['strategy_op']
         self.threshold = d['strategy_threshold']
         self.strategy_var = d['strategy_var']
@@ -99,7 +99,7 @@ class BoolStrategy(Strategy):
 
     def get_callable(self):
         threshold = self.threshold or None
-        return partial(BuiltInFuncs.run, builtin_func_name=self.func_name,
+        return partial(BuiltInFuncs.run, builtin_func_name=self.__name__,
                        op_name=self.op_name, threshold=threshold)
 
     @partial_bind_uuid
@@ -108,7 +108,7 @@ class BoolStrategy(Strategy):
             threshold = None
         else:
             threshold = threshold_list[0]
-        return partial(BuiltInFuncs.run, builtin_func_name=self.func_name,
+        return partial(BuiltInFuncs.run, builtin_func_name=self.__name__,
                        op_name=self.op_name, threshold=threshold)
 
 

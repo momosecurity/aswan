@@ -11,6 +11,7 @@ from builtin_funcs import BuiltInFuncs
 from core.redis_client import get_redis_client
 from core.forms import BaseForm, BaseFilterForm
 from core.pymongo_client import get_mongo_client
+from functools import reduce
 
 
 OP_CHOICES = (

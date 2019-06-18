@@ -133,7 +133,7 @@ class LRUCacheDict(object):
         self.__access_times.clear()
 
     def __contains__(self, key):
-        return self.has_key(key)
+        return key in self
 
     @_lock_decorator
     def has_key(self, key):

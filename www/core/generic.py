@@ -72,8 +72,7 @@ class PagedFilterTableView(SingleTableView):
             pages.append(current_page - 1)
             pages.append(current_page)
             pages.append(current_page + 1)
-        pages = list(set(pages))
-        pages.sort()
+        pages = sorted(set(pages))
         new_pages = [pages[0], ] if pages else []
         for i in range(1, len(pages)):
             gap = pages[i] - pages[i - 1]

@@ -110,8 +110,7 @@ class RulesForm(BaseForm):
             self.errors['controls'] = [u'非法管控原子名']
         strategy_uuids = []
         for strategy in strategys_list:
-            item = strategy.split(';')
-            item.sort()
+            item = sorted(strategy.split(';'))
             strategy_uuids.append("".join(item))
         if len(set(strategy_uuids)) < len(strategy_uuids):
             self.errors['strategys'] = [u'策略原子有重复']
