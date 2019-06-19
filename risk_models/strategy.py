@@ -99,7 +99,7 @@ class BoolStrategy(Strategy):
 
     def get_callable(self):
         threshold = self.threshold or None
-        return partial(BuiltInFuncs.run, builtin_func_name=self.__name__,
+        return partial(BuiltInFuncs.run, builtin_func_name=self.func_name,
                        op_name=self.op_name, threshold=threshold)
 
     @partial_bind_uuid
@@ -108,7 +108,7 @@ class BoolStrategy(Strategy):
             threshold = None
         else:
             threshold = threshold_list[0]
-        return partial(BuiltInFuncs.run, builtin_func_name=self.__name__,
+        return partial(BuiltInFuncs.run, builtin_func_name=self.func_name,
                        op_name=self.op_name, threshold=threshold)
 
 
