@@ -132,11 +132,8 @@ class LRUCacheDict(object):
         self.__expire_times.clear()
         self.__access_times.clear()
 
-    def __contains__(self, key):
-        return key in self
-
     @_lock_decorator
-    def has_key(self, key):
+    def __contains__(self, key):
         """
         This method should almost NEVER be used. The reason is that between the time
         has_key is called, and the key is accessed, the key might vanish.
@@ -146,7 +143,7 @@ class LRUCacheDict(object):
         >>> d['foo']
         'bar'
         >>> import time
-        >>> if d.has_key('foo'):
+        >>> if 'foo' in d:
         ...    time.sleep(2) #Oops, the key 'foo' is gone!
         ...    d['foo']
         Traceback (most recent call last):
