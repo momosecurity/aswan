@@ -79,7 +79,7 @@ class BoolStrategy(Strategy):
 
     def __init__(self, d):
         super(BoolStrategy, self).__init__(d)
-        self.__name__ = d['strategy_func']
+        self.func_name = d['strategy_func']
         self.op_name = d['strategy_op']
         self.threshold = d['strategy_threshold']
         self.strategy_var = d['strategy_var']
