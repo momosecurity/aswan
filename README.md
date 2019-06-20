@@ -1,5 +1,13 @@
 # 陌陌风控系统静态规则引擎
 
+### 关于我们
+Website：https://security.immomo.com 
+
+WeChat:<br> 
+<img src="https://momo-mmsrc.oss-cn-hangzhou.aliyuncs.com/img-1c96a083-7392-3b72-8aec-bad201a6abab.jpeg" width="200" hegiht="200" align=center /><br>
+
+[项目介绍](https://mp.weixin.qq.com/s/quk43WU3Vg9cQmub06Azqg)
+
 ### 架构介绍
 
    ![风控系统架构图](./www/static/img/wiki/architecture.jpg)
