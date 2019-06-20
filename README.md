@@ -134,7 +134,7 @@ curl 127.0.0.1:50000/query/ -X POST -d '{"rule_id": "1", "user_id": "10000"}' -H
 
     假设存在名称为test的数据源, 且数据源含有的数据是: {"ip": "string", "user_id": "string", "uid": "string"}
 ```
-curl 127.0.0.1:50000/report/ -X POST -d '{"source": "test", "user_id": "10000", "ip": "127.0.0.1", "uid": "abcabc112333222", "timestamp": 1559049606}' -H "Content-Type:application/json"
+curl 127.0.0.1:50000/report/ -X POST -d '{"source_name": "test", "user_id": "10000", "ip": "127.0.0.1", "uid": "abcabc112333222", "timestamp": 1559049606}' -H "Content-Type:application/json"
 ```
 
 3. 关于服务拆分
