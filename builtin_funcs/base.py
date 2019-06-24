@@ -114,7 +114,7 @@ class BuiltInFuncs(object):
         return self.trans_result(rv, op_name, threshold)
 
     def __repr__(self):
-        return self.desc.encode('utf8')
+        return self.desc
 
     @classmethod
     def run(cls, req_body, builtin_func_name, op_name, threshold=None,

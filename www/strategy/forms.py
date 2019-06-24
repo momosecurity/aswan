@@ -3,6 +3,7 @@ import copy
 import uuid
 import json
 
+from functools import reduce
 from django import forms
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
@@ -220,8 +221,7 @@ class FreqStrategyForm(BaseForm):
             try:
                 for a in args:
                     assert int(a) > 0
-                args = map(int, args)
-                strategy_time = reduce(lambda x, y: x * y, args)
+                strategy_time = reduce(lambda x, y: x * y, map(int, args))
                 assert strategy_time > 0
             except (ValueError, AssertionError):
                 raise forms.ValidationError(u"参数不合法，仅支持正整数和*")

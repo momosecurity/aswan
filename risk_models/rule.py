@@ -50,7 +50,7 @@ class Rule(object):
 
     def _build_group_uuid(self, uuids):
         uuid_str = ''.join(uuids)
-        return md5(uuid_str).hexdigest()
+        return md5(uuid_str.encode()).hexdigest()
 
     def get_callable_list(self):
         callable_list = []

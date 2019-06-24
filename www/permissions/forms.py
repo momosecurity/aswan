@@ -8,7 +8,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from core.forms import BaseFilterForm, BaseForm
-from permission import (
+from .permission import (
     UserPermission, GroupPermission, UriGroupPermission
 )
 

@@ -117,4 +117,3 @@ class PagedFilterTableView(SingleTableView):
 
 
 ListView = PagedFilterTableView
-

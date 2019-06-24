@@ -216,7 +216,7 @@ class RulesChangeView(JSONResponseMixin, View):
         except ValueError as e:
             return self.render_json_response({
                 'state': False,
-                'error': unicode(e),
+                'error': str(e),
             })
         client = get_redis_client()
         name = 'rule:{}'.format(data['uuid'])

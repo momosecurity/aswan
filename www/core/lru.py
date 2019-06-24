@@ -227,12 +227,12 @@ class LRUCachedFunction(object):
     >>> f(5)
     Calling f(5)
     5
-    >>> f(3) #Still in cache, so no print statement. At this point, 4 is the least recently used.
+    >>> f(3) # Still in cache, so no print statement. At this point, 4 is the least recently used.
     3
     >>> f(6)
     Calling f(6)
     6
-    >>> f(4) #No longer in cache - 4 is the least recently used, and there are at least 3 others items in cache [3,4,5,6].
+    >>> f(4) # No longer in cache - 4 is the least recently used, and there are at least 3 others items in cache [3,4,5,6].
     Calling f(4)
     4
     """
@@ -246,8 +246,8 @@ class LRUCachedFunction(object):
         self.__name__ = self.function.__name__
 
     def __call__(self, *args, **kwargs):
-        key = repr((args,
-                    kwargs)) + "#" + self.__name__  # In principle a python repr(...) should not return any # characters.
+        # In principle a python repr(...) should not return any # characters.
+        key = repr((args, kwargs)) + "#" + self.__name__
         try:
             return self.cache[key]
         except KeyError:

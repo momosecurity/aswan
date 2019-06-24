@@ -26,7 +26,7 @@ def smart_true_false(value):
 
 def jsonify(object):
     try:
-        if not isinstance(object, basestring):
+        if not isinstance(object, str):
             return mark_safe(json.dumps(object))
         else:
             return object
@@ -35,7 +35,7 @@ def jsonify(object):
 
 
 def repr_str(value):
-    if isinstance(value, basestring):
+    if isinstance(value, str):
         repr_value = repr(value).lstrip("u")[1:-1]
         return repr_value
     else:
@@ -75,8 +75,7 @@ def truncatesmart(value, limit=80):
         # Fail silently.
         return value
 
-    # Make sure it's unicode
-    value = unicode(value)
+    value = str(value)
 
     # Return the string itself if length is smaller or equal to the limit
     if len(value) <= limit:

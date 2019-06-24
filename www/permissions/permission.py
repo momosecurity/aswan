@@ -52,8 +52,7 @@ class PermManager(object):
     @mongodb_error_log
     def all(self, meta_only=False):
         db = get_mongo_client()
-        projection = {f: True for f in self.projection_fields} \
-                     if meta_only else {}
+        projection = {f: True for f in self.projection_fields} if meta_only else {}
         return db[self.collection].find(projection=projection)
 
     @mongodb_error_log

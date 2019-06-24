@@ -8,9 +8,10 @@ def errors_to_dict(errors):
     form.errors不可序列化,转成dict,序列化成json给前端
     """
     return dict(
-        (k, map(unicode, v))
-        for (k, v) in errors.iteritems()
+        (k, str(v))
+        for (k, v) in errors.items()
     )
 
+
 def get_sample_str(length=8):
-    return ''.join(random.sample(string.lowercase, length))
+    return ''.join(random.sample(string.ascii_lowercase, length))

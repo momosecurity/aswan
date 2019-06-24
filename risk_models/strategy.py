@@ -289,8 +289,7 @@ class UserStrategy(Strategy):
 
         daily_count = int(self.daily_count)
         now = datetime.now()
-        seconds = ((daily_count - 1) * 86400 + now.hour * 3600 +
-                   now.minute * 60 + now.second)
+        seconds = (daily_count - 1) * 86400 + now.hour * 3600 + now.minute * 60 + now.second
         start = time.time() - seconds
         threshold = int(self.threshold)
         key_member_score_map = self._build_key_member_score_map(history_data)
@@ -318,8 +317,7 @@ class UserStrategy(Strategy):
             return False
 
         cur_time = datetime.now()
-        seconds = ((daily_count - 1) * 86400 + cur_time.hour * 3600 +
-                   cur_time.minute * 60 + cur_time.second)
+        seconds = (daily_count - 1) * 86400 + cur_time.hour * 3600 + cur_time.minute * 60 + cur_time.second
         end = time.time()
         start = math.floor(end - seconds)
         for zkey in zkeys:
