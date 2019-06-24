@@ -2,7 +2,8 @@ import unittest
 
 import pymysql
 
-pymysql.install_as_MySQLdb()
+# user MySQLdb driver
+pymysql.install_as_MySQLdb() # noqa
 
 from risk_models.menu import hit_menu
 from www.menu.init_data import create_menu_event, add_element_to_menu

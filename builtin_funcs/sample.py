@@ -4,9 +4,7 @@ from builtin_funcs import BuiltInFuncs
 
 
 @BuiltInFuncs.register(desc=u'异常用户',
-                       args_type_tuple=(
-                               ('user_id', basestring),
-                       ),
+                       args_type_tuple=(('user_id', str),),
                        supported_ops=('is', 'is_not'))
 def is_abnormal(req_body):
     user_id = req_body['user_id']
@@ -25,9 +23,7 @@ def is_abnormal(req_body):
 
 
 @BuiltInFuncs.register(desc=u'历史登录次数',
-                       args_type_tuple=(
-                               ('user_id', basestring),
-                       ),
+                       args_type_tuple=(('user_id', str),),
                        supported_ops=('gt', 'ge', 'lt', 'le', 'eq', 'neq'),
                        threshold_trans_func=int
                        )

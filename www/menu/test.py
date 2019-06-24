@@ -17,7 +17,6 @@ class TestMenuMinix(object):
     list_uri = ''
     test_cases = []
 
-
     def _test_list(self):
         # todo 这里的参数有些问题，降低了覆盖率，后续改一下
         data = {'dimension': self.dimension, 'menu_type': 'black',
@@ -41,9 +40,8 @@ class TestMenuMinix(object):
 
         # 成功删除
         menu_element_id = add_element_to_menu(self.event_code, 'black',
-                                            self.dimension, 'test_value')
-        resp = self.client.post(reverse(self.delete_uri),
-                                data={'ids': menu_element_id})
+                                              self.dimension, 'test_value')
+        resp = self.client.post(reverse(self.delete_uri), data={'ids': menu_element_id})
         self.assertEquals(resp.status_code, 200)
         t = json.loads(resp.content)
         self.assertEquals(t['state'], True)
@@ -87,7 +85,6 @@ class TestMenuMinix(object):
                 self.assertEquals(resp.status_code, 200)
                 t = json.loads(resp.content)
                 self.assertEquals(t['state'], False)
-
 
     def test_view(self):
         self.event_code = create_menu_event()['event_code']

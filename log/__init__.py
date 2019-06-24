@@ -1,1 +1,1 @@
-from .logger import *
+from .logger import * # noqa

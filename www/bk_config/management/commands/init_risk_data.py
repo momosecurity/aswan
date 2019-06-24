@@ -32,13 +32,13 @@ class Command(BaseCommand):
         add_element_to_menu(event_code, menu_type='black', dimension='user_id',
                             element='111111')
         add_element_to_menu(event_code, menu_type='white', dimension='uid',
-                            element=hashlib.md5('white_uid').hexdigest())
+                            element=hashlib.md5('white_uid'.encode()).hexdigest())
         add_element_to_menu(event_code, menu_type='gray', dimension='ip',
                             element='1.1.1.1')
         add_element_to_menu(event_code, menu_type='black', dimension='phone',
-                            element=hashlib.md5('12345678901').hexdigest())
+                            element=hashlib.md5('12345678901'.encode()).hexdigest())
         add_element_to_menu(event_code, menu_type='black', dimension='pay',
-                            element=hashlib.md5('pay_account').hexdigest())
+                            element=hashlib.md5('pay_account'.encode()).hexdigest())
 
         # 创建策略
         # 名单型策略

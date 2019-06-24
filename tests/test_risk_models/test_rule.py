@@ -4,7 +4,8 @@ import unittest
 
 import pymysql
 
-pymysql.install_as_MySQLdb()
+# use MySQLdb driver
+pymysql.install_as_MySQLdb() # noqa
 
 import django
 

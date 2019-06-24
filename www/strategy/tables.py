@@ -39,7 +39,7 @@ class BoolStrategyTable(tables.Table):
     def render_strategy_func(self, value):
         name = FUNC_MAP.get(value, "")
         if name:
-            return u"{0}({1})".format(name.decode('utf8'), value)
+            return u"{0}({1})".format(name, value)
         return value
 
 

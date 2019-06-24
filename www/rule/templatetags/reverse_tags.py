@@ -23,18 +23,18 @@ def smart_true_false(value):
         return mark_safe('<i class="fa fa-close"></i>')
 
 
-def jsonify(object):
-    try:
-        if not isinstance(object, basestring):
-            return mark_safe(json.dumps(object))
-        else:
-            return object
-    except:
-        return object
+def jsonify(obj):
+    if not isinstance(obj, str):
+        try:
+            json_str = mark_safe(json.dumps(obj))
+        except:
+            json_str = obj
+        return json_str
+    return obj
 
 
 def repr_str(value):
-    if isinstance(value, basestring):
+    if isinstance(value, str):
         repr_value = repr(value).lstrip("u")[1:-1]
         return repr_value
     else:
@@ -42,20 +42,19 @@ def repr_str(value):
 
 
 def mongo_dict_to_json(value):
-    try:
-        if isinstance(value, dict):
-            if 'last_update' in value:
-                value['last_update'] = value['last_update'].strftime("%Y-%m-%d %H:%M:%S")
-            if 'expire_date' in value:
-                value['expire_date'] = value['expire_date'].strftime("%Y-%m-%d %H:%M:%S")
-            value['_id'] = str(value['_id'])
+    if isinstance(value, dict):
+        value['_id'] = str(value['_id'])
 
-            json_value = json.dumps(value)
-            return json_value
-        else:
-            return value
-    except:
-        return value
+        keys = ['last_update', 'expire_date']
+        for key in keys:
+            if key in value:
+                value[key] = value[key].strftime('%Y-%m-%d %H:%M:%S')
+        try:
+            json_str = json.dumps(value)
+        except:
+            json_str = value
+        return json_str
+    return value
 
 
 def truncatesmart(value, limit=80):
@@ -75,7 +74,7 @@ def truncatesmart(value, limit=80):
         return value
 
     # Make sure it's unicode
-    value = unicode(value)
+    value = str(value)
 
     # Return the string itself if length is smaller or equal to the limit
     if len(value) <= limit:
