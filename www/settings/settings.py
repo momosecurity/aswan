@@ -135,7 +135,7 @@ risk_env = os.environ.get('RISK_ENV', 'develop')
 # 若配置文件不存在，直接无法启动
 try:
     importlib.import_module('.' + risk_env, 'settings.local_settings')
-    exec 'from local_settings.{risk_env} import *'.format(risk_env=risk_env)
+    exec('from .local_settings.{risk_env} import *'.format(risk_env=risk_env))
 except Exception:
     raise AssertionError(
         'The project should set correct RISK_ENV environment var.')

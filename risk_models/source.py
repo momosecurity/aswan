@@ -42,7 +42,7 @@ class RawSource(object):
             keys = {}
             for key_name, key_type in fields.items():
                 if key_type in {'string', 'str'}:
-                    key_type = 'basestring'
+                    key_type = 'str'
                 try:
                     type_ = getattr(__builtins__, key_type)
                 except AttributeError:
@@ -157,7 +157,7 @@ class UserSource(Source):
         return u'{}:{}'.format(data['user_id'], int(time.time()))
 
     def check_member(self, data):
-        return 'user_id' in data and isinstance(data['user_id'], basestring)
+        return 'user_id' in data and isinstance(data['user_id'], str)
 
 
 class Sources(object):

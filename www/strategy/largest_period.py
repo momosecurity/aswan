@@ -72,4 +72,4 @@ def get_source_largest_period():
 
 
 if __name__ == "__main__":
-    print get_source_largest_period()
+    print(get_source_largest_period())

@@ -9,7 +9,6 @@ from core.redis_client import get_redis_client
 from risk_models.strategy import Strategys
 
 
-
 class RuleModel(object):
 
     @classmethod

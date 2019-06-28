@@ -26,8 +26,8 @@ def create_user(email, username, password, is_superuser):
                                   password=password)
 
     import string
-    last_name = ''.join(random.sample(string.lowercase, 8))
-    first_name = ''.join(random.sample(string.uppercase, 8))
+    last_name = ''.join(random.sample(string.ascii_lowercase, 8))
+    first_name = ''.join(random.sample(string.ascii_uppercase, 8))
     if not UserPermission.objects.get(email):
         UserPermission(
             email,

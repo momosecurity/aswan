@@ -184,12 +184,9 @@ class MenuCreateForm(BaseForm):
 
 class MenuFilterForm(BaseFilterForm):
     filter_event_code = forms.ChoiceField(label=_(u"项目类型"), required=False)
-    filter_menu_type = forms.ChoiceField(label=_(u"名单类型"),
-                                  choices=MENU_TYPE_CHOICES,
-                                  required=False)
+    filter_menu_type = forms.ChoiceField(label=_(u"名单类型"), choices=MENU_TYPE_CHOICES, required=False)
     filter_value = forms.CharField(label=_(u"值"), required=False)
-    filter_menu_status = forms.ChoiceField(choices=MENU_STATUS_CHOICES,
-                                    required=False)
+    filter_menu_status = forms.ChoiceField(choices=MENU_STATUS_CHOICES, required=False)
 
     def __init__(self, *args, **kwargs):
         self.dimension = kwargs.pop("dimension", None)

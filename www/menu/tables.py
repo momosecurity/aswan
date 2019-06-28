@@ -19,7 +19,7 @@ class EventTable(tables.Table):
 class BaseMenuTable(tables.Table):
     check_all = columns.TemplateColumn("""
         {% load reverse_tags %}
-        <input class="menu-item" data-id="{{ record|mongo_id }}" type="checkbox" \>
+        <input class="menu-item" data-id="{{ record|mongo_id }}" type="checkbox" />
         """, orderable=False, verbose_name="")
     value = columns.Column(verbose_name=_(u"值"))
     event_code = columns.Column(verbose_name=_(u"项目"))

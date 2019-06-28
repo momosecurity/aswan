@@ -181,8 +181,8 @@ class TestFreqStrategyView(BaseTestCase, TestStrategyViewMinix):
 
     def _test_test(self):
         super(TestFreqStrategyView, self)._test_test()
-        history_data = [{'uid': '111', 'timestamp': int(
-            time.time() - random.randint(1, 100))}
+        history_data = [{'uid': '111',
+                         'timestamp': int(time.time() - random.randint(1, 100))}
                         for _ in range(4)]
 
         # 命中

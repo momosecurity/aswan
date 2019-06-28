@@ -18,14 +18,14 @@ URL_2_HANDLERS = {
 
 def __parse_post_body(environ, ignore_get=False):
     post_data = {}
-    storage = FieldStorage(fp=environ['wsgi.input'], environ=environ,
-                           keep_blank_values=True)
 
     # accept post json
-    if environ["REQUEST_METHOD"] == "POST" and environ[
-        "CONTENT_TYPE"] == "application/json":
-        post_data = json.loads(storage.value)
-        return post_data
+    if environ["CONTENT_TYPE"].strip(';') == "application/json" and environ["REQUEST_METHOD"] == "POST":
+        storage = environ['wsgi.input'].read()
+        if storage:
+            return json.loads(storage)
+
+    storage = FieldStorage(environ['wsgi.input'], environ=environ, keep_blank_values=True)
 
     # accept get querystring
     if not ignore_get:
@@ -45,7 +45,7 @@ def application(environ, start_response):
     post_data = __parse_post_body(environ, ignore_get=False)
     response = handler(post_data)
     start_response('200 OK', [('Content-Type', 'application/json')])
-    return [str(response)]
+    return [str(response).encode()]
 
 
 def serve_forever():

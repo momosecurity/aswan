@@ -32,7 +32,5 @@ class TestPermission(BaseTestCase):
         response = self.client.get(users_url, data=data)
         self.assertEquals(response.status_code, 200)
 
-
-
     def test_view(self):
         self._test_users()

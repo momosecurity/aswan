@@ -86,7 +86,8 @@ class TestBaseFunction(unittest.TestCase):
     def test_repr(self):
         func_code = 'is_abnormal'
         buildin_func_obj = BuiltInFuncs.name_callable.get(func_code)
-        self.assertEquals(repr(buildin_func_obj), buildin_func_obj.desc.encode('utf8'))
+        self.assertEquals(repr(buildin_func_obj), buildin_func_obj.desc)
+
 
 if __name__ == '__main__':
     unittest.main()
