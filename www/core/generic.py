@@ -65,7 +65,7 @@ class PagedFilterTableView(SingleTableView):
     def _build_pages(self):
         page_count = self._get_page_count()
         current_page = int(self.request.GET.get('page', 0))
-        pages = range(1, page_count + 1)
+        pages = list(range(1, page_count + 1))
         if page_count > 8:
             pages = pages[:3] + pages[-3:]
         if 1 < current_page < page_count - 1:
