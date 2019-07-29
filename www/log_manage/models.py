@@ -38,7 +38,7 @@ def get_hit_log_model(db_table):
             model._meta.db_table = db_table
             return model
 
-    class HitLogModel(models.Model):
+    class HitLogModel(models.Model, metaclass=CustomMetaClass):
         time = models.DateTimeField(verbose_name=_(u'命中时间'))
         rule_id = models.IntegerField(verbose_name=_(u'规则ID'))
         user_id = models.IntegerField(verbose_name=_(u'命中用户'))
@@ -54,9 +54,8 @@ def get_hit_log_model(db_table):
 
         objects = Manager()
 
-        __metaclass__ = CustomMetaClass
-
         class Meta:
+            managed = False
             index_together = (
                 ('time',),
                 ('user_id',),
