@@ -223,9 +223,10 @@ class MenuDestroyView(JSONResponseMixin, View):
 
             #  同时删除redis中数据
             redis_client = get_redis_client()
-            # todo pipeline
+            pipeline = redis_client.pipeline(transaction=False)
             for key, values in redis_values_should_remove.items():
-                redis_client.srem(key, *values)
+                pipeline.srem(key, *values)
+            pipeline.execute()
         except Exception:
             return self.render_json_response(dict(
                 state=False,

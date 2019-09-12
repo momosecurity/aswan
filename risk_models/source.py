@@ -154,7 +154,7 @@ class UserSource(Source):
     prefix = 'user_strategy:*'
 
     def get_member(self, data):
-        return u'{}:{}'.format(data['user_id'], int(time.time()))
+        return u'{}:{}'.format(data['user_id'], int(time.time() * 1000))
 
     def check_member(self, data):
         return 'user_id' in data and isinstance(data['user_id'], str)
@@ -204,22 +204,21 @@ class Sources(object):
         return all([source.check_all(data) for source in sources])
 
     def _write_one_record(self, zkey, score, member, preserve_time):
-        # todo 这里使用pipeline, 减少带宽
+        pipeline = self.conn.pipeline()
         try:
-            self.conn.zadd(zkey, score, member)
+            pipeline.zadd(zkey, score, member)
+            pipeline.expire(zkey, preserve_time)
+            # 这个是为了减少redis存储压力，每次删除部分老旧数据，可以修改此处逻辑
+            pipeline.zremrangebyrank(zkey, 0, -128)
+            pipeline.execute()
         except redis.RedisError:
-            logger.error('zadd(%s, %s, %s) failed', zkey, score, member)
+            logger.error(
+                f'pipeline execute error,'
+                f'zkey --> {zkey},'
+                f'score --> {score},'
+                f'member --> {member},'
+                f'preserve_time --> {preserve_time})')
             return False
-
-        try:
-            self.conn.expire(zkey, preserve_time)
-        except redis.RedisError:
-            logger.error('expire zkey(%s) faield', zkey)
-
-        try:
-            self.conn.zremrangebyrank(zkey, 0, -128)
-        except redis.RedisError:
-            logger.error('zremrangebyrank zkey(%s) failed', zkey)
         return True
 
     def write_all(self, name, data):
