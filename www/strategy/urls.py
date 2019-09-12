@@ -17,7 +17,7 @@ from strategy.views import (
 
 urlpatterns = [
     url(r'^$',
-        RedirectView.as_view(url=reverse_lazy("strategy:strategy_list"),
+        RedirectView.as_view(url=reverse_lazy("strategy:menu_strategy_list"),
                              permanent=True), name="strategy_index"),
     # 名单型策略
     url(r'^menu_strategy/list/$', MenuStrategyListView.as_view(),
