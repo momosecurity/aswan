@@ -8,7 +8,7 @@ def errors_to_dict(errors):
     form.errors不可序列化,转成dict,序列化成json给前端
     """
     return dict(
-        (k, map(v, str))
+        (k, [str(t) for t in v])
         for (k, v) in errors.items()
     )
 
