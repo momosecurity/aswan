@@ -1,7 +1,11 @@
 # coding=utf8
-from risk_models.exceptions import RuleNotExistsException
+
 from .base import Response
-from risk_models.rule import calculate_rule
+from risk_models.exceptions import RuleNotExistsException
+from risk_models.rule import calculate_rule, Rules, AccessCount
+
+rules = Rules(auto_refresh=True)
+ac = AccessCount(auto_persist=True)
 
 
 def query_handler(req_body):
@@ -11,7 +15,7 @@ def query_handler(req_body):
     try:
         assert rule_id
         rule_id = str(rule_id)
-        control, weight = calculate_rule(rule_id, req_body)
+        control, weight = calculate_rule(rule_id, req_body, rules=rules, ac=ac)
         result = {'control': control, 'weight': weight}
     except AssertionError:
         error = 'must contain rule_id'

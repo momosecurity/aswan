@@ -74,6 +74,11 @@ class BaseForm(FormBaseMixin, forms.Form):
         for field in self.fields:
             self.fields[field].widget.attrs["class"] = "form-control"
 
+    def remove_class(self, *field_names):
+        for field_name in field_names:
+            if field_name in self.fields:
+                self.fields[field_name].widget.attrs.pop('class')
+
     def is_edit(self):
         return self.instance.pk is not None
 
