@@ -29,7 +29,9 @@ def parse_msg(msg):
     dt = datetime.strptime(dt, '%Y-%m-%d %H:%M:%S,%f')
     d = json.loads(body)
     d['time'] = dt
-    d['user_id'] = d['req_body']['user_id']
+    req_body = d['req_body']
+    d['user_id'] = req_body['user_id']
+    d['req_body'] = json.dumps(req_body, ensure_ascii=False)
     return d
 
 

@@ -36,29 +36,27 @@ def get_hit_log_model(db_table):
             model = super(CustomMetaClass, cls).__new__(cls, name, bases,
                                                         attrs)
             model._meta.db_table = db_table
+            model._meta.index_together = (
+                ('time',),
+                ('user_id',),
+            )
+            model.managed = False
             return model
 
     class HitLogModel(models.Model, metaclass=CustomMetaClass):
         time = models.DateTimeField(verbose_name=_(u'命中时间'))
         rule_id = models.IntegerField(verbose_name=_(u'规则ID'))
         user_id = models.IntegerField(verbose_name=_(u'命中用户'))
-        kwargs = models.TextField(max_length=128, verbose_name=_(u'扩展参数'))
-        req_body = models.TextField(max_length=512, verbose_name=_(u'请求参数'))
-        control = models.CharField(max_length=16, verbose_name=_(u'管控原子'))
-        custom = models.CharField(max_length=50, verbose_name=_(u'策略组解释'))
-        group_name = models.CharField(max_length=256,
+        kwargs = models.CharField(max_length=128, null=False, default='', verbose_name=_(u'扩展参数'))
+        req_body = models.CharField(max_length=512, null=False, default='', verbose_name=_(u'请求参数'))
+        control = models.CharField(max_length=16, null=False, default='', verbose_name=_(u'管控原子'))
+        custom = models.CharField(max_length=50, null=False, default='', verbose_name=_(u'策略组解释'))
+        group_name = models.CharField(max_length=256, null=False, default='',
                                       verbose_name=_(u'策略原子组名称'))
-        group_uuid = models.CharField(max_length=36,
+        group_uuid = models.CharField(max_length=36, null=False, default='',
                                       verbose_name=_(u'策略原子组UUID'))
-        hit_number = models.PositiveSmallIntegerField(verbose_name=_(u'命中次序'))
+        hit_number = models.PositiveSmallIntegerField(null=False, default=1, verbose_name=_(u'命中次序'))
 
         objects = Manager()
-
-        class Meta:
-            managed = False
-            index_together = (
-                ('time',),
-                ('user_id',),
-            )
 
     return HitLogModel
