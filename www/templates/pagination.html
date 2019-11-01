@@ -120,12 +120,12 @@
             var pageNum = $.trim(_inpNum.val());
             var hrefPrefix = _btnConfirm.attr('data-href');
             hrefPrefix = hrefPrefix.replace("&submit=%E6%9F%A5%E8%AF%A2", "");
+            hrefPrefix = hrefPrefix.replace("&page=", "");
 
             if(pageNum == "") {
                 return false;
             } else {
-
-                _btnConfirm[0].href = hrefPrefix + pageNum;
+                _btnConfirm[0].href = hrefPrefix + "&page=" + pageNum;
             }
         });
     </script>

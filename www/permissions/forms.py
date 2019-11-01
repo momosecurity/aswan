@@ -50,8 +50,9 @@ class UserPermUpdateForm(BaseForm):
     def __init__(self, *args, **kwargs):
         super(UserPermUpdateForm, self).__init__(*args, **kwargs)
         self.fields['groups'].choices = get_multiple_choices(GroupPermission)
-        self.fields['permissions'].choices = \
-            get_multiple_choices(UriGroupPermission)
+        self.fields['permissions'].choices = get_multiple_choices(
+            UriGroupPermission)
+        self.remove_class('permissions', 'groups')
 
     def clean_pk(self):
         pk = self.cleaned_data['pk']
@@ -96,8 +97,9 @@ class GroupPermUpdateForm(BaseForm):
         super(GroupPermUpdateForm, self).__init__(*args, **kwargs)
         if disable_name:
             self.fields['pk'].widget.attrs = self.FORBID_ATTR
-        self.fields['permissions'].choices = \
-            get_multiple_choices(UriGroupPermission)
+        self.fields['permissions'].choices = get_multiple_choices(
+            UriGroupPermission)
+        self.remove_class('permissions')
 
     def clean_pk(self):
         pk = self.cleaned_data['pk']
