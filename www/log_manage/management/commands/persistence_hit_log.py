@@ -30,7 +30,7 @@ def parse_msg(msg):
     d = json.loads(body)
     d['time'] = dt
     req_body = d['req_body']
-    d['user_id'] = req_body['user_id']
+    d['user_id'] = req_body.get('user_id', '')
     d['req_body'] = json.dumps(req_body, ensure_ascii=False)
     return d
 
