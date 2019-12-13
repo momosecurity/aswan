@@ -9,6 +9,7 @@ from django.http import Http404
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView, View
 from braces.views import JSONResponseMixin
+from redis import RedisError
 
 from core.generic import ListView
 from core.utils import errors_to_dict
@@ -392,9 +393,11 @@ class RulesThresholdEdit(JSONResponseMixin, View):
             strategy_index = data.get('strategy_index', None)
             # 从参数中获取前端传参过来的策略列表
             new_strategy_confs = data.get('strategy_list', None)
-            assert all((rule_uuid, strategy_index, new_strategy_confs))
+            assert strategy_index is not None
+            assert isinstance(strategy_index, int) and strategy_index >= 0
+            assert all((rule_uuid, new_strategy_confs))
         except (AssertionError, TypeError, ValueError):
-            return self.render_json_response({'state': False})
+            return self.render_json_response({'state': False, 'msg': '参数校验失败'})
 
         client = get_redis_client()
 
@@ -405,14 +408,15 @@ class RulesThresholdEdit(JSONResponseMixin, View):
             strategy_confs = json.loads(rule_conf.get('strategys'))
             # 从策略组列表中找出需要编辑的策略组
             strategy_conf = strategy_confs[strategy_index]
-        except (TypeError, ValueError, IndexError):
-            return self.render_json_response({'state': False})
+        except (TypeError, ValueError, IndexError, RedisError):
+            return self.render_json_response({'state': False, 'msg': '配置读取失败'})
 
+        strategys_obj = Strategys()
         strategy_conf['strategy_list'] = [
             [
                 x['strategy_uuid'],
                 x['threshold_list'],
-                Strategys().build_strategy_name_from_thresholds(
+                strategys_obj.build_strategy_name_from_thresholds(
                     x['strategy_uuid'], x['threshold_list'])
             ] for x in new_strategy_confs
         ]  # 构造编辑后的策略组
@@ -421,7 +425,10 @@ class RulesThresholdEdit(JSONResponseMixin, View):
         rule_conf["strategys"] = json.dumps(strategy_confs)
         rule_conf['user'] = request.user.username
         rule_conf['update_time'] = str(int(time.time()))
-        client.hmset("rule:{}".format(rule_uuid), rule_conf)  # 回写规则数据
+        try:
+            client.hmset("rule:{}".format(rule_uuid), rule_conf)  # 回写规则数据
+        except RedisError:
+            return self.render_json_response({'state': False, 'msg': '配置回写失败'})
 
         return self.render_json_response({'state': True})
 

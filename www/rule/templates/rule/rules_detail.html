@@ -198,11 +198,10 @@
                 if (resp.state) {
                     window.location.reload();
                 } else {
-                    var error = resp.error;
                     swal({
-                        title: "哎呀，出错了",
-                        text: error,
-                        type: "error",
+                        title: "操作失败",
+                        text: resp.msg,
+                        type: "warning",
                         confirmButtonColor:"#1ab394"
                     });
                 }
