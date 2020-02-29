@@ -1,0 +1,72 @@
+{% load django_tables2 %}
+
+{% if is_paginated %}
+    <nav class="soc-pagination">
+        <div class="page-show soc-pagination-numbers">
+            <ul class="pagination  pagination-sm">
+                {% block pagination.previous %}
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{% querystring table.prefixed_page_field=page_obj.previous_page_number %}"
+                               tabindex="-1" aria-disabled="true">{{ previous_link_decorator|safe }}上一页</a>
+                        </li>
+                    {% endif %}
+                {% endblock pagination.previous %}
+
+                {% block pagination.cardinality %}
+                    {% for page in pages %}
+                        {% if page %}
+                            {% ifequal page page_obj.number %}
+                                <li class="page-item active" aria-current="page">
+                                    <a class="page-link" href="#">{{ page }} <span class="sr-only">(current)</span></a>
+                                </li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       href="{% querystring table.prefixed_page_field=page %}">{{ page }}</a>
+                                </li>
+                            {% endifequal %}
+                        {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="#">...</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                {% endblock pagination.cardinality %}
+
+                {% block pagination.next %}
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{% querystring table.prefixed_page_field=page_obj.next_page_number %}">
+                                下一页{{ next_link_decorator|safe }}
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endblock pagination.next %}
+            </ul>
+        </div>
+
+        <div class="goto soc-pagination-goto" id="goto">
+            <div class="input-group">
+                <input type="text" class="form-control" id="soc-go-page-input"
+                       placeholder="页码" aria-describedby="soc-go-page-btn">
+                <div class="input-group-append">
+                    <button class="btn btn-primary-soft" type="button" id="soc-go-page-btn">
+                        跳页
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="count-container">
+            <select name="count" class="form-control" id="soc-change-page-size">
+                {% for value in page_values %}
+                    <option value="{{ value }}" {% if value == request.GET.page_size %}
+                            selected {% endif %}>每页{{ value }}条数据</option>
+                {% endfor %}
+            </select>
+        </div>
+    </nav>
+{% endif %}

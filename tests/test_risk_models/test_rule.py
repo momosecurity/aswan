@@ -13,10 +13,10 @@ import django
 django.setup()  # noqa
 
 from risk_models.rule import calculate_rule
-from www.core.utils import get_sample_str
+from core.utils import get_sample_str
 from www.menu.init_data import create_menu_event, add_element_to_menu
 from www.strategy.init_data import create_bool_strategy, create_menu_strategy
-from www.rule.init_data import create_rule
+from rule.init_data import create_rule
 
 
 class TestRule(unittest.TestCase):

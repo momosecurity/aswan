@@ -1,0 +1,81 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <link rel="icon" href="{% static 'img/favicon.ico' %}">
+
+    <link href="{% static 'widget/datetimepicker/bootstrap-datetimepicker.css' %}" rel="stylesheet">
+    <link href="{% static 'widget/datetimepicker/datetimepicker.css' %}" rel="stylesheet">
+    <link href="{% static 'css/multi-select.css' %}" rel="stylesheet">
+    <link href="{% static 'css/jquery.searchableSelect.css' %}" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+
+    {% block css %}
+    {% endblock %}
+
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <title>安全运营中心 - SOC</title>
+</head>
+
+<body>
+<div class="n-layout-content">
+    <div class="soc-header">
+        {% include "components/header.html" %}
+    </div>
+
+    <div class="soc-body">
+        {% block soc-body %}
+            <div class="soc-body-content">
+                <div class="left-sidebar">
+                    {% include "components/sidebar.html" %}
+                </div>
+
+                <div class="right-content">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </div>
+        {% endblock %}
+    </div>
+    <div class="n-footer">{% include "components/footer.html" %}</div>
+</div>
+
+{% csrf_token %}
+
+<script type="text/javascript" src="{% static 'js/feather.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery.searchableSelect.js' %}"></script>
+<script src="{% static 'widget/datetimepicker/bootstrap-datetimepicker.js' %}"></script>
+<script src="{% static 'js/jquery.multi-select.js' %}"></script>
+<script src="{% static 'js/jquery.quicksearch.js' %}"></script>
+<script src="{% static 'js/default_time.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+<script type="text/javascript">
+    // django Ajax 请求添加X-CSRFToken header
+    djangoAjaxSetup();
+
+    // 根据当前页面展开侧边栏子项
+    const activePath = "{{ soc_tabs.0.path }}";
+    showSidebarForUrl(activePath);
+
+    // 暗黑模式底部logo替换
+    const imgUrl = "{% static 'img/security-logo.png' %}";
+    if (isDarkModeEnabled()) replaceFooterLogoImage(imgUrl);
+
+    // feather图标文件加载
+    feather.replace();
+</script>
+{% block js %}
+{% endblock %}
+</body>
+</html>

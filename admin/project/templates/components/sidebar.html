@@ -1,0 +1,64 @@
+<div class="page-wrapper toggled">
+    <nav id="sidebar" class="sidebar-wrapper float-left">
+        <div class="sidebar-content">
+            <!-- sidebar-menu  -->
+            <div class="sidebar-item sidebar-search">
+                <div id="pin-sidebar" class="header-menu" style="text-align: center">
+                    <a href="javascript:void(0);" style="display: block"><i class="soc-feather" data-feather="more-horizontal"></i></a>
+                </div>
+            </div>
+            <div class=" sidebar-item sidebar-menu">
+                <ul>
+                    {% for item in soc_sidebar %}
+                        {% if item.category == "leaf_menu" %}
+                            <li>
+                                <a href="{{ item.value.0 }}">
+                                    <i><i class="soc-sidebar-icon" data-feather="{{ item.icon }}"></i></i>
+                                    <span class="menu-text">{{ item.name }}</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="sidebar-dropdown">
+                            <a href="javascript:void(0);">
+                                <i><i class="soc-sidebar-icon" data-feather="{{ item.icon }}"></i></i>
+                                <span class="menu-text">{{ item.name }}</span>
+                            </a>
+                            <div class="sidebar-submenu">
+                                <ul>
+                                    {% for item in item.value %}
+                                        {% if item.category == "leaf_menu" %}
+                                            <li>
+                                                <a href="{{ item.value.0 }}">
+                                                    <span class="menu-text">{{ item.name }}</span>
+                                                </a>
+                                            </li>
+                                        {% elif item.category == "submenu" %}
+                                            <li class="sidebar-dropdown-3">
+                                                <a href="javascript:void(0);">
+                                                    <span class="menu-text">{{ item.name }}</span>
+                                                </a>
+                                                <div class="sidebar-submenu-3">
+                                                    <ul>
+                                                        {% for item in item.value %}
+                                                            <li>
+                                                                <a href="{{ item.value.0 }}">
+                                                                    <span class="menu-text">{{ item.name }}</span>
+                                                                </a>
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+            <!-- sidebar-menu  -->
+        </div>
+    </nav>
+</div>

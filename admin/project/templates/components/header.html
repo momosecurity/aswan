@@ -1,0 +1,58 @@
+{% load staticfiles %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 n-nav-body">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <a class="navbar-brand" href="/"><span class="soc-title-01">A</span><span class="soc-title-02">swan</span></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            {% if request.user.is_authenticated %}
+                                <a class="nav-link" href="/">首页 <span class="sr-only">(current)</span></a>
+                            {% endif %}
+                        </li>
+                        {% if request.user.is_authenticated %}
+                            {% for item in soc_quick_nav %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ item.url }}">{{ item.name }}</a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+
+                {% if request.user.is_authenticated %}
+                    <div class="avatar">
+                        <img src="{% static 'img/avatar-3.png' %}" class="avatar-img rounded-circle">
+                    </div>
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="soc-login-name" role="button"
+                           data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false" style="font-weight: bold; padding: 8px 10px;">
+                            {% if request.user.last_name %}
+                                {{ request.user.last_name }}{{ request.user.first_name }}
+                            {% else %}
+                                测试账号
+                            {% endif %}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown3">
+                            <a class="dropdown-item" href="#">版本 {{ deploy_env.soc_version }}</a>
+                            <a class="dropdown-item" href="https://moji.wemomo.com/doc#/book/G4iTiH/104673">变更日志</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/accounts/logout/">退出</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <a href="/accounts/login/" style="font-weight: bold">登录</a>
+                {% endif %}
+            </nav>
+        </div>
+    </div>
+</div>

@@ -10,7 +10,7 @@ WeChat:<br>
 
 ### 架构介绍
 
-   ![风控系统架构图](./www/static/img/wiki/architecture.jpg)
+   ![风控系统架构图](./admin/project/static/img/wiki/architecture.jpg)
 
 本项目的主分支仅支持Python3，目前通过Python3.7.3的版本测试，如果需要python2.7的版本，请使用tag: last-support-Python2.7 的代码.
 
@@ -56,7 +56,7 @@ WeChat:<br>
 
     名单必须属于某个项目(用于确定名单的范围)，可以在名单管理-名单项目管理中添加项目。
 
-    ![名单管理](./www/static/img/wiki/menu.png)
+    ![名单管理](./admin/project/static/img/wiki/menu.png)
 
 2. 名单型策略
 
@@ -64,7 +64,7 @@ WeChat:<br>
 
     示例：用户ID 在 初始项目 的 用户黑名单 中
 
-    ![名单型策略](./www/static/img/wiki/menu_strategy.png)
+    ![名单型策略](./admin/project/static/img/wiki/menu_strategy.png)
 
 3. 布尔型策略
 
@@ -74,7 +74,7 @@ WeChat:<br>
     传阈值的布尔型，描述符为 **{参数名:单选，假设是"账号ID"} {操作码：大于/小于/等于/不等于} {内置函数：历史登录次数} {阈值：170}**
     示例：账号ID历史登录次数大于100
 
-    ![布尔型策略](./www/static/img/wiki/bool_strategy.png)
+    ![布尔型策略](./admin/project/static/img/wiki/bool_strategy.png)
 
     `内置函数`是什么？就是自定义的一些逻辑判断函数，只需要满足要求返回布尔值即可。比如注册时间是否在某个范围以内，当前设备是否是常用设备。
 
@@ -84,7 +84,7 @@ WeChat:<br>
     示例：同一设备一天内限制操作10次.
     可是我怎么知道当前已经有多少次呢？这就需要上报，上报后将计数  详见第9条 **数据源管理**
 
-    ![时段频控型策略](./www/static/img/wiki/freq_strategy.png)
+    ![时段频控型策略](./admin/project/static/img/wiki/freq_strategy.png)
 
 5. 限用户数型策略
 
@@ -93,22 +93,22 @@ WeChat:<br>
     示例：同一设备当天限10个用户
     此策略同样需要上报的数据，且由于与用户相关，因此上报数据中必须包含user_id字段(在数据源中需配置)  详见第9条 **数据源管理**
 
-    ![限用户数型策略](./www/static/img/wiki/user_strategy.png)
+    ![限用户数型策略](./admin/project/static/img/wiki/user_strategy.png)
 
 6. 规则管理
 
     管控原子：命中某条策略后的管控动作，比如拦截...
     把上面2--5中所述的策略原子按照优先级组合起来，由上向下执行，直到命中某条策略，则返回对应策略的管控原子。此模块更多是重交互，完成策略的配置、组合、权重等等
 
-    ![规则配置页](./www/static/img/wiki/rule_manage.png)
+    ![规则配置页](./admin/project/static/img/wiki/rule_manage.png)
 
 7. 日志管理
 
     所有命中策略的日志均在此展示，也会包含审计相关的日志，`下一期会基于此日志，开放拦截溯源功能`。
 
-    ![命中日志](./www/static/img/wiki/rule_manage.png)
+    ![命中日志](./admin/project/static/img/wiki/rule_manage.png)
 
-    ![审计日志](./www/static/img/wiki/audit_log.png)
+    ![审计日志](./admin/project/static/img/wiki/audit_log.png)
 
 8. 权限配置
 
@@ -122,7 +122,7 @@ WeChat:<br>
 
     重要：由于逻辑必然依赖时间信息，为通用且必需字段，timestamp为默认隐含字段，类型是时间戳(精确到秒，整数)
 
-    ![数据源配置](./www/static/img/wiki/data_source.png)
+    ![数据源配置](./admin/project/static/img/wiki/data_source.png)
 
 ### 调用样例
 
@@ -197,11 +197,11 @@ User.objects.create_superuser(username=username, password=password, email=email,
 
 具体图示如下:
 
-   ![uri组管理](./www/static/img/wiki/permission_manage.png)
+   ![uri组管理](./admin/project/static/img/wiki/permission_manage.png)
 
-   ![权限组管理](./www/static/img/wiki/url_group_manage.png)
+   ![权限组管理](./admin/project/static/img/wiki/url_group_manage.png)
 
-   ![用户管理](./www/static/img/wiki/user_manage.png)
+   ![用户管理](./admin/project/static/img/wiki/user_manage.png)
 
 ### 配置相关
 

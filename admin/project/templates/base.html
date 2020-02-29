@@ -1,0 +1,38 @@
+{% extends "components/root.html" %}
+
+{% block css %}
+{% endblock %}
+
+
+{% block content %}
+    <div class="row content-tabs">
+        <div class="card">
+            <div class="card-body">
+                <ul class="nav nav-tabs mb-4">
+                    {% if soc_tabs %}
+                        {% for item in soc_tabs %}
+                            <a class="{{ item.active }}" href="{{ item.path }}">{{ item.tab_name }}</a>
+                        {% endfor %}
+
+                    {% else %}
+                        {% block header %}
+                        {% endblock %}
+                    {% endif %}
+                </ul>
+
+                <div class="float-right soc-action">
+                    {% block action %}
+                    {% endblock %}
+                </div>
+
+                {% block main %}
+                    安全运营中心（Security Operation Center，SOC）是陌陌安全的统一安全运营与管理平台。
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+{% endblock %}

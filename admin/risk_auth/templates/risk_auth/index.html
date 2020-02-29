@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+
+{% block content %}
+
+
+<div>
+
+    <div class="row align-items-center justify-content-center no-gutters min-vh-80">
+        <div class="col-8 col-md-6 col-lg-7"
+        style="padding-top: 100px !important">
+            <!-- Image -->
+            <img src="{% static 'img/illustration-2.png' %}" class="img-fluid" style="width: 500px">
+        </div>
+        <div class="col-12 col-md-5 col-lg-4 order-md-1 mb-auto mb-md-0 pb-8 py-md-11">
+
+            <!-- Heading -->
+            <div class="mb-0 font-weight-bold text-center">
+                陌陌风控系统静态规则引擎，零基础简易便捷的配置多种复杂规则，实时高效管控用户异常行为。
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

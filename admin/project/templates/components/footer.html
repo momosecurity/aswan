@@ -1,0 +1,33 @@
+{% load staticfiles %}
+
+<div class="container">
+    <!--底部链接-->
+    <div class="row">
+        {% for name, values in soc_footer_links.items %}
+            <div class="col-md-3">
+                <h6 class="n-footer-link-group-name">{{ name }}</h6>
+                {% for link_name, link in values.items %}
+                    <a class="n-footer-link" href="{{ link }}">{{ link_name }}</a>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+
+
+    <div class="row n-footer-copyright">
+        <!--底部logo-->
+        <div class="col-md-5">
+            <img class="soc-footer-logo" src="{% static 'img/security-logo-new.png' %}"
+                 style="width: 150px;margin-left: -15px;"/>
+        </div>
+
+        <!--copyright链接-->
+        <div class="col-md-7">
+            <div class="float-right n-footer-copyright-group">
+                <a class="n-footer-copyright-item">Host:{{ deploy_env.hostname }}</a>
+                <a href="https://security.immomo.com/" class="n-footer-copyright-item">陌陌安全应急响应中心</a>
+                <a class="n-footer-copyright-item">© 陌陌安全 2020</a>
+            </div>
+        </div>
+    </div>
+</div>
