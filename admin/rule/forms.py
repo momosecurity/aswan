@@ -12,18 +12,18 @@ from risk_models.rule import Rules
 from rule.models import RuleModel
 
 STATUS_CHOICES = (
-    ('on', u"启用"),
-    ('off', u"停用"),
+    ('on', "启用"),
+    ('off', "停用"),
 )
 CONTROL_CHOICES = (
-    ('', u"管控原子选择"),
-    ('pass', u"直接通过"),
-    ('deny', u"拒绝"),
-    ('log', u"记录日志"),
-    ('message', u"短信验证"),
-    ('picture', u"图片验证"),
-    ('number', u"数字验证"),
-    ('verify', u"审核"),
+    ('', "管控原子选择"),
+    ('pass', "直接通过"),
+    ('deny', "拒绝"),
+    ('log', "记录日志"),
+    ('message', "短信验证"),
+    ('picture', "图片验证"),
+    ('number', "数字验证"),
+    ('verify', "审核"),
 )
 CONTROL_MAP = {
     k: v for k, v in CONTROL_CHOICES if k
@@ -31,17 +31,17 @@ CONTROL_MAP = {
 
 
 class RulesForm(BaseForm):
-    title = forms.CharField(label=_(u"规则名称"))
-    describe = forms.CharField(required=False, label=_(u"规则描述"),
+    title = forms.CharField(label=_("规则名称"))
+    describe = forms.CharField(required=False, label=_("规则描述"),
                                widget=forms.Textarea)
-    status = forms.ChoiceField(label=_(u"状态"), choices=STATUS_CHOICES)
+    status = forms.ChoiceField(label=_("状态"), choices=STATUS_CHOICES)
     end_time = forms.DateTimeField()
     strategy = forms.ChoiceField(label=_("策略原子"), required=False)
     control = forms.ChoiceField(label=_("管控原子"), choices=CONTROL_CHOICES,
                                 required=False)
-    custom = forms.CharField(label=_(u"客服话术"), required=False,
+    custom = forms.CharField(label=_("客服话术"), required=False,
                              widget=forms.Textarea(
-                                 attrs={'placeholder': u'客服话术',
+                                 attrs={'placeholder': '客服话术',
                                         'data-autoresize': '',
                                         'rows': '1',
                                         'cols': 'auto'}))
@@ -64,7 +64,7 @@ class RulesForm(BaseForm):
     def clean_end_time(self):
         end_time = self.cleaned_data['end_time']
         if end_time <= timezone.now():
-            raise forms.ValidationError(_(u"结束时间应大于当前时间"))
+            raise forms.ValidationError(_("结束时间应大于当前时间"))
         return end_time
 
     def clean_weights(self):
@@ -72,7 +72,7 @@ class RulesForm(BaseForm):
         seps = weights.split(',')
         for num in seps:
             if not num.isdigit():
-                raise forms.ValidationError(_(u"权重值不是数字"))
+                raise forms.ValidationError(_("权重值不是数字"))
         return weights
 
     def _check_names(self, names, choices, sep=None):
@@ -101,19 +101,19 @@ class RulesForm(BaseForm):
         names = cd['names'].split(':::')
         if not len(strategys_list) == len(controls) == len(customs) == len(
                 names):
-            self.errors['customs'] = [u'策略原子组名、策略原子、管控原子、客服话术不匹配']
+            self.errors['customs'] = ['策略原子组名、策略原子、管控原子、客服话术不匹配']
         if not self._check_names(strategys_list, self._get_all_strategys(),
                                  sep=';'):
-            self.errors['strategys'] = [u'非法策略原子名']
+            self.errors['strategys'] = ['非法策略原子名']
         if not self._check_names(controls, CONTROL_CHOICES):
-            self.errors['controls'] = [u'非法管控原子名']
+            self.errors['controls'] = ['非法管控原子名']
         strategy_uuids = []
         for strategy in strategys_list:
             item = strategy.split(';')
             item.sort()
             strategy_uuids.append("".join(item))
         if len(set(strategy_uuids)) < len(strategy_uuids):
-            self.errors['strategys'] = [u'策略原子有重复']
+            self.errors['strategys'] = ['策略原子有重复']
         return cd
 
     def save(self, *args, **kwargs):
@@ -135,8 +135,8 @@ class RulesForm(BaseForm):
 
 
 class RulesTestForm(BaseForm):
-    req_body = forms.CharField(widget=forms.Textarea, label=_(u"请求体"))
-    rule = forms.ChoiceField(label=_(u"规则名称"), widget=forms.Select())
+    req_body = forms.CharField(widget=forms.Textarea, label=_("请求体"))
+    rule = forms.ChoiceField(label=_("规则名称"), widget=forms.Select())
 
     def __init__(self, *args, **kwargs):
         super(RulesTestForm, self).__init__(*args, **kwargs)
@@ -151,12 +151,12 @@ class RulesTestForm(BaseForm):
         try:
             req_body = json.loads(req_body)
         except ValueError:
-            raise forms.ValidationError(u"请求体不是合法json格式")
+            raise forms.ValidationError("请求体不是合法json格式")
         return req_body
 
 
 class RulesFilterForm(BaseFilterForm):
-    status = forms.ChoiceField(label=_(u"状态"),
+    status = forms.ChoiceField(label=_("状态"),
                                choices=(('', '所有状态'),) + STATUS_CHOICES,
                                required=False)
-    rule_name = forms.CharField(label=_(u"规则名称(可模糊查询)"), required=False)
+    rule_name = forms.CharField(label=_("规则名称(可模糊查询)"), required=False)

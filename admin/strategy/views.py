@@ -3,7 +3,7 @@
 import time
 import json
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.conf import settings
 from django.views.generic import TemplateView, View
 from braces.views import JSONResponseMixin

@@ -1,12 +1,11 @@
-# coding=utf8
+from bson import ObjectId
 from datetime import datetime
 from collections import defaultdict
 
 import pymongo
-from bson import ObjectId
-from django.views.generic import View
 from braces.views import JSONResponseMixin
-from django.core.urlresolvers import reverse
+from django.urls import reverse
+from django.views.generic import View
 
 from core.generic import ListView
 from core.utils import errors_to_dict
@@ -81,7 +80,7 @@ class EventDestroyView(JSONResponseMixin, View):
         if db.menus.find_one({"event": event_code}):
             return self.render_json_response(dict(
                 state=False,
-                error=u"已生成名单，无法删除"
+                error="已生成名单，无法删除"
             ))
 
         # 2 确保没有被名单策略使用
@@ -124,8 +123,8 @@ class BaseMenuListView(ListView):
         if event_code:
             query['event_code'] = event_code
         if not menu_status:
-            menu_status = u'有效'
-        if menu_status != u'全部':
+            menu_status = '有效'
+        if menu_status != '全部':
             query['menu_status'] = menu_status
         query.update(self.extra_filter_kwargs)
         return query
@@ -136,6 +135,8 @@ class BaseMenuListView(ListView):
             self.build_filter_query(),
             sort=[("create_time", pymongo.DESCENDING)]
         )
+        qs = list(qs)
+        print(qs)
         return qs
 
     def get_qs_count(self):
@@ -194,7 +195,7 @@ class MenuDestroyView(JSONResponseMixin, View):
         redis_values_should_remove = defaultdict(list)
 
         menus_records = list(
-            db['menus'].find({'_id': {"$in": obj_ids}, 'menu_status': u'有效'},
+            db['menus'].find({'_id': {"$in": obj_ids}, 'menu_status': '有效'},
                              {'event_code': True, '_id': False,
                               'dimension': True,
                               'menu_type': True, 'value': True,
@@ -213,7 +214,7 @@ class MenuDestroyView(JSONResponseMixin, View):
                 redis_values_should_remove[redis_key].append(d['value'])
 
         update_payload = {
-            'menu_status': u'无效',
+            'menu_status': '无效',
             'creator': request.user.username,
             'create_time': datetime.now(),
         }

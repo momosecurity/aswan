@@ -3,7 +3,7 @@
 from builtin_funcs import BuiltInFuncs
 
 
-@BuiltInFuncs.register(desc=u'异常用户',
+@BuiltInFuncs.register(desc='异常用户',
                        args_type_tuple=(('user_id', str),),
                        supported_ops=('is', 'is_not'))
 def is_abnormal(req_body):
@@ -22,7 +22,7 @@ def is_abnormal(req_body):
         return False
 
 
-@BuiltInFuncs.register(desc=u'历史登录次数',
+@BuiltInFuncs.register(desc='历史登录次数',
                        args_type_tuple=(('user_id', str),),
                        supported_ops=('gt', 'ge', 'lt', 'le', 'eq', 'neq'),
                        threshold_trans_func=int

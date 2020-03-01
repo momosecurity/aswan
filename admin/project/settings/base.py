@@ -18,6 +18,9 @@ SECRET_KEY = '=====PLEASE_REPLACE_THIS_SECRET_KEY_IN_PRODUCTION_MODE====='
 ALLOWED_HOSTS = [
     "*",
 ]
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 WSGI_APPLICATION = 'wsgi.application'
 ROOT_URLCONF = 'urls'
 
@@ -47,10 +50,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Dependencies
-    'django_tables2',
-    'crispy_forms',
-
     # Project apps
     'risk_auth',
     'permissions',
@@ -59,20 +58,25 @@ INSTALLED_APPS = (
     'rule',
     'bk_config',
     'log_manage',
+
+    # Dependencies
+    'django_tables2',
+    'crispy_forms',
+    'debug_toolbar',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'permissions.middleware.PermissionsMiddleware',
     'permissions.middleware.UserAuditMiddleware'
-)
+]
 
 TEMPLATES = [
     {
@@ -85,7 +89,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'permissions.context_processors.menu_by_perms',
                 'project.context_processors.project_info',
             ],
         },
@@ -132,7 +135,7 @@ risk_env = os.environ.get('RISK_ENV', 'develop')
 #################
 # Admin Sidebar #
 #################
-SOC_FOOTER_LINKS = {
+ADMIN_FOOTER_LINKS = {
     '陌陌官网': {
         '官网首页': 'http://www.immomo.com/',
         '陌陌网页版': 'https://web.immomo.com/?fr=gw_nav',

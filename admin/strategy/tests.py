@@ -3,7 +3,7 @@ import random
 import time
 import json
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from bk_config.init_data import create_data_source
 from core.utils import get_sample_str

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load staticfiles %}
+{% load static %}
 
 {% block css %}
     {{ block.super }}
@@ -65,9 +65,9 @@
                         <tbody>
                             {% for rule in rule.rule_list %}
                             <tr>
-                                <td style="width: 10%">{{ rule.group_name }}</td>
+                                <td style="width: 20%">{{ rule.group_name }}</td>
                                 <td style="width: 5%">{{ rule.weight }}</td>
-                                <td style="width: 45%">
+                                <td style="width: 35%">
                                     <div><strong>{{ rule.strategy_name }}</strong></div>
                                 </td>
                                 <td style="width: 10%">{{ rule.control_display }}</td>

@@ -2,7 +2,7 @@
 
 from core.testcase import BaseTestCase
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 
 class TestPermission(BaseTestCase):

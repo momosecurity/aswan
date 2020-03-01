@@ -1,9 +1,9 @@
-{% load staticfiles %}
+{% load static %}
 
 <div class="container">
     <!--底部链接-->
     <div class="row">
-        {% for name, values in soc_footer_links.items %}
+        {% for name, values in admin_footer_links.items %}
             <div class="col-md-3">
                 <h6 class="n-footer-link-group-name">{{ name }}</h6>
                 {% for link_name, link in values.items %}

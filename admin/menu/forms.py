@@ -15,16 +15,16 @@ from risk_models.menu import build_redis_key
 
 # 查询时有全部名单
 MENU_TYPE_CHOICES = (
-    (u'', u'全部名单'),
-    (u'black', u'黑名单'),
-    (u'white', u'白名单'),
-    (u'gray', u'灰名单')
+    ('', '全部名单'),
+    ('black', '黑名单'),
+    ('white', '白名单'),
+    ('gray', '灰名单')
 )
 
 MENU_STATUS_CHOICES = (
-    (u'有效', u'有效'),
-    (u'全部', u'全部'),
-    (u'无效', u'无效')
+    ('有效', '有效'),
+    ('全部', '全部'),
+    ('无效', '无效')
 )
 
 # 新增时没有全部名单
@@ -33,11 +33,11 @@ MENU_TYPE_CHOICES_ADD_CHOICES = MENU_TYPE_CHOICES[1:]
 MENU_TYPE_NAME_MAP = dict(MENU_TYPE_CHOICES_ADD_CHOICES)
 
 DIMENSION_NAME_MAP = {
-    "user_id": u"用户ID",
-    "ip": u'IP地址',
-    "phone": u"手机号",
-    "uid": u"设备号",
-    "pay": u"支付账号"
+    "user_id": "用户ID",
+    "ip": 'IP地址',
+    "phone": "手机号",
+    "uid": "设备号",
+    "pay": "支付账号"
 }
 
 
@@ -49,7 +49,7 @@ class MenuEventCreateForm(BaseForm):
         event_name = self.cleaned_data['event_name'].strip()
         res = db.menu_event.find_one({'event_name': event_name})
         if res:
-            raise forms.ValidationError(u"该项目名称已存在")
+            raise forms.ValidationError("该项目名称已存在")
         return event_name
 
     def save(self, *args, **kwargs):
@@ -68,10 +68,10 @@ class MenuCreateForm(BaseForm):
     value = forms.CharField(widget=forms.Textarea(
         attrs={"placeholder": "用户ID[批量添加时请以回车键隔开]", "rows": "5"}))
     dimension = forms.CharField(required=False, widget=forms.HiddenInput,
-                                label=_(u'名单维度'))
-    menu_type = forms.ChoiceField(label=_(u"名单类型"),
+                                label=_('名单维度'))
+    menu_type = forms.ChoiceField(label=_("名单类型"),
                                   choices=MENU_TYPE_CHOICES_ADD_CHOICES)
-    event_code = forms.ChoiceField(label=_(u"项目"))
+    event_code = forms.ChoiceField(label=_("项目"))
     end_time = forms.DateTimeField(widget=forms.TextInput(
         attrs={"placeholder": "结束时间", "class": "form-control datetime"}))
     menu_desc = forms.CharField(required=False, widget=forms.Textarea(
@@ -96,15 +96,15 @@ class MenuCreateForm(BaseForm):
         try:
             json.dumps(value_list)
         except ValueError:
-            raise forms.ValidationError(u"输入非法")
+            raise forms.ValidationError("输入非法")
         if not value_list:
-            raise forms.ValidationError(u"该字段是必填项。")
+            raise forms.ValidationError("该字段是必填项。")
         return value_list
 
     def clean_end_time(self):
         end_time = self.cleaned_data['end_time']
         if end_time <= timezone.now():
-            raise forms.ValidationError(_(u"结束时间应大于当前时间"))
+            raise forms.ValidationError(_("结束时间应大于当前时间"))
         return end_time
 
     def _check_regex(self, values, regex):
@@ -114,7 +114,7 @@ class MenuCreateForm(BaseForm):
                 errors.append(item)
         if errors:
             msg = ', '.join(errors)
-            msg = u'输入非法: {}'.format(msg)
+            msg = '输入非法: {}'.format(msg)
             self.errors['value'] = [msg]
 
     def clean(self):
@@ -145,7 +145,7 @@ class MenuCreateForm(BaseForm):
             payload = dict(
                 end_time=end_time,
                 menu_desc=cd['menu_desc'],
-                menu_status=u"有效",
+                menu_status="有效",
                 create_time=datetime.datetime.now(),
                 creator=chinese_name
             )
@@ -183,9 +183,9 @@ class MenuCreateForm(BaseForm):
 
 
 class MenuFilterForm(BaseFilterForm):
-    filter_event_code = forms.ChoiceField(label=_(u"项目类型"), required=False)
-    filter_menu_type = forms.ChoiceField(label=_(u"名单类型"), choices=MENU_TYPE_CHOICES, required=False)
-    filter_value = forms.CharField(label=_(u"值"), required=False)
+    filter_event_code = forms.ChoiceField(label=_("项目类型"), required=False)
+    filter_menu_type = forms.ChoiceField(label=_("名单类型"), choices=MENU_TYPE_CHOICES, required=False)
+    filter_value = forms.CharField(label=_("值"), required=False)
     filter_menu_status = forms.ChoiceField(choices=MENU_STATUS_CHOICES, required=False)
 
     def __init__(self, *args, **kwargs):
@@ -193,7 +193,7 @@ class MenuFilterForm(BaseFilterForm):
         super(MenuFilterForm, self).__init__(*args, **kwargs)
         self.fields['filter_event_code'].choices = self._build_event_choices()
 
-        placeholder = DIMENSION_NAME_MAP.get(self.dimension, u'未知')
+        placeholder = DIMENSION_NAME_MAP.get(self.dimension, '未知')
         self.fields['filter_value'].widget.attrs["placeholder"] = _(
             placeholder)
 
@@ -204,5 +204,5 @@ class MenuFilterForm(BaseFilterForm):
                    db['menu_event'].find({}, projection={'_id': False,
                                                          'event_code': True,
                                                          'event_name': True})]
-        choices.insert(0, ('', u"全部项目"))
+        choices.insert(0, ('', "全部项目"))
         return choices

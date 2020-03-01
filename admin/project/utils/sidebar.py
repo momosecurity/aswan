@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from django.core.urlresolvers import reverse, NoReverseMatch
+
+from django.urls import reverse, NoReverseMatch
 
 
 class Menu:

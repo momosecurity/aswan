@@ -12,7 +12,7 @@ class TruncateColumn(Column):
 
     def render(self, value):
         if isinstance(value, str) and len(value) > self.truncate_limit:
-            value = u'<span title="{0}">{1}</span>'.format(value,
+            value = '<span title="{0}">{1}</span>'.format(value,
                                                            truncatechars(value, self.truncate_limit))
             return mark_safe(value)
         return value

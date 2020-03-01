@@ -15,25 +15,26 @@ class PaginatorClass(Paginator):
         """
         Validates the given 1-based page number.
         """
-        try:
-            number = int(number)
-        except (TypeError, ValueError):
-            raise PageNotAnInteger('That page number is not an integer')
-        if number < 1:
-            raise EmptyPage('That page number is less than 1')
-        if number > self.num_pages:
-            if number == 1 and self.allow_empty_first_page:
-                pass
-            else:
-                number = self.num_pages
         return number
+        # try:
+        #     number = int(number)
+        # except (TypeError, ValueError):
+        #     raise PageNotAnInteger('That page number is not an integer')
+        # if number < 1:
+        #     raise EmptyPage('That page number is less than 1')
+        # if number > self.num_pages:
+        #     if number == 1 and self.allow_empty_first_page:
+        #         pass
+        #     else:
+        #         number = self.num_pages
+        # return number
 
 
 class PagedFilterTableView(SingleTableView):
-    empty_text = u"暂无数据"
+    empty_text = "暂无数据"
     enable_page_size_config = None
     collection_name = None
-    paginate_by = 50
+    paginate_by = 10
     paginator_class = PaginatorClass
 
     def get_queryset(self):
@@ -64,7 +65,7 @@ class PagedFilterTableView(SingleTableView):
 
     def _build_pages(self):
         page_count = self._get_page_count()
-        current_page = int(self.request.GET.get('page', 0))
+        current_page = int(self.request.GET.get('page') or 0)
         pages = list(range(1, page_count + 1))
         if page_count > 8:
             pages = pages[:3] + pages[-3:]
@@ -85,7 +86,7 @@ class PagedFilterTableView(SingleTableView):
         return new_pages
 
     def get_context_data(self, **kwargs):
-        context = super(PagedFilterTableView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['pages'] = self._build_pages()
         context['filter_form'] = self.get_filter_form()
         context['record_count'] = self.get_qs_count()
@@ -97,7 +98,7 @@ class PagedFilterTableView(SingleTableView):
 
     def get_page_values(self):
         """分页配置"""
-        defaults = ['50', '100', '200', '500', '1000']
+        defaults = ['10', '50', '100', '500', '1000']
         return defaults
 
     def get_paginate_by(self, queryset):

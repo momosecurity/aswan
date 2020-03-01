@@ -45,7 +45,13 @@ WeChat:<br>
     bash start.sh
 ```
 
-### 后台介绍
+### 风控管理平台介绍
+1. 登录
+   ![登录](./admin/project/static/img/wiki/login.png)
+
+0. 首页
+   ![首页](./admin/project/static/img/wiki/home.png)
+
 1. 名单管理
 
     为名单型策略提供基础的数据管理功能。
@@ -56,7 +62,7 @@ WeChat:<br>
 
     名单必须属于某个项目(用于确定名单的范围)，可以在名单管理-名单项目管理中添加项目。
 
-    ![名单管理](./admin/project/static/img/wiki/menu.png)
+    ![名单管理1](./admin/project/static/img/wiki/menu.png)
 
 2. 名单型策略
 
@@ -105,8 +111,6 @@ WeChat:<br>
 7. 日志管理
 
     所有命中策略的日志均在此展示，也会包含审计相关的日志，`下一期会基于此日志，开放拦截溯源功能`。
-
-    ![命中日志](./admin/project/static/img/wiki/rule_manage.png)
 
     ![审计日志](./admin/project/static/img/wiki/audit_log.png)
 

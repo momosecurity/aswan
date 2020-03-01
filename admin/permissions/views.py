@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from braces.views import JSONResponseMixin
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import Http404
 from django.http.request import QueryDict
 from django.views.generic import TemplateView, ListView as OriginListView

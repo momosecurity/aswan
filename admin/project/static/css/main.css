@@ -58,11 +58,11 @@ thead a:hover {
 }
 
 .soc-title-01 {
-    color: #23834d;
+    color: #0038ec;
 }
 
 .soc-title-02 {
-    color: #335eea;
+    color: #086731;
 
 }
 
@@ -518,5 +518,13 @@ thead a:hover {
 }
 
 .navbar-brand {
-    letter-spacing: -1px;
+    font-size: 20px !important;
+    margin-bottom: 2px;
+    letter-spacing: 1px;
+}
+
+
+#batchDelete {
+    color: #fff;
+    margin-left: 10px;
 }

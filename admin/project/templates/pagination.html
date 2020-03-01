@@ -1,23 +1,23 @@
 {% load django_tables2 %}
 
-{% if is_paginated %}
+{% if table.context.is_paginated %}
     <nav class="soc-pagination">
         <div class="page-show soc-pagination-numbers">
             <ul class="pagination  pagination-sm">
-                {% block pagination.previous %}
-                    {% if page_obj.has_previous %}
+                {% block table.context.pagination.previous %}
+                    {% if table.context.page_obj.has_previous %}
                         <li class="page-item">
                             <a class="page-link"
-                               href="{% querystring table.prefixed_page_field=page_obj.previous_page_number %}"
-                               tabindex="-1" aria-disabled="true">{{ previous_link_decorator|safe }}上一页</a>
+                               href="{% querystring table.prefixed_page_field=table.context.page_obj.previous_page_number %}"
+                               tabindex="-1" aria-disabled="true">上一页</a>
                         </li>
                     {% endif %}
-                {% endblock pagination.previous %}
+                {% endblock table.context.pagination.previous %}
 
-                {% block pagination.cardinality %}
-                    {% for page in pages %}
+                {% block table.context.pagination.cardinality %}
+                    {% for page in table.context.pages %}
                         {% if page %}
-                            {% ifequal page page_obj.number %}
+                            {% ifequal page table.context.page_obj.number %}
                                 <li class="page-item active" aria-current="page">
                                     <a class="page-link" href="#">{{ page }} <span class="sr-only">(current)</span></a>
                                 </li>
@@ -33,18 +33,18 @@
                             </li>
                         {% endif %}
                     {% endfor %}
-                {% endblock pagination.cardinality %}
+                {% endblock table.context.pagination.cardinality %}
 
-                {% block pagination.next %}
-                    {% if page_obj.has_next %}
+                {% block table.context.pagination.next %}
+                    {% if table.context.page_obj.has_next %}
                         <li class="page-item">
                             <a class="page-link"
-                               href="{% querystring table.prefixed_page_field=page_obj.next_page_number %}">
-                                下一页{{ next_link_decorator|safe }}
+                               href="{% querystring table.prefixed_page_field=table.context.page_obj.next_page_number %}">
+                                下一页
                             </a>
                         </li>
                     {% endif %}
-                {% endblock pagination.next %}
+                {% endblock table.context.pagination.next %}
             </ul>
         </div>
 
@@ -62,7 +62,7 @@
 
         <div class="count-container">
             <select name="count" class="form-control" id="soc-change-page-size">
-                {% for value in page_values %}
+                {% for value in table.context.page_values %}
                     <option value="{{ value }}" {% if value == request.GET.page_size %}
                             selected {% endif %}>每页{{ value }}条数据</option>
                 {% endfor %}

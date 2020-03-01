@@ -64,4 +64,4 @@ class SourceMapForm(BaseForm):
 
 
 class SourceFilterForm(BaseFilterForm):
-    name = forms.CharField(required=False, label=_(u"数据源名称"))
+    name = forms.CharField(required=False, label=_("数据源名称"))

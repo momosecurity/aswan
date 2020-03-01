@@ -36,7 +36,7 @@ def add_element_to_menu(event_code, menu_type, dimension, element,
     payload = dict(
         end_time=end_time,
         menu_desc=menu_desc,
-        menu_status=u"有效",
+        menu_status="有效",
         create_time=datetime.now(),
         creator='test',
         value=element,

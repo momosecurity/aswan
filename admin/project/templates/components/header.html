@@ -1,10 +1,10 @@
-{% load staticfiles %}
+{% load static %}
 
 <div class="container">
     <div class="row">
         <div class="col-md-12 n-nav-body">
             <nav class="navbar navbar-expand-lg navbar-light">
-                <a class="navbar-brand" href="/"><span class="soc-title-01">A</span><span class="soc-title-02">swan</span></a>
+                <a class="navbar-brand" href="/"><span class="soc-title-01">风控管理</span><span class="soc-title-02">平台</span></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent"
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,13 +18,6 @@
                                 <a class="nav-link" href="/">首页 <span class="sr-only">(current)</span></a>
                             {% endif %}
                         </li>
-                        {% if request.user.is_authenticated %}
-                            {% for item in soc_quick_nav %}
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ item.url }}">{{ item.name }}</a>
-                                </li>
-                            {% endfor %}
-                        {% endif %}
                     </ul>
                 </div>
 
@@ -44,7 +37,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown3">
                             <a class="dropdown-item" href="#">版本 {{ deploy_env.soc_version }}</a>
-                            <a class="dropdown-item" href="https://moji.wemomo.com/doc#/book/G4iTiH/104673">变更日志</a>
+                            <a class="dropdown-item" href="#">变更日志</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="/accounts/logout/">退出</a>
                         </div>

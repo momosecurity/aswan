@@ -59,8 +59,8 @@ class BaseForm(FormBaseMixin, forms.Form):
     i18n_fields = []
 
     form_class = 'form-horizontal'
-    form_inputs = [Submit('submit', _(u'保存')),
-                   Reset('reset', _(u'重置'))]
+    form_inputs = [Submit('submit', _('保存')),
+                   Reset('reset', _('重置'))]
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
@@ -105,7 +105,7 @@ class BaseFilterForm(FormBaseMixin, forms.Form):
 
     def get_layout(self, helper):
         items = [Field(x, wrapper_class="form-group") for x in self.fields]
-        action = FormActions(Submit('submit', _(u'查询')),
+        action = FormActions(Submit('submit', _('查询')),
                              css_class="form-group")
         items.append(action)
         layout = Layout(*items)
@@ -113,8 +113,8 @@ class BaseFilterForm(FormBaseMixin, forms.Form):
 
 
 class BaseTimeFilterForm(forms.Form):
-    time_start = forms.CharField(label=_(u"开始时间"), required=False)
-    time_end = forms.CharField(label=_(u"结束时间"), required=False)
+    time_start = forms.CharField(label=_("开始时间"), required=False)
+    time_end = forms.CharField(label=_("结束时间"), required=False)
 
     left_sub_days = 3
 

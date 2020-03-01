@@ -5,7 +5,7 @@ import time
 from datetime import datetime
 
 from django.http import Http404
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.views.generic import TemplateView, View
 from braces.views import JSONResponseMixin
 from redis import RedisError
@@ -67,7 +67,7 @@ class RulesDestroyView(JSONResponseMixin, View):
             })
         return self.render_json_response({
             'state': False,
-            'error': u"未找到规则"
+            'error': "未找到规则"
         })
 
 
@@ -107,7 +107,7 @@ class RulesChangeView(JSONResponseMixin, View):
         status = origin.get('status')
 
         if status not in ('on', 'off'):
-            raise ValueError(u"状态不合法")
+            raise ValueError("状态不合法")
 
         ret = {
             "uuid": uuid_,
@@ -124,18 +124,18 @@ class RulesChangeView(JSONResponseMixin, View):
         try:
             datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S')
         except (ValueError, TypeError):
-            raise ValueError(u"结束时间格式不合法")
+            raise ValueError("结束时间格式不合法")
 
         ret['end_time'] = end_time
 
         try:
             title = origin['title']
         except KeyError:
-            raise ValueError(u"规则名称必须填写")
+            raise ValueError("规则名称必须填写")
         try:
             describe = origin['describe']
         except KeyError:
-            raise ValueError(u"规则描述必须填写")
+            raise ValueError("规则描述必须填写")
 
         names = origin.get('names', '').split(':::')
         weights = origin.get('weights', '').split(',')
@@ -333,7 +333,7 @@ class RulesDataView(JSONResponseMixin, View):
     def _get_menu_strategy_args(self, uuids, client):
         ret = set()
         dimensions = self._get_one_kind_fields_from_uuids(
-            uuids, 'strategy_menu', 'dimension', client
+            uuids, 'strategy_men', 'dimension', client
         )
         for name in dimensions:
             ret.add(name)

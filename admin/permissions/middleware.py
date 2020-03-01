@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-import json
+
 import logging
 from core.lru import LRUCacheDict
 
 from django.shortcuts import redirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.exceptions import PermissionDenied
 
 from log_manage.signals import user_visit
@@ -33,8 +33,15 @@ CACHE_USER_PERMS = LRUCacheDict(max_size=100, expiration=CACHE_EXPIRE_TIME)
 
 
 class PermissionsMiddleware(object):
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        return response
+
     @classmethod
-    def process_request(cls, request, *args, **kwargs):
+    def process_view(cls, request, *args, **kwargs):
         user = request.user
         path = request.path
         if path in WHITE_LIST_URIS:
@@ -78,18 +85,22 @@ class PermissionsMiddleware(object):
                 CACHE_USER_PERMS[pk] = result
             return result
         except DBError:
-            LOGGER.error(u'Failed get user permissions ({}-{}) for DB error!'
+            LOGGER.error('Failed get user permissions ({}-{}) for DB error!'
                          .format(user.pk, user.fullname))
             return WHITE_LIST_URIS
 
 
-class UserAuditMiddleware(object):
+class UserAuditMiddleware:
     ignore_uris = [
         "/accounts/login/",
         "/accounts/logout/",
     ]
 
-    def process_response(self, request, response, *args, **kwargs):
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
         path = request.path
         method = request.method
         # 忽略部分uri

@@ -2,7 +2,7 @@
 import json
 from datetime import datetime, timedelta
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from core.utils import get_sample_str
 from menu.forms import MENU_TYPE_CHOICES_ADD_CHOICES

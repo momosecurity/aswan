@@ -1,6 +1,6 @@
 # coding=utf8
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
@@ -15,7 +15,7 @@ class Home(TemplateView):
 
 def risk_login(request):
     next_url = request.GET.get("next", None) or reverse("risk_auth:home")
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         return redirect(next_url)
 
     if request.method == "POST":
@@ -27,14 +27,14 @@ def risk_login(request):
                 superuser_flag = user.is_superuser
                 UserPermission(
                     user.email,
-                    fullname=u'{}{}'.format(user.last_name,
+                    fullname='{}{}'.format(user.last_name,
                                             user.first_name) or user.email,
                     is_superuser=superuser_flag
                 ).save()
             return redirect(next_url)
     else:
         form = AuthenticationForm()
-        form.fields["username"].help_text = u"请登录"
+        form.fields["username"].help_text = "请登录"
     context = {"form": form}
     return render(request, 'risk_auth/login.html', context=context)
 

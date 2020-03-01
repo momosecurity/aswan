@@ -36,7 +36,7 @@
             <td colspan="{{ table.columns|length }}">
                 <input type="checkbox" id="checkall-bottom" class="check-all" name="checkall" />
                 <label for="checkall-bottom">{% trans "全选" %}</label>
-                <a id="batchDelete" class="btn btn-primary" style="padding: 4px 8px;" data-uri="{{ batch_delete_uri }}">{% trans "删除" %}</a>
+                <a id="batchDelete" class="btn btn-danger btn-sm"  data-uri="{{ batch_delete_uri }}">{% trans "删除" %}</a>
             </td>
         </tr>
     </tfoot>
@@ -45,7 +45,7 @@
     <tfoot class="check-tfoot">
         <tr>
             <td colspan="{{ table.columns|length }}">
-                <input type="checkbox" id="checkall-bottom" class="check-all" name="checkall" />
+                <input type="checkbox" id="checkall-bottom2" class="check-all" name="checkall" />
                 <label for="checkall-bottom">{% trans "全选" %}</label>
                 <a id="batchEdit" class="btn btn-primary" style="padding: 4px 8px;">{% trans "批量编辑" %}</a>
                 <a id="batchEditSave" class="btn btn-primary" disabled="disabled" style="padding: 4px 8px;" data-uri="{{ batch_edit_uri }}">{% trans "保存" %}</a>

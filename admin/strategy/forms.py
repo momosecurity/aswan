@@ -15,44 +15,44 @@ from core.pymongo_client import get_mongo_client
 
 
 OP_CHOICES = (
-    ('is', u'是(使用、已经)'),
-    ('is_not', u'不是(未使用、尚未)'),
-    ('lt', u'小于...'),
-    ('le', u'小于等于...'),
-    ('eq', u'等于...'),
-    ('ne', u'不等于...'),
-    ('ge', u'大于等于...'),
-    ('gt', u'大于...'),
+    ('is', '是(使用、已经)'),
+    ('is_not', '不是(未使用、尚未)'),
+    ('lt', '小于...'),
+    ('le', '小于等于...'),
+    ('eq', '等于...'),
+    ('ne', '不等于...'),
+    ('ge', '大于等于...'),
+    ('gt', '大于...'),
 )
 
 FUNC_CHOICES = tuple(
     [(k, str(v)) for k, v in BuiltInFuncs.name_callable.items()]
 )
 VAR_CHOICES = (
-    ('user_id', u'账号ID'),
-    ('phone', u'手机号'),
-    ('uid', u'当前设备ID'),
-    ('ip', u'当前IP'),
-    ('reg_ip', u'注册IP'),
-    ('reg_uid', u'注册设备ID'),
+    ('user_id', '账号ID'),
+    ('phone', '手机号'),
+    ('uid', '当前设备ID'),
+    ('ip', '当前IP'),
+    ('reg_ip', '注册IP'),
+    ('reg_uid', '注册设备ID'),
 )
 
 DIM_CHOICES_MENU = (
-    ('user_id', u'账号ID'),
-    ('phone', u'手机号'),
-    ('ip', u'当前IP'),
-    ('reg_ip', u'注册IP'),
-    ('uid', u'当前设备ID'),
-    ('reg_uid', u'注册设备ID'),
+    ('user_id', '账号ID'),
+    ('phone', '手机号'),
+    ('ip', '当前IP'),
+    ('reg_ip', '注册IP'),
+    ('uid', '当前设备ID'),
+    ('reg_uid', '注册设备ID'),
 )
 OP_CHOICES_MENU = (
-    ('is', u'在'),
-    ('is_not', u'不在'),
+    ('is', '在'),
+    ('is_not', '不在'),
 )
 TYPE_CHOICES_MENU = (
-    (u'black', u'黑名单'),
-    (u'white', u'白名单'),
-    (u'gray', u'灰名单')
+    ('black', '黑名单'),
+    ('white', '白名单'),
+    ('gray', '灰名单')
 )
 
 OP_MAP = dict(OP_CHOICES)
@@ -129,20 +129,20 @@ class BoolStrategyForm(BaseForm):
             self.errors['strategy_name'] = [u"该条记录已存在,请勿重复添加"]
 
         if var_name not in required_args:
-            self.errors['strategy_var'] = [u'函数{}支持的内置变量为{}'.format(
+            self.errors['strategy_var'] = ['函数{}支持的内置变量为{}'.format(
                 func_name,
                 self._get_display_names(required_args)
             )]
 
         if op_name not in supported_ops:
-            self.errors['strategy_op'] = [u'函数{}不支持此操作码'.format(func_name)]
+            self.errors['strategy_op'] = ['函数{}不支持此操作码'.format(func_name)]
         if op_name in ('is', 'is_not') and threshold:
-            self.errors['strategy_op'] = [u'[{}]该操作码不接受阈值'.format(op_name)]
+            self.errors['strategy_op'] = ['[{}]该操作码不接受阈值'.format(op_name)]
 
         if op_name in {'lt', 'le', 'eq', 'ne', 'ge', 'gt'}:
             if not threshold:
                 self.errors['strategy_threshold'] = [
-                    u'操作码{}必须包含阈值'.format(op_name)]
+                    '操作码{}必须包含阈值'.format(op_name)]
         return cd
 
 
