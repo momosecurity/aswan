@@ -1,7 +1,10 @@
 gevent==1.4.0
 redis==2.10.5
 hiredis==0.2.0
-py_lru_cache==0.1.4
+
+# 这个项目在py3下有一些兼容性问题，因此我们重写了它
+# py_lru_cache==0.1.4
+
 Django==1.11.29
 django-redis==4.8.0
 django-braces==1.11.0
