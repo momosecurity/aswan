@@ -1,12 +1,11 @@
 # coding=utf8
 from datetime import datetime, timedelta
 
-from django import forms
-from django.utils.translation import ugettext_lazy as _
-
 from crispy_forms.bootstrap import FormActions
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Div, HTML, Reset, Field
+from crispy_forms.layout import Submit, Layout, Reset, Field
+from django import forms
+from django.utils.translation import ugettext_lazy as _
 
 
 class FormBaseMixin(object):
@@ -75,9 +74,15 @@ class BaseForm(FormBaseMixin, forms.Form):
             self.fields[field].widget.attrs["class"] = "form-control"
 
     def remove_class(self, *field_names):
+        self.change_class(*field_names, class_name=None)
+
+    def change_class(self, *field_names, class_name=None):
         for field_name in field_names:
             if field_name in self.fields:
-                self.fields[field_name].widget.attrs.pop('class')
+                if class_name is None:
+                    self.fields[field_name].widget.attrs.pop('class')
+                else:
+                    self.fields[field_name].widget.attrs['class'] = class_name
 
     def is_edit(self):
         return self.instance.pk is not None

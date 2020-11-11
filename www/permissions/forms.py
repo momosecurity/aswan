@@ -50,7 +50,7 @@ class UserPermUpdateForm(BaseForm):
         self.fields['groups'].choices = get_multiple_choices(GroupPermission)
         self.fields['permissions'].choices = get_multiple_choices(
             UriGroupPermission)
-        self.remove_class('permissions', 'groups')
+        self.change_class('permissions', 'groups', 'is_superuser', class_name='form-check-input')
 
     def clean_pk(self):
         pk = self.cleaned_data['pk']
@@ -97,7 +97,7 @@ class GroupPermUpdateForm(BaseForm):
             self.fields['pk'].widget.attrs = self.FORBID_ATTR
         self.fields['permissions'].choices = get_multiple_choices(
             UriGroupPermission)
-        self.remove_class('permissions')
+        self.change_class('permissions', class_name='form-check-input')
 
     def clean_pk(self):
         pk = self.cleaned_data['pk']

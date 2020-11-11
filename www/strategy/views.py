@@ -1,18 +1,19 @@
 # coding=utf8
 
-import time
 import json
+import time
 
-from django.core.urlresolvers import reverse
-from django.conf import settings
-from django.views.generic import TemplateView, View
 from braces.views import JSONResponseMixin
+from django.conf import settings
+from django.core.urlresolvers import reverse
+from django.views.generic import TemplateView, View
 
+from builtin_funcs import BuiltInFuncs
 from core.generic import ListView
+from core.redis_client import get_redis_client
 from core.utils import errors_to_dict
-from strategy.tables import (
-    BoolStrategyTable, FreqStrategyTable, MenuStrategyTable, UserStrategyTable,
-)
+from risk_models.strategy import (BoolStrategy, MenuStrategy, UserStrategy,
+                                  FreqStrategy)
 from strategy.forms import (
     BoolStrategyForm, BoolStrategyTestForm, FreqStrategyForm,
     FreqStrategyTestForm, MenuStrategyForm, MenuStrategyTestForm,
@@ -20,13 +21,12 @@ from strategy.forms import (
     FREQ_STRATEGY_UNIQ_SET_KEYS, USER_STRATEGY_UNIQ_SET_KEYS,
     StrategyFilterForm
 )
-from core.redis_client import get_redis_client
-from builtin_funcs import BuiltInFuncs
-from risk_models.strategy import (BoolStrategy, MenuStrategy, UserStrategy,
-                                  FreqStrategy)
+from strategy.tables import (
+    BoolStrategyTable, FreqStrategyTable, MenuStrategyTable, UserStrategyTable,
+)
 
 
-class BaseStrategyDestoryView(JSONResponseMixin, View):
+class BaseStrategyDestroyView(JSONResponseMixin, View):
     key_tpl = ''
 
     def get_values_sign(self, data):
@@ -34,11 +34,11 @@ class BaseStrategyDestoryView(JSONResponseMixin, View):
 
     def post(self, request, *args, **kwargs):
         uuid = request.POST.get('id', None)
-        is_using, rule_id = _check_strategy(uuid)
+        is_using, using_rule_ids = _check_strategy(uuid)
         if is_using:
             return self.render_json_response(dict(
                 state=False,
-                error=u"该策略原子正被规则{}引用".format(rule_id)
+                error=u"该策略原子正被规则{}引用".format((', '.join(using_rule_ids)))
             ))
         client = get_redis_client()
         name = self.key_tpl.format(uuid=uuid)
@@ -53,7 +53,7 @@ class BaseStrategyDestoryView(JSONResponseMixin, View):
         ))
 
 
-class BoolStrategyDestroyView(BaseStrategyDestoryView):
+class BoolStrategyDestroyView(BaseStrategyDestroyView):
     key_tpl = 'bool_strategy:{uuid}'
 
     def get_values_sign(self, data):
@@ -203,7 +203,7 @@ class FreqStrategyCreateView(BaseStrategyCreateView):
     redirect_view_name = 'strategy:freq_strategy_list'
 
 
-class FreqStrategyDestroyView(BaseStrategyDestoryView):
+class FreqStrategyDestroyView(BaseStrategyDestroyView):
     key_tpl = 'freq_strategy:{uuid}'
 
     def get_values_sign(self, data):
@@ -289,7 +289,7 @@ class FreqStrategyDataView(JSONResponseMixin, View):
             })
 
 
-class MenuStrategyDestroyView(BaseStrategyDestoryView):
+class MenuStrategyDestroyView(BaseStrategyDestroyView):
     key_tpl = 'strategy_menu:{uuid}'
 
     def get_values_sign(self, data):
@@ -384,7 +384,7 @@ class UserStrategyCreateView(BaseStrategyCreateView):
     redirect_view_name = 'strategy:user_strategy_list'
 
 
-class UserStrategyDestroyView(BaseStrategyDestoryView):
+class UserStrategyDestroyView(BaseStrategyDestroyView):
     key_tpl = 'user_strategy:{uuid}'
 
     def get_values_sign(self, data):
@@ -473,6 +473,7 @@ class UserStrategyTestView(JSONResponseMixin, TemplateView):
 def _check_strategy(strategy_id):
     """校验策略原子是否被生效中的规则引用"""
     client = get_redis_client()
+    using_rule_ids = []
     for r in client.scan_iter(match="rule:*"):
         rule = client.hgetall(r)
         strategy_group_list = json.loads(rule.get("strategys", '[]'))
@@ -480,5 +481,5 @@ def _check_strategy(strategy_id):
             strategy_list = strategy_group.get("strategy_list", [])
             for stategy_data in strategy_list:
                 if stategy_data and stategy_data[0] == strategy_id:
-                    return True, rule["id"]
-    return False, None
+                    using_rule_ids.append(rule["id"])
+    return bool(using_rule_ids), using_rule_ids
