@@ -7,3 +7,6 @@
 mongo/
 output/
 venv/
+
+# mac
+.DS_Store
