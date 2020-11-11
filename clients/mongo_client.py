@@ -1,4 +1,4 @@
-from lru import lru_cache_function
+from risk_models.lru import lru_cache_function
 from pymongo import MongoClient
 
 from config import (SOC_MONGO_HOST, MONGO_POOL_SIZE, MONGO_MAX_IDLE_TIME,

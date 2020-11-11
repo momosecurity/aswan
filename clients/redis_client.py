@@ -4,7 +4,7 @@ import redis
 
 import config as conf
 
-from lru import lru_cache_function
+from risk_models.lru import lru_cache_function
 
 __all__ = ['get_log_redis_client', 'get_config_redis_client',
            'get_report_redis_client']
