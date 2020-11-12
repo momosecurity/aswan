@@ -1,30 +1,30 @@
 # coding=utf8
-import re
-import json
-import uuid
 import datetime
+import json
+import re
+import uuid
 
 from django import forms
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
-from core.pymongo_client import get_mongo_client
 from core.forms import BaseFilterForm, BaseForm
+from core.pymongo_client import get_mongo_client
 from core.redis_client import get_redis_client
 from risk_models.menu import build_redis_key
 
 # 查询时有全部名单
 MENU_TYPE_CHOICES = (
-    (u'', u'全部名单'),
-    (u'black', u'黑名单'),
-    (u'white', u'白名单'),
-    (u'gray', u'灰名单')
+    ('', '全部名单'),
+    ('black', '黑名单'),
+    ('white', '白名单'),
+    ('gray', '灰名单')
 )
 
 MENU_STATUS_CHOICES = (
-    (u'有效', u'有效'),
-    (u'全部', u'全部'),
-    (u'无效', u'无效')
+    ('有效', '有效'),
+    ('全部', '全部'),
+    ('无效', '无效')
 )
 
 # 新增时没有全部名单
@@ -34,7 +34,7 @@ MENU_TYPE_NAME_MAP = dict(MENU_TYPE_CHOICES_ADD_CHOICES)
 
 DIMENSION_NAME_MAP = {
     "user_id": u"用户ID",
-    "ip": u'IP地址',
+    "ip": 'IP地址',
     "phone": u"手机号",
     "uid": u"设备号",
     "pay": u"支付账号"
@@ -68,7 +68,7 @@ class MenuCreateForm(BaseForm):
     value = forms.CharField(widget=forms.Textarea(
         attrs={"placeholder": "用户ID[批量添加时请以回车键隔开]", "rows": "5"}))
     dimension = forms.CharField(required=False, widget=forms.HiddenInput,
-                                label=_(u'名单维度'))
+                                label=_('名单维度'))
     menu_type = forms.ChoiceField(label=_(u"名单类型"),
                                   choices=MENU_TYPE_CHOICES_ADD_CHOICES)
     event_code = forms.ChoiceField(label=_(u"项目"))
@@ -114,7 +114,7 @@ class MenuCreateForm(BaseForm):
                 errors.append(item)
         if errors:
             msg = ', '.join(errors)
-            msg = u'输入非法: {}'.format(msg)
+            msg = '输入非法: {}'.format(msg)
             self.errors['value'] = [msg]
 
     def clean(self):
@@ -167,12 +167,10 @@ class MenuCreateForm(BaseForm):
                     payload.update(condition)
                     db.menus.insert_one(payload)
                 else:
-                    db.menus.update_one({"_id": res.get("_id", '')},
-                                        {"$set": payload})
+                    db.menus.update_one({"_id": res["_id"]}, {"$set": payload})
 
                 #  同时写redis
-                redis_key = build_redis_key(event_code, dimension,
-                                            menu_type)
+                redis_key = build_redis_key(event_code, dimension, menu_type)
                 if redis_key:
                     redis_client.sadd(redis_key, value)
 
@@ -193,7 +191,7 @@ class MenuFilterForm(BaseFilterForm):
         super(MenuFilterForm, self).__init__(*args, **kwargs)
         self.fields['filter_event_code'].choices = self._build_event_choices()
 
-        placeholder = DIMENSION_NAME_MAP.get(self.dimension, u'未知')
+        placeholder = DIMENSION_NAME_MAP.get(self.dimension, '未知')
         self.fields['filter_value'].widget.attrs["placeholder"] = _(
             placeholder)
 
