@@ -17,6 +17,10 @@ services:
       python www/manage.py runserver 0.0.0.0:8000"
     environment:
       - RISK_ENV=docker
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 8
 
   app_service:
     build:
@@ -39,6 +43,10 @@ services:
       - mysql_db
     environment:
       - RISK_ENV=docker
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 8
 
   redis_db:
     image: redis:6.0.8

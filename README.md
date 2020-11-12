@@ -57,13 +57,13 @@ WeChat:<br>
 2. 启动
 
 ``` bash
-docker-compose -f deploy/docker/docker-compose.yml up --build
+docker-compose -f deploy/docker-compose.yaml up --build
 
-# 如果不需要初始化数据，可忽略
+# 如果需要初始化数据及账号，可登录到具体的实例上执行下述命令
 # 创建管理员账户  此处详见  其它操作--增加用户
 python manage.py createsuperuser # 后续 依次输入用户名、密码、邮箱 即可创建一个管理员账号
 # 如果希望对系统有一个直观的感受，可以使用如下指令来预注入一些数据
-ython manage.py init_risk_data
+python manage.py init_risk_data
 ```
 
 ### 后台介绍
