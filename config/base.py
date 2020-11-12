@@ -24,9 +24,13 @@ MONGO_SOCKET_TIMEOUT = 1 * 1000  # socket超时, 1秒
 MONGO_MAX_WAITING_TIME = 100  # 最大等待时间,100毫秒
 MONGO_READ_PREFERENCE = "secondaryPreferred"
 
-MONGO_AUTH_DB = "risk_control"
-MONGO_USER = "risk_control_user"
-MONGO_PWD = "risk_control_pwd"
+MONGO_DB  = MONGO_AUTH_DB = "risk_control"
+MONGO_USER = ""
+MONGO_PWD = ""
+
+SOC_MONGO_HOST = [
+    "127.0.0.1:27017",
+]
 
 risk_env = os.environ.get('RISK_ENV', 'develop')
 

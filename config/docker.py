@@ -2,9 +2,9 @@
 
 #  存储各项配置信息的redis
 REDIS_CONFIG = {
-    "host": "127.0.0.1",
+    "host": "redis_db",
     "port": 6379,
-    "db": 0,
+    "db": 1,
     "password": "",
     "max_connections": 40,
     "socket_timeout": 1,
@@ -13,9 +13,9 @@ REDIS_CONFIG = {
 
 #  作为命中日志队列的redis
 LOG_REDIS_CONFIG = {
-    "host": "127.0.0.1",
+    "host": "redis_db",
     "port": 6379,
-    "db": 0,
+    "db": 1,
     "password": "",
     "max_connections": 40,
     "socket_timeout": 1,
@@ -24,9 +24,9 @@ LOG_REDIS_CONFIG = {
 
 #  存储上报数据的redis
 REPORT_REDIS_CONFIG = {
-    "host": "127.0.0.1",
+    "host": "redis_db",
     "port": 6379,
-    "db": 0,
+    "db": 1,
     "password": "",
     "max_connections": 40,
     "socket_timeout": 1,
@@ -35,7 +35,7 @@ REPORT_REDIS_CONFIG = {
 
 # 存储命中日志的mysql
 LOG_MYSQL_CONFIG = {
-    'host': '127.0.0.1',
+    'host': 'mysql_db',
     'port': 3306,
     'user': 'root',
     'passwd': 'root',
@@ -45,10 +45,9 @@ LOG_MYSQL_CONFIG = {
 
 # 存储权限等信息的mongo
 SOC_MONGO_HOST = [
-    "127.0.0.1:27017",
+    "mongo_db:27017",
 ]
 
-MONGO_USER = "risk_control_user"
-MONGO_PWD = "risk_control_pwd"
-
 MONGO_DB = "risk_control"
+
+RISK_SERVER_HOST = '0.0.0.0'
