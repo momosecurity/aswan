@@ -1,4 +1,5 @@
 gevent==1.4.0
+greenlet==0.4.15
 redis==2.10.5
 hiredis==0.2.0
 

@@ -15,6 +15,9 @@ WeChat:<br>
 本项目的主分支仅支持Python3，目前通过Python3.7.3的版本测试，如果需要python2.7的版本，请使用tag: last-support-Python2.7 的代码.
 
 ### 快速启动
+
+#### 手动
+
 1. 本项目依赖redis, mysql, mongodb，因此需准备环境并更改配置项
 ```bash
     # 为了简单可以使用docker安装
@@ -43,6 +46,24 @@ WeChat:<br>
 ```bash
     # 在aswan下以nohup的方式启动服务进程、管理后台、拦截日志消费进程
     bash start.sh
+```
+
+#### docker
+
+1. 安装docker及docker compose
+
+此处不再赘述
+
+2. 启动
+
+``` bash
+docker-compose -f deploy/docker-compose.yaml up --build
+
+# 如果需要初始化数据及账号，可登录到具体的实例上执行下述命令
+# 创建管理员账户  此处详见  其它操作--增加用户
+python manage.py createsuperuser # 后续 依次输入用户名、密码、邮箱 即可创建一个管理员账号
+# 如果希望对系统有一个直观的感受，可以使用如下指令来预注入一些数据
+python manage.py init_risk_data
 ```
 
 ### 后台介绍

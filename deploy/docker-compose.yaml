@@ -1,0 +1,73 @@
+version: '3.3'
+
+services:
+  app_python:
+    build:
+      context: ../
+      dockerfile: deploy/Dockerfile.backend
+    depends_on:
+      - redis_db
+      - mongo_db
+      - mysql_db
+    ports:
+      - "8000:8000"
+    command: >
+      bash -c "python www/manage.py collectstatic --noinput&&
+      python www/manage.py migrate &&
+      python www/manage.py runserver 0.0.0.0:8000"
+    environment:
+      - RISK_ENV=docker
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 8
+
+  app_service:
+    build:
+      context: ../
+      dockerfile: deploy/Dockerfile.service
+    depends_on:
+      - redis_db
+    ports:
+      - "50000:50000"
+    environment:
+      - RISK_ENV=docker
+
+  app_task:
+    build:
+      context: ../
+      dockerfile: deploy/Dockerfile.task
+    depends_on:
+      - redis_db
+      - mongo_db
+      - mysql_db
+    environment:
+      - RISK_ENV=docker
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 8
+
+  redis_db:
+    image: redis:6.0.8
+    container_name: risk_redis
+    ports:
+      - "6379:6379"
+
+  mongo_db:
+    image: mongo:4.4.1
+    container_name: risk_mongo
+    ports:
+      - "27017:27017"
+
+  mysql_db:
+    image: mysql:5.6
+    container_name: risk_mysql
+    ports:
+      - "3306:3306"
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: risk_control

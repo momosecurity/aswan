@@ -39,7 +39,7 @@ def application(environ, start_response):
     if environ['PATH_INFO'] not in URL_2_HANDLERS:
         response = json.dumps({"ec": 0, "error": "invalid uri"})
         start_response('200 OK', [('Content-Type', 'application/json')])
-        return [response]
+        return [response.encode()]
 
     handler = URL_2_HANDLERS[environ['PATH_INFO']]
     post_data = __parse_post_body(environ, ignore_get=False)
