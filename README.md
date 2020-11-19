@@ -147,14 +147,14 @@ python manage.py init_risk_data
 
 ### 调用样例
 
-1. 调用查询服务
+1. 调用[查询服务](./wiki/查询API.md)
 
     假设存在id为1的规则，则可以通过如下方式查询是否命中策略
 ```
 curl 127.0.0.1:50000/query/ -X POST -d '{"rule_id": "1", "user_id": "10000"}' -H "Content-Type:application/json"
 ```
 
-2. 调用上报服务
+2. 调用[上报服务](./wiki/上报API.md)
 
     假设存在名称为test的数据源, 且数据源含有的数据是: {"ip": "string", "user_id": "string", "uid": "string"}
 ```
