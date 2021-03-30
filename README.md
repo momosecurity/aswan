@@ -273,4 +273,11 @@ $ python www/manage.py test
 $ cd tests && python run_test.py
 ```
 
-> 欢迎各位在issue里对本项目提供宝贵意见
+### 加入社区
+欢迎加入QQ群沟通！
+
+群号：663227548
+
+<img src="https://user-images.githubusercontent.com/5725123/112924674-27b5e300-9143-11eb-9ce7-972fbfd5a974.JPG" width="200" align=center /><br>
+
+
