@@ -1,6 +1,6 @@
 from django.db import connection
 
-from log_manage.models import get_hit_log_model
+from www.log_manage.models import get_hit_log_model
 
 
 def create_hit_table(date_obj):

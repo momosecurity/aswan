@@ -9,9 +9,9 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from builtin_funcs import BuiltInFuncs
-from core.redis_client import get_redis_client
-from core.forms import BaseForm, BaseFilterForm
-from core.pymongo_client import get_mongo_client
+from www.core.redis_client import get_redis_client
+from www.core.forms import BaseForm, BaseFilterForm
+from www.core.pymongo_client import get_mongo_client
 
 
 OP_CHOICES = (

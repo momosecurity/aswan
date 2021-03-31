@@ -3,9 +3,9 @@
 import uuid
 from datetime import datetime, timedelta
 
-from core.pymongo_client import get_mongo_client
-from core.redis_client import get_redis_client
-from core.utils import get_sample_str
+from www.core.pymongo_client import get_mongo_client
+from www.core.redis_client import get_redis_client
+from www.core.utils import get_sample_str
 from risk_models.menu import build_redis_key
 
 

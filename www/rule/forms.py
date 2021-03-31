@@ -6,10 +6,10 @@ from django import forms
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
-from core.forms import BaseFilterForm, BaseForm
+from www.core.forms import BaseFilterForm, BaseForm
 from risk_models.strategy import Strategys
 from risk_models.rule import Rules
-from rule.models import RuleModel
+from www.rule.models import RuleModel
 
 STATUS_CHOICES = (
     ('on', u"启用"),

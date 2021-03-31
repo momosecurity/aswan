@@ -1,6 +1,6 @@
 # coding=utf8
 import json
-from core.redis_client import get_redis_client
+from www.core.redis_client import get_redis_client
 
 client = get_redis_client()
 __all__ = ["get_source_largest_period"]

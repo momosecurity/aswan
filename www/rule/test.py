@@ -6,11 +6,11 @@ from datetime import datetime, timedelta
 from django.core.urlresolvers import reverse
 from django.test.client import RequestFactory
 
-from bk_config.init_data import create_data_source
-from core.testcase import BaseTestCase
-from core.utils import get_sample_str
-from menu.init_data import create_menu_event, add_element_to_menu
-from strategy.init_data import (create_menu_strategy, create_user_strategy,
+from www.bk_config.init_data import create_data_source
+from www.core.testcase import BaseTestCase
+from www.core.utils import get_sample_str
+from www.menu.init_data import create_menu_event, add_element_to_menu
+from www.strategy.init_data import (create_menu_strategy, create_user_strategy,
                                 create_bool_strategy, create_freq_strategy)
 
 

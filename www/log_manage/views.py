@@ -5,12 +5,12 @@ from datetime import timedelta
 from braces.views import JSONResponseMixin
 from django.db import connection
 
-from log_manage.models import AuditLogModel, get_hit_log_model
+from www.log_manage.models import AuditLogModel, get_hit_log_model
 from risk_models.rule import Rules
-from core.generic import ListView
+from www.core.generic import ListView
 from django.views.generic import View
-from log_manage.tables import HitLogDetailTable, AuditLogTable
-from log_manage.forms import HitLogDetailFilterForm, AuditLogForm
+from www.log_manage.tables import HitLogDetailTable, AuditLogTable
+from www.log_manage.forms import HitLogDetailFilterForm, AuditLogForm
 
 logger = logging.getLogger(__name__)
 

@@ -5,8 +5,8 @@ from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 
-from risk_auth.forms import AuthenticationForm
-from permissions.permission import UserPermission
+from www.risk_auth.forms import AuthenticationForm
+from www.permissions.permission import UserPermission
 
 
 class Home(TemplateView):

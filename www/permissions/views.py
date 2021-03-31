@@ -6,16 +6,16 @@ from django.http import Http404
 from django.http.request import QueryDict
 from django.views.generic import TemplateView, ListView as OriginListView
 
-from core.generic import ListView
-from core.utils import errors_to_dict
-from permissions.forms import (
+from www.core.generic import ListView
+from www.core.utils import errors_to_dict
+from www.permissions.forms import (
     UserPermFilterForm, UserPermUpdateForm,
     GroupPermUpdateForm, UriGroupPermUpdateForm,
 )
-from permissions.permission import (
+from www.permissions.permission import (
     UserPermission, GroupPermission, UriGroupPermission,
 )
-from permissions.tables import (
+from www.permissions.tables import (
     UserPermissionTable, GroupPermissionTable, UriGroupPermissionTable
 )
 

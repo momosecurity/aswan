@@ -8,9 +8,9 @@ from django import forms
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
-from core.forms import BaseFilterForm, BaseForm
-from core.pymongo_client import get_mongo_client
-from core.redis_client import get_redis_client
+from www.core.forms import BaseFilterForm, BaseForm
+from www.core.pymongo_client import get_mongo_client
+from www.core.redis_client import get_redis_client
 from risk_models.menu import build_redis_key
 
 # 查询时有全部名单

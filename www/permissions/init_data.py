@@ -4,7 +4,7 @@ import random
 
 from django.contrib.auth.models import User
 
-from permissions.permission import UserPermission
+from www.permissions.permission import UserPermission
 
 
 def create_user(email, username, password, is_superuser):

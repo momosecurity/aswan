@@ -10,7 +10,7 @@ from django.db import connection
 
 from config import HIT_LOG_QUEUE_NAME
 from clients import get_log_redis_client
-from log_manage.models import get_hit_log_model
+from www.log_manage.models import get_hit_log_model
 
 logger = logging.getLogger(__name__)
 

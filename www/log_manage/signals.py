@@ -4,7 +4,7 @@ from collections import defaultdict
 
 from django.dispatch import Signal, receiver
 
-from log_manage.models import AuditLogModel
+from www.log_manage.models import AuditLogModel
 
 __all__ = ['user_visit']
 

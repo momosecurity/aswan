@@ -1,9 +1,9 @@
 # coding=utf8
 from django.utils.translation import ugettext_lazy as _
 from django_tables2 import tables, columns
-from core.pymongo_client import get_mongo_client
-from core.columns import TruncateColumn
-from menu.forms import MENU_TYPE_NAME_MAP
+from www.core.pymongo_client import get_mongo_client
+from www.core.columns import TruncateColumn
+from www.menu.forms import MENU_TYPE_NAME_MAP
 
 
 class EventTable(tables.Table):

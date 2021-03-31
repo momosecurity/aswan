@@ -11,14 +11,14 @@ from django.views.generic import TemplateView, View
 from braces.views import JSONResponseMixin
 from redis import RedisError
 
-from core.generic import ListView
-from core.utils import errors_to_dict
-from core.redis_client import get_redis_client
+from www.core.generic import ListView
+from www.core.utils import errors_to_dict
+from www.core.redis_client import get_redis_client
 
 from builtin_funcs import BuiltInFuncs
-from rule.forms import RulesForm, RulesTestForm, CONTROL_MAP, \
+from www.rule.forms import RulesForm, RulesTestForm, CONTROL_MAP, \
     RulesFilterForm, CONTROL_CHOICES
-from rule.tables import RulesTable
+from www.rule.tables import RulesTable
 from risk_models.strategy import Strategys
 
 __all__ = ['RulesListView', 'RulesCreateView', 'RulesDestroyView',

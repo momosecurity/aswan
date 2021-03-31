@@ -6,8 +6,8 @@ from datetime import datetime, timedelta, date
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from core.forms import BaseFilterForm
-from log_manage.models import AuditLogModel
+from www.core.forms import BaseFilterForm
+from www.log_manage.models import AuditLogModel
 from risk_models.rule import Rules
 
 logger = logging.getLogger(__name__)

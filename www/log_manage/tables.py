@@ -5,9 +5,9 @@ from django.utils.translation import ugettext_lazy as _
 from django_tables2 import tables, columns
 
 from risk_models.rule import Rules
-from permissions.permission import (UserPermission, GroupPermission,
+from www.permissions.permission import (UserPermission, GroupPermission,
                                     UriGroupPermission)
-from rule.forms import CONTROL_MAP
+from www.rule.forms import CONTROL_MAP
 
 
 class HitLogDetailTable(tables.Table):

@@ -4,10 +4,10 @@ import json
 from django.utils.translation import ugettext_lazy as _
 from django_tables2 import tables, columns
 
-from strategy.forms import (OP_MAP, FUNC_MAP, VAR_MAP, DIM_MAP_MENU,
+from www.strategy.forms import (OP_MAP, FUNC_MAP, VAR_MAP, DIM_MAP_MENU,
                             TYPE_MAP_MENU, OP_MAP_MENU)
-from core.pymongo_client import get_mongo_client
-from core.redis_client import get_redis_client
+from www.core.pymongo_client import get_mongo_client
+from www.core.redis_client import get_redis_client
 
 
 class BoolStrategyTable(tables.Table):

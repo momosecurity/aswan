@@ -2,8 +2,8 @@ import json
 
 from django.core.urlresolvers import reverse
 
-from core.testcase import BaseTestCase
-from core.utils import get_sample_str
+from www.core.testcase import BaseTestCase
+from www.core.utils import get_sample_str
 
 
 class TestConfigView(BaseTestCase):

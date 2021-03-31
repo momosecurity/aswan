@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from core.testcase import BaseTestCase
+from www.core.testcase import BaseTestCase
 
 from django.core.urlresolvers import reverse
 

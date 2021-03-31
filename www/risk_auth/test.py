@@ -3,7 +3,7 @@
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 
-from core.testcase import BaseTestCase
+from www.core.testcase import BaseTestCase
 
 
 class TestRiskAuthView(BaseTestCase):

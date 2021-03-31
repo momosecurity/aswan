@@ -8,13 +8,13 @@ from django.views.generic import View
 from braces.views import JSONResponseMixin
 from django.core.urlresolvers import reverse
 
-from core.generic import ListView
-from core.utils import errors_to_dict
-from core.pymongo_client import get_mongo_client
-from core.redis_client import get_redis_client
+from www.core.generic import ListView
+from www.core.utils import errors_to_dict
+from www.core.pymongo_client import get_mongo_client
+from www.core.redis_client import get_redis_client
 from risk_models.menu import build_redis_key
-from menu.forms import MenuCreateForm, MenuEventCreateForm, MenuFilterForm
-from menu.tables import (
+from www.menu.forms import MenuCreateForm, MenuEventCreateForm, MenuFilterForm
+from www.menu.tables import (
     EventTable, UseridTable, IPTable, UidTable, PayTable, PhoneTable
 )
 

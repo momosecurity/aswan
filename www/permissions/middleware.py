@@ -5,8 +5,8 @@ from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 
-from log_manage.signals import user_visit
-from permissions.permission import UserPermission, DBError
+from www.log_manage.signals import user_visit
+from www.permissions.permission import UserPermission, DBError
 from risk_models.lru import LRUCacheDict
 
 LOGGER = logging.getLogger(__name__)

@@ -2,8 +2,8 @@
 
 import json
 
-from core.utils import get_sample_str
-from core.redis_client import get_redis_client
+from www.core.utils import get_sample_str
+from www.core.redis_client import get_redis_client
 
 
 def create_data_source(source_key=None, source_name=None, fields=None):

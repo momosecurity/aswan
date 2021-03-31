@@ -5,11 +5,11 @@ import json
 from braces.views import JSONResponseMixin
 from django.views.generic import View
 
-from core.utils import errors_to_dict
-from core.generic import ListView
-from core.redis_client import get_redis_client
-from bk_config.forms import SourceMapForm, SourceFilterForm
-from bk_config.tables import ConfigSourceTable
+from www.core.utils import errors_to_dict
+from www.core.generic import ListView
+from www.core.redis_client import get_redis_client
+from www.bk_config.forms import SourceMapForm, SourceFilterForm
+from www.bk_config.tables import ConfigSourceTable
 
 
 FIELD_EN_ZH_MAP = {

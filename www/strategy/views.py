@@ -9,19 +9,19 @@ from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView, View
 
 from builtin_funcs import BuiltInFuncs
-from core.generic import ListView
-from core.redis_client import get_redis_client
-from core.utils import errors_to_dict
+from www.core.generic import ListView
+from www.core.redis_client import get_redis_client
+from www.core.utils import errors_to_dict
 from risk_models.strategy import (BoolStrategy, MenuStrategy, UserStrategy,
                                   FreqStrategy)
-from strategy.forms import (
+from www.strategy.forms import (
     BoolStrategyForm, BoolStrategyTestForm, FreqStrategyForm,
     FreqStrategyTestForm, MenuStrategyForm, MenuStrategyTestForm,
     UserStrategyForm, UserStrategyTestForm,
     FREQ_STRATEGY_UNIQ_SET_KEYS, USER_STRATEGY_UNIQ_SET_KEYS,
     StrategyFilterForm
 )
-from strategy.tables import (
+from www.strategy.tables import (
     BoolStrategyTable, FreqStrategyTable, MenuStrategyTable, UserStrategyTable,
 )
 

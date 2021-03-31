@@ -2,8 +2,8 @@
 
 from datetime import datetime, timedelta
 
-from core.utils import get_sample_str
-from rule.models import RuleModel
+from www.core.utils import get_sample_str
+from www.rule.models import RuleModel
 
 
 def create_rule(strategy_confs, end_time=None, title=None, describe=None,

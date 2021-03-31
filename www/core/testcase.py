@@ -4,10 +4,10 @@ import os
 
 from django.test import TransactionTestCase
 
-from core.redis_client import get_redis_client
-from core.pymongo_client import get_mongo_client
+from www.core.redis_client import get_redis_client
+from www.core.pymongo_client import get_mongo_client
 
-from permissions.init_data import create_user
+from www.permissions.init_data import create_user
 
 __all__ = ['BaseTestCase']
 

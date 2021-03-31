@@ -1,8 +1,8 @@
 # coding=utf-8
 
-from core.utils import get_sample_str
+from www.core.utils import get_sample_str
 
-from strategy.forms import (MenuStrategyForm, BoolStrategyForm,
+from www.strategy.forms import (MenuStrategyForm, BoolStrategyForm,
                             UserStrategyForm, FreqStrategyForm)
 
 
@@ -122,7 +122,6 @@ def create_freq_strategy(strategy_source, strategy_body, strategy_time,
     :param str|unicode strategy_body: 限制主体 eg:  ip, uid, user_id  etc...
     :param int strategy_time: 时段(单位为秒)
     :param int strategy_limit: 限制个数
-    :param request: 请求对象，需要从中取得用户信息等
     :param str|unicode strategy_name: 策略名称
     :param str|unicode strategy_desc: 策略描述
     :return:

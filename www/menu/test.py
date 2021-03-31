@@ -4,11 +4,11 @@ from datetime import datetime, timedelta
 
 from django.core.urlresolvers import reverse
 
-from core.utils import get_sample_str
-from menu.forms import MENU_TYPE_CHOICES_ADD_CHOICES
-from menu.init_data import create_menu_event, add_element_to_menu
+from www.core.utils import get_sample_str
+from www.menu.forms import MENU_TYPE_CHOICES_ADD_CHOICES
+from www.menu.init_data import create_menu_event, add_element_to_menu
 
-from core.testcase import BaseTestCase
+from www.core.testcase import BaseTestCase
 
 
 class TestMenuMinix(object):

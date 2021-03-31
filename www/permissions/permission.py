@@ -9,7 +9,7 @@ from bson import ObjectId
 from bson.errors import InvalidId
 from pymongo.errors import PyMongoError
 
-from core.pymongo_client import get_mongo_client
+from www.core.pymongo_client import get_mongo_client
 
 
 logger = logging.getLogger(__name__)

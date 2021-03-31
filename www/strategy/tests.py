@@ -5,11 +5,10 @@ import json
 
 from django.core.urlresolvers import reverse
 
-from bk_config.init_data import create_data_source
-from core.utils import get_sample_str
-from menu.init_data import create_menu_event, add_element_to_menu
-
-from core.testcase import BaseTestCase
+from www.bk_config.init_data import create_data_source
+from www.core.utils import get_sample_str
+from www.menu.init_data import create_menu_event, add_element_to_menu
+from www.core.testcase import BaseTestCase
 
 
 class TestStrategyViewMinix(object):
