@@ -1,10 +1,9 @@
 # 陌陌风控系统静态规则引擎
 
-### 关于我们
-Website：https://security.immomo.com
+### 加入社区
+欢迎加入QQ群沟通！群号：663227548
 
-WeChat:<br>
-<img src="https://momo-mmsrc.oss-cn-hangzhou.aliyuncs.com/img-1c96a083-7392-3b72-8aec-bad201a6abab.jpeg" width="200" hegiht="200" align=center /><br>
+<img src="https://user-images.githubusercontent.com/5725123/112924674-27b5e300-9143-11eb-9ce7-972fbfd5a974.JPG" width="200" align=center /><br>
 
 [项目介绍](https://mp.weixin.qq.com/s/quk43WU3Vg9cQmub06Azqg)
 
@@ -273,11 +272,8 @@ $ python www/manage.py test
 $ cd tests && python run_test.py
 ```
 
-### 加入社区
-欢迎加入QQ群沟通！
+### 关于我们
+Website：https://security.immomo.com
 
-群号：663227548
-
-<img src="https://user-images.githubusercontent.com/5725123/112924674-27b5e300-9143-11eb-9ce7-972fbfd5a974.JPG" width="200" align=center /><br>
-
-
+WeChat:<br>
+<img src="https://momo-mmsrc.oss-cn-hangzhou.aliyuncs.com/img-1c96a083-7392-3b72-8aec-bad201a6abab.jpeg" width="200" hegiht="200" align=center /><br>
