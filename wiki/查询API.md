@@ -15,8 +15,6 @@
 | key | 类型 | 含义 | 是否必填 |
 | ---- | ---- | ---- | ---- |
 | user_id | string | 账号ID | 是 |
-| token | string | 标识业务方, 接入时分发 | 是 |
-| app_name | string | 业务方标识，接入时分发 | 是 |
 | rule_id | string | 规则ID, 每个调用点可能不同 | 是 |
 | ip | string | 用户当前IP地址 | 否 |
 | uid | string | 用户当前设备号 | 否 |
@@ -30,10 +28,8 @@
 import requests
 
 data = {
-    'app_name': 'test_app',
     'ip': '1.1.1.1',
     'rule_id': '1',
-    'token': '111111111111111',
     'uid': '111111111111111',
     'user_id': '11111'
 }
@@ -51,7 +47,7 @@ requests.post(f'http://{ip}:{port}/query/', json=data)
 '{"result":{"control":"deny","weight":100},"em":"OK","ec":0}'
 
 # 失败结果示例
-'{"error":"invalid token","em":"invalid token","ec":70}'
+'{"error":"invalid token","em":"invalid user_id","ec":70}'
 
 # warning 规则停用后，会返回错误
 ``` 
