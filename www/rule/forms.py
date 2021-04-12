@@ -97,6 +97,7 @@ class RulesForm(BaseForm):
 
         strategys_list = cd['strategys'].split(',')
         controls = cd['controls'].split(',')
+        weights = cd['weights'].split(',')
         customs = cd.get('customs', '').split(':::')
         names = cd['names'].split(':::')
         if not len(strategys_list) == len(controls) == len(customs) == len(
@@ -114,6 +115,8 @@ class RulesForm(BaseForm):
             strategy_uuids.append("".join(item))
         if len(set(strategy_uuids)) < len(strategy_uuids):
             self.errors['strategys'] = [u'策略原子有重复']
+        if len(set(weights)) < len(weights):
+            self.errors['weights'] = ['存在重复权重配置']
         return cd
 
     def save(self, *args, **kwargs):

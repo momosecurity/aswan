@@ -175,6 +175,8 @@ class RulesChangeView(JSONResponseMixin, View):
             strategy_uuids.append("".join(item))
         if len(set(strategy_uuids)) < len(strategy_uuids):
             raise ValueError(u"策略原子有重复")
+        if len(set(weights)) < len(weights):
+            raise ValueError("存在重复权重配置")
         for key in (
                 'title', 'describe', 'names', 'weights', 'strategys',
                 'controls',
