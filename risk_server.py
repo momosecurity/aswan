@@ -1,5 +1,6 @@
 # coding=utf8
 """A http server which offers two uri: query and report"""
+import cgi
 from gevent import monkey
 
 monkey.patch_all()  # noqa
@@ -19,8 +20,9 @@ URL_2_HANDLERS = {
 def __parse_post_body(environ, ignore_get=False):
     post_data = {}
 
+    mimetype, options = cgi.parse_header(environ["CONTENT_TYPE"])
     # accept post json
-    if environ["CONTENT_TYPE"].strip(';') == "application/json" and environ["REQUEST_METHOD"] == "POST":
+    if mimetype == "application/json" and environ["REQUEST_METHOD"] == "POST":
         storage = environ['wsgi.input'].read()
         if storage:
             return json.loads(storage)
