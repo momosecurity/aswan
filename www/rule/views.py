@@ -106,6 +106,7 @@ class RulesChangeView(JSONResponseMixin, View):
         origin = request.POST
         uuid_ = origin.get('id')
         status = origin.get('status')
+        allow_break = origin.get('allow_break')
 
         if status not in ('on', 'off'):
             raise ValueError(u"状态不合法")
@@ -113,6 +114,7 @@ class RulesChangeView(JSONResponseMixin, View):
         ret = {
             "uuid": uuid_,
             "status": status,
+            "allow_break": allow_break,
             'user': request.user.username,
             'update_time': now
         }
@@ -128,6 +130,7 @@ class RulesChangeView(JSONResponseMixin, View):
             raise ValueError(u"结束时间格式不合法")
 
         ret['end_time'] = end_time
+        ret['allow_break'] = allow_break
 
         try:
             title = origin['title']
@@ -194,7 +197,7 @@ class RulesChangeView(JSONResponseMixin, View):
             items.append([key, value])
             return items
 
-        for key in ('title', 'describe', 'status', 'end_time'):
+        for key in ('title', 'allow_break', 'describe', 'status', 'end_time'):
             items.append([key, data[key]])
         strategy_list = []
         datas = zip(data['names'], data['strategys'], data['controls'],
@@ -247,7 +250,7 @@ class RulesDetailView(JSONResponseMixin, TemplateView):
         d = client.hgetall(name)
         if not d:
             raise Http404
-        for key in ('status', 'title', 'describe', 'end_time', 'id', 'uuid'):
+        for key in ('status', 'allow_break', 'title', 'describe', 'end_time', 'id', 'uuid'):
             data[key] = d[key]
         try:
             rule_list = json.loads(d["strategys"])
@@ -457,7 +460,7 @@ class RulesEdit(JSONResponseMixin, TemplateView):
             raise Http404
 
         data = {}
-        for key in ('status', 'title', 'describe', 'end_time', 'id', 'uuid'):
+        for key in ('status', 'allow_break', 'title', 'describe', 'end_time', 'id', 'uuid'):
             data[key] = d[key]
 
         try:

@@ -3,7 +3,11 @@
 import json
 
 from django import forms
+from django.forms import BooleanField
+from django.forms.utils import flatatt
 from django.utils import timezone
+from django.utils.encoding import force_text
+from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
 from core.forms import BaseFilterForm, BaseForm
@@ -30,11 +34,38 @@ CONTROL_MAP = {
 }
 
 
+class PrettyCheckboxWidget(forms.widgets.CheckboxInput):
+    def render(self, name, value, attrs=None):
+        attrs = {type: 'checkbox', name: name}
+        final_attrs = self.build_attrs(attrs)
+        if self.check_test(value):
+            final_attrs['checked'] = 'checked'
+        if not (value is True or value is False or value is None or value == ''):
+            final_attrs['value'] = force_text(value)
+        if 'prettycheckbox-label' in final_attrs:
+            label = _(final_attrs.pop('prettycheckbox-label'))
+        else:
+            label = ''
+        return format_html('<label for="{0}"><input{1} /> {2}</label>', attrs['id'], flatatt(final_attrs), label)
+
+
+class PrettyCheckboxField(BooleanField):
+    widget = PrettyCheckboxWidget
+
+    def __init__(self, *args, **kwargs):
+        if kwargs['label']:
+            kwargs['widget'].attrs['prettycheckbox-label'] = kwargs['label']
+            kwargs['label'] = ''
+        super(PrettyCheckboxField, self).__init__(*args, **kwargs)
+
+
 class RulesForm(BaseForm):
     title = forms.CharField(label=_(u"规则名称"))
     describe = forms.CharField(required=False, label=_(u"规则描述"),
                                widget=forms.Textarea)
     status = forms.ChoiceField(label=_(u"状态"), choices=STATUS_CHOICES)
+    #allow_break = PrettyCheckboxField(label=_(u"允许策略短路"), widget=PrettyCheckboxWidget())
+    allow_break = forms.BooleanField(label=_(u"允许策略短路"), initial=True, required=True)
     end_time = forms.DateTimeField()
     strategy = forms.ChoiceField(label=_("策略原子"), required=False)
     control = forms.ChoiceField(label=_("管控原子"), choices=CONTROL_CHOICES,
@@ -131,6 +162,7 @@ class RulesForm(BaseForm):
         return RuleModel.create(creator_name=self.request.user.username,
                                 title=cd['title'],
                                 describe=cd['describe'], status=cd['status'],
+                                allow_break=cd['allow_break'],
                                 end_time=cd['end_time'],
                                 strategy_confs=zip(names, strategys, controls,
                                                    customs,

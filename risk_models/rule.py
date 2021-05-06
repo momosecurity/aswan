@@ -26,6 +26,7 @@ class Rule(object):
         self.id = d['id']
         self.uuid = d['uuid']
         self.name = d['title']
+        self.allow_break = d['allow_break'],
         self.strategy_group_list = []
         origin_strategy_group_list = json.loads(d['strategys'])
         for strategy_group in origin_strategy_group_list:
@@ -60,7 +61,7 @@ class Rule(object):
             for uuid_, threshold_list in strategy_list:
                 funcs.append(strategys.get_callable(uuid_, threshold_list))
             callable_list.append([funcs, control, custom, group_name,
-                                  group_uuid, weight])
+                                  group_uuid, weight, self.allow_break])
         return callable_list
 
     def __str__(self):
@@ -216,7 +217,7 @@ def calculate_rule(id_, req_body, rules=None, ac=None):
     rv_control, rv_weight, result_seted, hit_number = 'pass', 0, False, 0
 
     for (funcs, control, custom, group_name, group_uuid,
-         weight) in rules.get_callable_list(id_):
+         weight, allow_break) in rules.get_callable_list(id_):
         results = []
         for func in funcs:
             try:
@@ -248,4 +249,6 @@ def calculate_rule(id_, req_body, rules=None, ac=None):
                                   group_uuid=group_uuid,
                                   hit_number=hit_number))
             hit_logger.info(msg)
-    return rv_control, rv_weight
+            if allow_break and hit_number > 0:
+                return rv_control, rv_weight, custom
+    return rv_control, rv_weight, custom
