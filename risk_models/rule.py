@@ -26,7 +26,7 @@ class Rule(object):
         self.id = d['id']
         self.uuid = d['uuid']
         self.name = d['title']
-        self.allow_break = d['allow_break'],
+        self.allow_break = d['allow_break'] if 'allow_break' in d else False
         self.strategy_group_list = []
         origin_strategy_group_list = json.loads(d['strategys'])
         for strategy_group in origin_strategy_group_list:
@@ -234,12 +234,10 @@ def calculate_rule(id_, req_body, rules=None, ac=None):
 
         # 目前策略为过全部策略原子组以积累数据，若无此需求，可自行进行短路
         if all(results):
-            if not result_seted:
-                rv_control, rv_weight, result_seted = control, weight, True
-
             # 当前命中的策略组在此规则中是第几个命中的
             hit_number += 1
 
+            # 记录命中日志
             msg = json.dumps(dict(rule_id=id_,
                                   kwargs={},
                                   req_body=req_body,
@@ -249,6 +247,11 @@ def calculate_rule(id_, req_body, rules=None, ac=None):
                                   group_uuid=group_uuid,
                                   hit_number=hit_number))
             hit_logger.info(msg)
-            if allow_break and hit_number > 0:
-                return rv_control, rv_weight, custom
-    return rv_control, rv_weight, custom
+
+            # 允许策略短路, 命中权重高的策略后, 之后的策略就不走了
+            if allow_break:
+                return rv_control, rv_weight
+
+            if not result_seted:
+                rv_control, rv_weight, result_seted = control, weight, True
+    return rv_control, rv_weight
