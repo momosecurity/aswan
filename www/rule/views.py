@@ -250,7 +250,7 @@ class RulesDetailView(JSONResponseMixin, TemplateView):
         d = client.hgetall(name)
         if not d:
             raise Http404
-        for key in ('status', 'allow_break', 'title', 'describe', 'end_time', 'id', 'uuid'):
+        for key in ('status', 'title', 'describe', 'end_time', 'id', 'uuid'):
             data[key] = d[key]
         try:
             rule_list = json.loads(d["strategys"])
@@ -265,6 +265,7 @@ class RulesDetailView(JSONResponseMixin, TemplateView):
                 x[2] for x in rule['strategy_list'] if len(x) == 3)
             rule['strategy_list_str'] = json.dumps(rule['strategy_list'])
         data['rule_list'] = rule_list
+        data['allow_break'] = d['allow_break'] if 'allow_break' in d else False
         return data
 
 
@@ -460,7 +461,7 @@ class RulesEdit(JSONResponseMixin, TemplateView):
             raise Http404
 
         data = {}
-        for key in ('status', 'allow_break', 'title', 'describe', 'end_time', 'id', 'uuid'):
+        for key in ('status', 'title', 'describe', 'end_time', 'id', 'uuid'):
             data[key] = d[key]
 
         try:
@@ -476,6 +477,7 @@ class RulesEdit(JSONResponseMixin, TemplateView):
                 x[2] for x in rule['strategy_list'] if len(x) == 3)
             rule['strategy_list_str'] = json.dumps(rule['strategy_list'])
         data['rule_list'] = rule_list
+        data['allow_break'] = d['allow_break'] if 'allow_break' in d else False
         return data
 
     @classmethod
