@@ -20,12 +20,14 @@ URL_2_HANDLERS = {
 def __parse_post_body(environ, ignore_get=False):
     post_data = {}
 
-    mimetype, options = cgi.parse_header(environ["CONTENT_TYPE"])
-    # accept post json
-    if mimetype == "application/json" and environ["REQUEST_METHOD"] == "POST":
-        storage = environ['wsgi.input'].read()
-        if storage:
-            return json.loads(storage)
+    content_type = environ["CONTENT_TYPE"] if "CONTENT_TYPE" in environ else None
+    if content_type is not None:
+        mimetype, options = cgi.parse_header(content_type)
+        # accept post json
+        if mimetype == "application/json" and environ["REQUEST_METHOD"] == "POST":
+            storage = environ['wsgi.input'].read()
+            if storage:
+                return json.loads(storage)
 
     storage = FieldStorage(environ['wsgi.input'], environ=environ, keep_blank_values=True)
 
