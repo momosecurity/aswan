@@ -216,17 +216,13 @@ def calculate_rule(id_, req_body, rules=None, ac=None):
 
     rv_control, rv_weight, result_seted, hit_number = 'pass', 0, False, 0
 
-    for (funcs, control, custom, group_name, group_uuid,
-         weight, allow_break) in rules.get_callable_list(id_):
+    for (funcs, control, custom, group_name, group_uuid, weight, allow_break) in rules.get_callable_list(id_):
         results = []
         for func in funcs:
             try:
                 ret = func(req_body)
-            except Exception:
-                logger.error(
-                    'run func error, rule_id: {}, weight: {}'.format(id_,
-                                                                     weight),
-                    exc_info=True)
+            except Exception as ex:
+                logger.error('run func error, rule_id: {}, weight: {}'.format(id_,weight), ex, exc_info=True)
                 ret = False
             results.append(ret)
             if not ret:
@@ -246,11 +242,13 @@ def calculate_rule(id_, req_body, rules=None, ac=None):
                                   group_name=group_name,
                                   group_uuid=group_uuid,
                                   hit_number=hit_number))
-            hit_logger.info(msg)
 
             # 允许策略短路, 命中权重高的策略后, 之后的策略就不走了
             if allow_break:
-                return rv_control, rv_weight
+                hit_logger.info(msg)
+                return control, weight
+
+            hit_logger.info(msg)
 
             if not result_seted:
                 rv_control, rv_weight, result_seted = control, weight, True
