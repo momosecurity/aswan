@@ -106,7 +106,7 @@ class RulesChangeView(JSONResponseMixin, View):
         origin = request.POST
         uuid_ = origin.get('id')
         status = origin.get('status')
-        allow_break = origin.get('allow_break')
+        allow_break = origin.get('allow_break', False)
 
         if status not in ('on', 'off'):
             raise ValueError(u"状态不合法")
@@ -265,7 +265,7 @@ class RulesDetailView(JSONResponseMixin, TemplateView):
                 x[2] for x in rule['strategy_list'] if len(x) == 3)
             rule['strategy_list_str'] = json.dumps(rule['strategy_list'])
         data['rule_list'] = rule_list
-        data['allow_break'] = d['allow_break'] if 'allow_break' in d else False
+        data['allow_break'] = d.get('allow_break', False)
         return data
 
 
@@ -477,7 +477,7 @@ class RulesEdit(JSONResponseMixin, TemplateView):
                 x[2] for x in rule['strategy_list'] if len(x) == 3)
             rule['strategy_list_str'] = json.dumps(rule['strategy_list'])
         data['rule_list'] = rule_list
-        data['allow_break'] = d['allow_break'] if 'allow_break' in d else False
+        data['allow_break'] = d.get('allow_break', False)
         return data
 
     @classmethod

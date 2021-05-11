@@ -26,7 +26,7 @@ class Rule(object):
         self.id = d['id']
         self.uuid = d['uuid']
         self.name = d['title']
-        self.allow_break = d['allow_break'] if 'allow_break' in d else False
+        self.allow_break = d.get('allow_break', False)
         self.strategy_group_list = []
         origin_strategy_group_list = json.loads(d['strategys'])
         for strategy_group in origin_strategy_group_list:
