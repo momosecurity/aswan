@@ -1,7 +1,7 @@
 ##########
 # DJANGO #
 ##########
-Django==1.11.29
+Django==2.2.24
 django-redis==4.8.0
 django-braces==1.11.0
 django-filter==1.0.4
