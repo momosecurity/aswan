@@ -54,6 +54,14 @@
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
+                            <label class="col-sm-2 control-label">允许策略短路</label>
+                            <div class="col-sm-10">
+                                {{ form.allow_break }}
+                                <span id="id-allow_break-error" class="help-block" style="color:darkred"></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
                             <label class="col-sm-2 control-label">结束时间</label>
                             <div class="col-sm-10">
                                 <input class="form-control datetime" id="id_end_time" name="end_time" type="datetime">
@@ -181,6 +189,7 @@
             var title = $('#id_title').val()
             var describe = $('#id_describe').val()
             var status = $('#id_status').val()
+            var allow_break = $('#id_allow_break').val()
             var end_time = $('#id_end_time').val()
 
             var names = $(".group-name:visible").map(function () {
@@ -189,7 +198,6 @@
             var weights = $(".weight:visible").map(function () {
                 return $(this).val();
             });
-            console.log(weights);
             var strategys = $("#rule-list label.strategy:visible").map(function () {
                 return $(this).val();
             });
@@ -267,6 +275,7 @@
                 'title': title,
                 'describe': describe,
                 'status': status,
+                'allow_break': allow_break,
                 'end_time': end_time,
                 'strategys': strategy_arr.join(","),
                 'controls': control_arr.join(","),

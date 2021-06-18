@@ -29,6 +29,12 @@
     <link href="{% static 'css/plugins/sweetalert/sweetalert.css' %}" rel="stylesheet">
     <link href="{% static 'css/jquery.searchableSelect.css' %}" rel="stylesheet">
     <link href="{% static 'css/main.css' %}?v=3" rel="stylesheet">
+    <style>
+        /* 解决默认checkbox长度太长导致变形的问题 */
+        .form-control[type=checkbox] {
+            width: auto;
+        }
+    </style>
 </head>
 
 <body class="fixed-sidebar full-height-layout extra-main-bg" style="overflow:hidden">

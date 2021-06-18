@@ -38,7 +38,7 @@
                         <address>
                             <strong>规则名称:</strong> {{ rule.title }}<br>
                             <strong>规则描述:</strong> {{ rule.describe }}<br>
-                            <strong>规则状态:</strong> {% if rule.status == "on" %} 开启 {% else %} 关闭 {% endif %}<br>
+                            <strong>规则状态:</strong> <label class="text-danger">{% if rule.status == "on" %} 开启 {% else %} 关闭 {% endif %}</label><br>
                         </address>
                     </div>
 
@@ -46,6 +46,7 @@
                         <address>
                             <strong>规则ID:</strong> <label class="text-danger">{{ rule.id }}</label><br>
                             <strong>规则结束时间:</strong> <label class="text-danger">{{ rule.end_time }}</label><br>
+                            <strong>允许策略短路:</strong> <label class="text-danger">{{ rule.allow_break }}</label><br>
                         </address>
                     </div>
                 </div>

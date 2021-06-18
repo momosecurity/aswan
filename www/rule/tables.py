@@ -10,6 +10,7 @@ class RulesTable(tables.Table):
     id = columns.Column(verbose_name=_(u"规则ID"), orderable=False)
     title = columns.Column(verbose_name=_(u"规则名称"), orderable=False)
     status = columns.Column(verbose_name=_(u"状态"), orderable=False)
+    allow_break = columns.Column(verbose_name=_(u"允许策略短路"), orderable=False, default=False)
     update_time = columns.Column(verbose_name=_(u"更新时间"), orderable=False)
     user = columns.Column(verbose_name=_(u"更新人"), orderable=False)
     action = columns.TemplateColumn("""

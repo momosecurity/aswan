@@ -12,7 +12,7 @@ from risk_models.strategy import Strategys
 class RuleModel(object):
 
     @classmethod
-    def create(self, creator_name, title, describe, status, end_time,
+    def create(self, creator_name, title, describe, status, allow_break, end_time,
                strategy_confs):
         strategy_obj = Strategys()
 
@@ -46,6 +46,7 @@ class RuleModel(object):
             'title': title,
             'describe': describe,
             'status': status,
+            'allow_break': allow_break,
             'strategys': json.dumps(strategy_list)
         }
 
